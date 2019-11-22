@@ -4,6 +4,7 @@
  */
 namespace Waterfall_Reviews;
 use Waterfall as Waterfall;
+use MakeitWorkPress\WP_Updater as Updater;
 
 defined( 'ABSPATH' ) or die( 'Go eat veggies!' );
 
@@ -50,13 +51,18 @@ class Plugin {
 
         /**
          * Some additional hooks
-         */
+         */     
 
         // Remove the attachment review rules, killing our category archives
         add_filter( 'rewrite_rules_array', function($rules) {
             unset($rules['reviews/[^/]+/([^/]+)/?$']);
             return $rules;
         } );
+
+        /**
+         * Set-up the updater
+         */
+        new Updater\Boot(['source' => 'https://github.com/makeitworkpress/waterfall-reviews', 'type' => 'plugin']);
 
     }
 
@@ -72,7 +78,7 @@ class Plugin {
         foreach( ['Waterfall_Reviews\Ajax', 'Waterfall_Reviews\Score', 'Waterfall_Reviews\Filter', 'Waterfall_Reviews\Views\Archive_Reviews', 'Waterfall_Reviews\Views\Single_Reviews'] as $module ) {
 
             if( class_exists($module) ) {
-                $new = new $module();
+                new $module();
             }
             
         }        
