@@ -1,0 +1,24 @@
+// main: ../waterfall-reviews.less
+
+/**
+ * Styling for the filter component
+ */
+.wfr-filter-field {
+    display: flex;
+    flex-wrap: wrap;
+    label {
+        display: block;
+        width: 100%;
+    }
+    input[type="number"] {
+        width: 50%;
+    }    
+    input[type="range"] {
+        width: 80%;
+    }
+    .wfr-range-value {
+        align-self: center;
+        padding-left: @grid-space/4;
+        width: 20%; 
+    }
+} 

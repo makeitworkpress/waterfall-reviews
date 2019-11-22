@@ -1,0 +1,95 @@
+// main: ../waterfall-reviews.less
+
+/**
+ * Styling for the prices component
+ */
+.wfr-best-price {
+    font-size: 1.75em;
+}
+
+.atom-button ~ .wfr-prices .wfr-price {
+    float: right;
+    margin-left: @grid-space/2;
+}
+
+.wfr-regular-price {
+    align-items: center;
+    border: 1px solid @border;
+    border-bottom: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: @grid-space/4 @grid-space/2;
+    .single .content & {
+        padding: @grid-space/2 @grid-space;    
+        .atom-button {
+            padding: @grid-space/2 @grid-space; 
+        }
+    }
+    .molecule-post & {
+        border: none;
+        padding: @grid-space/4 0;
+        &:last-of-type {
+            border: none;
+        }
+    }
+    &:first-of-type {
+        border-radius: 5px 5px 0 0;
+    }
+    &:last-of-type {
+        border-bottom: 1px solid @border;
+        border-radius: 0 0 5px 5px;
+    }    
+    .components-image-background & {
+        border: 1px solid rgba(255, 255, 255, 0.4); 
+        border-bottom: none;
+        &:last-of-type {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        }            
+    }
+    > span {
+        margin-bottom: @grid-space/4;
+        margin-top: @grid-space/4;
+    }
+}
+
+.wfr-price-name {
+    flex-grow: 1;
+    font-size: 1.2em;
+    margin-right: @grid-space/2;
+    .main-header & {
+        width: 100%;    
+    }    
+}
+
+.wfr-price-value {
+    margin-right: @grid-space/2;
+}
+
+.wfr-price-currency {
+    margin-right: -0.25em;
+}
+
+.wfr-price-unit {
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+.wfr-price-prefix {
+    opacity: 0.8;  
+}
+
+.wfr-price-button {
+    .wfr-prices-widget & {
+        flex-grow: 1;
+        width: 100%;   
+    }
+    @media screen and (max-width: 767px) {
+        flex-grow: 1;
+    }   
+}
+
+.wfr-prices-widget-fixed {
+    position: sticky;
+    top: @grid-space;
+}

@@ -1,0 +1,89 @@
+// main: ../waterfall-reviews.less
+
+/**
+ * Adjusted styling for comments
+ */
+.wfr-rating-average-visitors-title {
+    margin-top: @grid-space*2;
+}
+
+.wfr-rating-average-visitors {
+    border: 1px solid @border;
+    margin: @grid-space/2 0 0 0;
+    max-width: 768px;
+    padding: @grid-space;
+}
+
+.single-reviews {
+    .atom-comments {
+        max-width: 768px;
+    }
+    .comment-respond {
+        margin-top: @grid-space;
+    }    
+}
+
+.comment {
+    .wfr-source-overall {
+        font-size: 1em;
+        margin-bottom: @grid-space/4;
+    }
+    .wfr-rating {
+        border-top: 1px solid @border;
+        margin: @grid-space/4 0;
+        padding: @grid-space/2 0;
+        p {
+            display: none;
+            margin: 0;
+        }
+    }  
+    .wfr-rating-source:nth-last-of-type(2), .wfr-rating-source:nth-last-of-type(1) {
+        margin: 0;
+    }
+}
+
+.logged-in-as {
+    clear: both;
+}
+
+.comment-form-rating {
+    align-items: center;
+    display: flex;
+    &:first-of-type {
+        margin-top: 1.5rem;
+    }
+    label {
+        min-width: @grid-space*6;
+        padding-right: @grid-space/4;
+        @media screen and (max-width: 480px) {
+            min-width: @grid-space*3;
+        }
+    }
+    .wfr-range-value {
+        padding-left: @grid-space/4;
+    }
+}
+
+.comment-form-reply {
+    clear: both;
+    label {
+        display: inline-block;
+        font-weight: 400;
+    }
+}
+
+.wfr-comment-form-criteria-rating {
+    float: left;
+    width: 50%;
+    @media screen and (min-width: 1025px) {
+        &:nth-of-type(odd) {
+            padding-left: @grid-space/4;
+        }
+        &:nth-of-type(even) {
+            padding-right: @grid-space/4;
+        }        
+    }
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+    }
+}

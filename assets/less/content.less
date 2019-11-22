@@ -1,0 +1,65 @@
+// main: waterfall-reviews.less
+
+.main-header, .main-content, .main-related, .main-footer {
+    padding-bottom: 64px;
+    padding-top: 64px;
+}
+
+/**
+ * General styling for Single Reviews
+ */
+.main-header {
+    .wfr-media, .wfr-rating {
+        margin-top: @grid-space;
+    } 
+    .wfr-prices {
+        margin-top: @grid-space;
+    }
+    .wfr-rating ~ .wfr-rating {
+        margin-top: 0;
+    }
+    .wfr-media {
+        float: left;
+        margin-right: @grid-space;
+        width: 67%;
+        @media screen and (max-width: 1023px) {
+            float: none;
+            margin-right: 0;
+            width: 100%;
+        }
+        .atom-image {
+            margin: 0;
+        }        
+        .flex-control-nav {
+            bottom: @grid-space/2;
+        }
+    }  
+} 
+
+.single .content {
+    .wfr-summary, .wfr-rating, .wfr-prices, .wfr-properties {
+        margin-bottom: @grid-space;
+    }
+}
+
+.readable-content {
+    .wfr-summary, .wfr-rating, .wfr-prices, .wfr-properties {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 768px;
+    }
+}
+
+
+/**
+ * General styling for the reviews archives
+ */
+.wfr-reviews-tabs {
+    ul.atom-tabs-navigation {
+        list-style: none;
+        padding: 0;
+    }
+    .atom-tabs-content {
+        background: #fff;
+    }
+} 

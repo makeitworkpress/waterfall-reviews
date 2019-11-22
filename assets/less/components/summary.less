@@ -1,0 +1,39 @@
+// main: ../waterfall-reviews.less
+.wfr-summary-description {
+    font-size: 1.2em;    
+}
+
+.wfr-summary-details {
+    background: #f5f5f5;
+    display: flex;
+    flex-wrap: wrap;
+    .summary-column {
+        padding: @grid-space;
+        width: 50%;
+        @media screen and (max-width: 767px) {
+            padding: @grid-space/2; 
+            width: 100%;
+        }
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        .fa {
+            margin-right: @grid-space/4;
+        }
+        &.advantages .fa {
+            color: @flat-green;
+        }
+        &.disadvantages .fa {
+            color: @flat-red;
+        }
+    }
+}
+
+/**
+ * Summary in post molecules /grids
+ */
+.wfr-item-summary {
+    font-size: 0.9em;
+    margin-bottom: 1.5rem;
+}

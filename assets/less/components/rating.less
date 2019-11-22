@@ -1,0 +1,147 @@
+// main: ../waterfall-reviews.less
+
+/**
+ * Styling for our rating component
+ */
+.wfr-rating {
+    display: flex;
+    flex-wrap: wrap;
+    p {
+        margin-bottom: 0;
+        width: 100%;
+    }
+}
+
+.wfr-rating-source {
+    margin-bottom: @grid-space/4;
+    padding-right: @grid-space/2;
+    width: 50%;
+    .molecule-post & {
+        padding: 0;
+        width: 100%;
+    }
+    @media screen and (max-width: 1024px) {
+        padding: 0;
+        width: 100%;       
+    }
+    .wfr-rating-name {
+        font-weight: 600;
+    }
+}
+
+.wfr-source-overall {
+    font-size: 1.2em;
+    margin-bottom: @grid-space/2;
+    width: 100%;
+    .molecule-post & {
+        font-size: 1em;
+    }
+}
+
+.wfr-source-users, .wfr-source-criteria {
+    font-size: 0.8em;
+}
+
+/**
+ * Display of names for circles, numbers, percentages and smileys
+ */
+.wfr-style-circles, .wfr-style-numbers, .wfr-style-percentages, .wfr-style-smileys {
+    align-items: center;
+    display: flex;
+    .wfr-rating-display {
+        order: 0;
+    }
+    .wfr-rating-name {
+        margin-left: @grid-space/4;
+        order: 1;
+    }
+}
+
+/**
+ * General colors
+ */
+.wfr-rating-display .fa,  .wfr-style-numbers .wfr-rating-display, .wfr-style-percentages .wfr-rating-display {
+    color: @flat-red;
+}
+
+.wfr-rating-display .wfr-rating-bars span {
+    background-color: @flat-red;
+}
+
+/**
+ * Bar style
+ */
+.wfr-style-bars {
+    .wfr-rating-display {
+        display: flex;
+    }
+}
+.wfr-rating-bars {
+    background: #e4e4e4;
+    display: flex;
+    flex-grow: 1;
+    height: 1em;
+    margin: 0.35em 0 0 @grid-space/4;
+    span {
+        background-color: @flat-red;
+        display: block;
+        
+    }
+}
+
+/**
+ * Rating Circles
+ */
+.wfr-rating-circle {
+    background-color: #fff;
+    border-radius: 50%;
+    display: block;
+    font-size: 1.1em;
+    height: 2.2em;
+    line-height: 2.2em;
+    position: relative;
+    text-align: center;
+    width: 2.2em;  
+    strong {
+        color: #555;
+        position: relative;
+        z-index: 1;
+    }
+    &:after {
+        background: #fff;
+        border-radius: 50%;
+        content: '';
+        left: 0.25em;
+        height: 1.7em;
+        position: absolute;
+        top: 0.25em;
+        width: 1.7em;
+    }
+}
+
+/**
+ * Rating numbers and percentages
+ */
+.wfr-style-numbers, .wfr-style-percentages {
+    .wfr-rating-display {
+        font-size: 1.25em;
+    }   
+}
+
+/**
+ * Smileys
+ */
+.wfr-style-smileys {
+    .wfr-rating-display {
+        font-size: 1.5em;
+    }
+    .fa.fa-meh-o {
+        color: @flat-blue;
+    }
+    .fa.fa-frown-o {
+        color: @flat-red;
+    }
+    .fa.fa-smile-o {
+        color: @flat-green;
+    }
+}

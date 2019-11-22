@@ -1,0 +1,54 @@
+// main: ../waterfall-reviews.less
+
+/**
+ * Styling for the reviews component
+ */
+.wfr-reviews-component {
+    .molecule-post {
+        border-bottom: 1px solid @border;
+        margin: @grid-space/2 0;
+        padding-bottom: @grid-space/2;
+        .wfr-rating, .wfr-rating-source, .wfr-prices {
+            margin: 0;
+        }
+        .wfr-rating {
+            margin-bottom: @grid-space/2;
+        }
+        .wfr-regular-price {
+            padding: 0;
+        } 
+        @media screen and (min-width: 768px) {
+            &.components-full-grid {
+                .entry-footer {
+                    display: flex;
+                    .wfr-prices {
+                        flex-grow: 1;
+                    }
+                    .wfr-price {
+                        justify-content: flex-end;
+                    }
+                    > .atom-button {
+                        margin-left: @grid-space/2;
+                    }
+                }
+            }  
+        }  
+    }   
+}
+
+/**
+ * Within Elementor
+ */
+.elementor-element .wfr-reviews-component {
+    .molecule-post {
+        .entry-image.components-left-float {
+            margin-right: @grid-space;
+        } 
+        .entry-image.components-right-float {
+            margin-left: @grid-space;
+        }  
+        .wfr-rating, .wfr-prices {
+            margin-bottom: @grid-space/4;
+        }       
+    }
+}  

@@ -1,0 +1,20 @@
+{
+    "license": "GPL-3.0",
+    "name": "Waterfall-Reviews",
+    "version": "1.0.0",
+    "author": "Michiel Tramper",
+    "description": "The Waterfall Reviews plugin turns your Waterfall WordPress theme into a killer-review site.",
+    "devDependencies": {
+        "browserify": "latest",
+        "uglify-js": "latest",
+        "watchify": "latest"
+    },
+    "scripts": {
+        "build-js": "browserify assets/js/app.js -o assets/js/waterfall-reviews.js && uglifyjs assets/js/waterfall-reviews.js -o assets/js/waterfall-reviews.min.js -c -m",
+        "watch-js": "watchify assets/js/app.js -o assets/js/waterfall-reviews.js -v"
+    },       
+    "repository" : {
+        "type": "git",    
+        "url": "https://gitlab.com/makeitworkpress/waterfall-reviews.git"
+    }  
+}
