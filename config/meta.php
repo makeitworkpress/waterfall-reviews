@@ -337,7 +337,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
 
         // Now, add the different fields according to our settings
         if( isset($themeOptions[$key . '_attributes']) && $themeOptions[$key . '_attributes'] ) {
-            foreach( $themeOptions[$key . '_attributes'] as $attribute ) {
+            foreach( $themeOptions[$key . '_attributes'] as $key => $attribute ) {
 
                 // Name and type should be defined
                 if( ! $attribute['name'] ) {
@@ -349,7 +349,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                 } 
 
                 $choices = [];
-                $id      = isset($attribute['key']) && $attribute['key'] ? sanitize_key($attribute['key']) : sanitize_key($attribute['name']);
+                $id      = sanitize_key($attribute['name']);
 
                 if( in_array($attribute['type'], ['checkbox', 'select']) && $attribute['values'] ) {
                     $values = array_filter( explode(',', $attribute['values']) );
@@ -369,15 +369,42 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                     }
                 }
 
-                $ratingFields[] = [
-                    'columns'   => 'fourth',
-                    'id'        => $id . '_' . $key . '_attribute',
-                    'title'     => $attribute['name'],
-                    'type'      => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
-                    'subtype'   => $attribute['type'] == 'number' ? 'number' : NULL,
-                    'rows'      => 3,
-                    'options'   => $choices
-                ];
+                if( isset($attribute['repeat']) && $attribute['repeat'] ) {
+                    $ratingFields[] = [
+                        'id'        => $id . '_' . $key . '_attribute',
+                        'title'     => $attribute['name'],
+                        'type'      => 'repeatable',
+                        'fields'    => [
+                            'name' => [
+                                'title'     => __('Plan Name', 'wfr'),
+                                'id'        => 'name',
+                                'columns'   => 'half',
+                                'type'      => 'input',
+                            ],                            
+                            'value' => [
+                                'title'     => __('Plan Value', 'wfr'),
+                                'id'        => 'value',
+                                'columns'   => 'half',
+                                'type'      => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
+                                'subtype'   => $attribute['type'] == 'number' ? 'number' : NULL,
+                                'rows'      => 3,
+                                'options'   => $choices
+                            ]
+                        ]
+
+                    ];
+                } else {
+                    $ratingFields[] = [
+                        'columns'   => 'fourth',
+                        'id'        => $id . '_' . $key . '_attribute',
+                        'title'     => $attribute['name'],
+                        'type'      => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
+                        'subtype'   => $attribute['type'] == 'number' ? 'number' : NULL,
+                        'rows'      => 3,
+                        'options'   => $choices
+                    ];
+                }
+
 
             }
         } 
@@ -423,15 +450,41 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
             }
         }
 
-        $propertyFields[] = [
-            'columns'   => 'fourth',
-            'id'        => $id . '_property',
-            'title'     => $property['name'],
-            'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
-            'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
-            'rows'      => 3,
-            'options'   => $choices
-        ];        
+        if( isset($attribute['repeat']) && $attribute['repeat'] ) {
+            $ratingFields[] = [
+                'id'        => $id . '_property',
+                'title'     => $attribute['name'],
+                'type'      => 'repeatable',
+                'fields'    => [
+                    'name'  => [
+                        'title'     => __('Plan Name', 'wfr'),
+                        'id'        => 'name',
+                        'columns'   => 'half',
+                        'type'      => 'input',
+                    ],                            
+                    'value' => [
+                        'title'     => __('Plan Value', 'wfr'),
+                        'id'        => 'value',
+                        'columns'   => 'half',
+                        'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
+                        'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
+                        'rows'      => 3,
+                        'options'   => $choices
+                    ]
+                ]
+
+            ];
+        } else {
+            $propertyFields[] = [
+                'columns'   => 'fourth',
+                'id'        => $id . '_property',
+                'title'     => $property['name'],
+                'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
+                'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
+                'rows'      => 3,
+                'options'   => $choices
+            ];
+        }
 
     }
 

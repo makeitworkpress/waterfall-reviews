@@ -173,13 +173,13 @@ $options = [
                         'remove'        => __('Remove Property', 'wfr'),
                         'fields'        => [
                             [
-                                'columns'       => 'third',
+                                'columns'       => 'fourth',
                                 'id'            => 'name',
                                 'title'         => __('Property Name', 'wfr'),
                                 'type'          => 'input'                                        
                             ],
                             [
-                                'columns'       => 'third',
+                                'columns'       => 'fourth',
                                 'id'            => 'type',
                                 'title'         => __('Property Field Type', 'wfr'),
                                 'type'          => 'select',
@@ -192,13 +192,25 @@ $options = [
                                 ]                                        
                             ],
                             [
-                                'columns'       => 'third',
+                                'columns'       => 'fourth',
                                 'id'            => 'values',
-                                'title'         => __('Property Field Values', 'wfr'),
-                                'description'   => __('Add values if your property field type is checkbox or select. Seperate them by comma.', 'wfr'),
+                                'title'         => __('Unique Property Field Values', 'wfr'),
+                                'description'   => __('Add unique values if your property field type is checkbox or select. Seperate them by comma.', 'wfr'),
                                 'type'          => 'textarea',
                                 'rows'          => 1                                       
-                            ],                                                                                                                   
+                            ],
+                            [
+                                'columns'       => 'fourth',
+                                'id'            => 'repeat',
+                                'title'         => __('Repeatable?', 'wfr'),
+                                'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
+                                'type'          => 'checkbox',
+                                'single'        => true,
+                                'style'         => 'switcher', 
+                                'options'       => [
+                                    'enable'    => ['label' => __('Enable', 'wfr')]
+                                ]                                      
+                            ]                                                                                                                                                
                         ]                                
                     ]                                
                 ]
@@ -242,17 +254,9 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                     'columns'       => 'fourth',
                     'id'            => 'name',
                     'title'         => __('Attribute Name', 'wfr'),
-                    'description'   => __('The name for this attribute.', 'wfr'),
+                    'description'   => __('The unique name for this attribute.', 'wfr'),
                     'type'          => 'input'                                        
-                ],
-                [
-                    'class'         => 'medium-text',
-                    'columns'       => 'fourth',
-                    'id'            => 'key',
-                    'title'         => __('Attribute ID', 'wfr'),
-                    'description'   => __('Optional ID. By default the sanitized name is used. Use lowercase characters.', 'wfr'),
-                    'type'          => 'input'                                        
-                ],                  
+                ],                
                 [
                     'columns'       => 'fourth',
                     'id'            => 'type',
@@ -268,11 +272,23 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                 [
                     'columns'       => 'fourth',
                     'id'            => 'values',
-                    'title'         => __('Attribute Field Values', 'wfr'),
-                    'description'   => __('Add values if you have a select or checkbox attribute field type. Seperate them by comma.', 'wfr'),
+                    'title'         => __('Unique Attribute Field Values', 'wfr'),
+                    'description'   => __('Add unique values if you have a select or checkbox attribute field type. Seperate them by comma.', 'wfr'),
                     'type'          => 'textarea',
                     'rows'          => 1                                        
-                ]                                                                                                                                
+                ],
+                [
+                    'columns'       => 'fourth',
+                    'id'            => 'repeat',
+                    'title'         => __('Repeatable?', 'wfr'),
+                    'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
+                    'type'          => 'checkbox',
+                    'single'        => true,
+                    'style'         => 'switcher', 
+                    'options'       => [
+                        'enable'    => ['label' => __('Enable', 'wfr')]
+                    ]                                      
+                ]                                                                                                                                                 
             ]
         ];
 
