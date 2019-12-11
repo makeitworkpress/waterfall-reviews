@@ -337,7 +337,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
 
         // Now, add the different fields according to our settings
         if( isset($themeOptions[$key . '_attributes']) && $themeOptions[$key . '_attributes'] ) {
-            foreach( $themeOptions[$key . '_attributes'] as $key => $attribute ) {
+            foreach( $themeOptions[$key . '_attributes'] as $attribute ) {
 
                 // Name and type should be defined
                 if( ! $attribute['name'] ) {
@@ -450,10 +450,10 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
             }
         }
 
-        if( isset($attribute['repeat']) && $attribute['repeat'] ) {
-            $ratingFields[] = [
+        if( isset($property['repeat']) && $property['repeat'] ) {
+            $propertyFields[] = [
                 'id'        => $id . '_property',
-                'title'     => $attribute['name'],
+                'title'     => $property['name'],
                 'type'      => 'repeatable',
                 'fields'    => [
                     'name'  => [

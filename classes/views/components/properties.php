@@ -92,7 +92,8 @@ class Properties extends Component {
         // We should have fields
         if( ! isset($this->options[$key . $option]) || ! $this->options[$key . $option] ) {
             return;
-        }        
+        }      
+  
 
         /**
          * For each field, get the meta values
@@ -108,21 +109,21 @@ class Properties extends Component {
                 if( is_array($meta) ) {
                     $value      = [];
                     foreach( $meta as $plan ) {
-                        $value[] = $this->getFieldValue($attribute, $meta) . '(' . $plan['name'] . ')'; 
+                        $value[] = $this->getFieldValues($attribute, $plan['value']) . ' (' . $plan['name'] . ')'; 
                     }
                 }
             } else {
-                $value = $this->getFieldValue($attribute, $meta);
+                $value = $this->getFieldValues($attribute, $meta);
             }
 
             if( is_array($value) ) {
-                $value = implode('<br/>, ', $value);
+                $value = implode(',<br/>', $value);
             }                    
 
             // In the end, only add the tabs if they have a value
             if( $value ) {
                 $target = $type = 'attribute' && $key ? str_replace('_', '', $key) : 'properties';
-                $this->props['tabs'][$key]['content'][] = ['label' => $attribute['name'], 'value' => $value];
+                $this->props['tabs'][$target]['content'][] = ['label' => $attribute['name'], 'value' => $value];
             }
         
         }
