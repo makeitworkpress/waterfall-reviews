@@ -188,12 +188,25 @@ class Charts extends Component {
             return $data;
         }
 
+        // Retrieve the specific data per review
         foreach( $reviews as $key => $review ) {
-            $data['labels'][]               = get_the_title( $review );
-            $data['dataSet']['data'][]      = get_post_meta( $review, $this->params['meta'], true ); 
+            $meta                           = get_post_meta( $review, $this->params['meta'], true );
+
+            // If a number field is repeatable, thus has multiple values. Often used for various plans in one item
+            if( is_array($meta) && isset($meta[0]['name']) && isset($meta[0]['value']) ) {
+
+                foreach( $meta as $plan ) {
+                    $data['labels'][]               = $plan['name'];
+                    $data['dataSet']['data'][]      = $plan['value']; 
+                }
+
+            } else {
+                $data['labels'][]               = get_the_title( $review );
+                $data['dataSet']['data'][]      = $meta; 
+            }
         }
 
-        // Loads the chart by an instant
+        // Loads the chart by an instant, thus requiring the values directly.
         if( $this->params['load'] == true ) {
             wp_localize_script( 'wfr-scripts', 'chart' . $this->params['id'], $data );    
         } else {

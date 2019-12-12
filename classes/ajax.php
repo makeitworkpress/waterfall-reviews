@@ -36,9 +36,9 @@ class Ajax extends Base {
 
         $chart      = new Views\Components\Charts( [
             'categories'    => array_filter( explode(',', sanitize_text_field($_POST['category'])) ),
-            'include'       => isset($_POST['include']) && is_array($_POST['include']) ? array_filter( $include, function($v) { return is_numeric($v); }) : [],
-            'meta'          => sanitize_key($_POST['key']),
-            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tag']))),    
+            'include'       => isset( $_POST['include'] ) && is_array( $_POST['include'] ) ? array_filter( $include, function($v) { return is_numeric($v); } ) : [],
+            'meta'          => sanitize_key( $_POST['key'] ),
+            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tag'])) ),    
         ] );
 
         $data = $chart->getChartData();
@@ -158,8 +158,6 @@ class Ajax extends Base {
                 'terms'     => [intval($_POST['term'])]
             ];            
         }
-
-       
 
         // Do our query
         $posts   = get_posts( wp_parse_args(['posts_per_page' => -1], $args) );

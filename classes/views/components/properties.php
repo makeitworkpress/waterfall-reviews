@@ -102,27 +102,28 @@ class Properties extends Component {
         foreach( $this->options[$key . $option] as $attribute ) {
                 
             $id     = sanitize_key($attribute['name']) . '_';
-            $meta   = get_post_meta($post->ID, $id . $key . $type, true);
+            $meta   = get_post_meta($post->ID, $id . $key . $type, true); // Key is optional for criteria attributes here
             $value  = '';
 
             if( $attribute['repeat'] ) {
                 if( is_array($meta) ) {
                     $value      = [];
                     foreach( $meta as $plan ) {
-                        $value[] = $this->getFieldValues($attribute, $plan['value']) . ' (' . $plan['name'] . ')'; 
+                        $value[] = $this->getFieldValues($attribute, $plan['value']) . ' <span class="wfr-properties-plan">(' . $plan['name'] . ')</span>'; 
                     }
                 }
             } else {
                 $value = $this->getFieldValues($attribute, $meta);
             }
 
+            // Fields that allow for repeat return an array, we split it by line here
             if( is_array($value) ) {
-                $value = implode(',<br/>', $value);
+                $value = implode('<br/>', $value);
             }                    
 
             // In the end, only add the tabs if they have a value
             if( $value ) {
-                $target = $type = 'attribute' && $key ? str_replace('_', '', $key) : 'properties';
+                $target = $type == 'attribute' && $key ? str_replace('_', '', $key) : 'properties';
                 $this->props['tabs'][$target]['content'][] = ['label' => $attribute['name'], 'value' => $value];
             }
         
@@ -138,7 +139,7 @@ class Properties extends Component {
      * 
      * @return string   $value          The formatted value
      */
-    private function getFieldValues($attribute, $meta ) {
+    private function getFieldValues( $attribute, $meta ) {
         
         switch( $attribute['type'] ) {
             case 'input':
@@ -168,12 +169,19 @@ class Properties extends Component {
                         if( ! $value ) {
                             $value  = [];
                         }
+
                         $value[]    = $choice;
+
                     // If it is just a single option, being checked
                     } elseif( $identifier == $meta ) {
                         $value      = $choice;    
                     }
                 } 
+
+                // Array values are comma seperated
+                if( is_array($value) ) {
+                    $value = implode( ', ', $value );
+                }
 
                 break;
             default:

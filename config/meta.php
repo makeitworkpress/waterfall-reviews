@@ -376,13 +376,13 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                         'type'      => 'repeatable',
                         'fields'    => [
                             'name' => [
-                                'title'     => __('Plan Name', 'wfr'),
+                                'title'     => __('Name', 'wfr'),
                                 'id'        => 'name',
                                 'columns'   => 'half',
                                 'type'      => 'input',
                             ],                            
                             'value' => [
-                                'title'     => __('Plan Value', 'wfr'),
+                                'title'     => __('Value', 'wfr'),
                                 'id'        => 'value',
                                 'columns'   => 'half',
                                 'type'      => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
@@ -457,13 +457,13 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
                 'type'      => 'repeatable',
                 'fields'    => [
                     'name'  => [
-                        'title'     => __('Plan Name', 'wfr'),
+                        'title'     => __('Name', 'wfr'),
                         'id'        => 'name',
                         'columns'   => 'half',
                         'type'      => 'input',
                     ],                            
                     'value' => [
-                        'title'     => __('Plan Value', 'wfr'),
+                        'title'     => __('Value', 'wfr'),
                         'id'        => 'value',
                         'columns'   => 'half',
                         'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
