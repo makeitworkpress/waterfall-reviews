@@ -399,6 +399,13 @@ if( isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] 
 }
 
 /**
+ * Remove extra layoutpanel sections for single review settings
+ */
+if(  function_exists('wf_elementor_theme_has_location') && wf_elementor_theme_has_location('single', 'reviews') ) {
+    $layoutPanel = [];
+}
+
+/**
  * Archive customizer settings
  */
 $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
@@ -468,6 +475,13 @@ $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
     'title'         => __('Show Summary in Reviews', 'wfr'),
     'type'          => 'checkbox'    
 ];
+
+/**
+ * Remove extra layoutpanel sections for single review settings
+ */
+if( function_exists('wf_elementor_theme_has_location') && wf_elementor_theme_has_location('archive', 'reviews') ) {
+    $layoutPanel = [];
+}
 
 /**
  * Typography customizer settings
