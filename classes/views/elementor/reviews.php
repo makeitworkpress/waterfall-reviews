@@ -420,7 +420,7 @@ class Reviews extends Elementor\Widget_Base {
 					],
 					'enlarge' 		=> $settings['image_enlarge'], 
 					'float' 		=> $settings['image_float'], 
-					'size' 			=> $settings['image_size_size'] ? $settings['image_size_size'] : 'ld-square'
+					'size' 			=> $settings['image_size'] ? $settings['image_size'] : 'ld-square'
 				]
 			],
 			'featured'			=> $settings['image_featured'],
@@ -474,7 +474,7 @@ class Reviews extends Elementor\Widget_Base {
 		}
 		
 		if( $settings['sort'] ) {
-			$args['queryArgs']					= $this->sortingArguments($args['queryArgs'], $settings['sort']);
+			$args['queryArgs']					= sortingArguments($args['queryArgs'], $settings['sort']);
 		}		
 
 		if( isset($settings['tags']) && $settings['tags'] ) {
@@ -509,52 +509,5 @@ class Reviews extends Elementor\Widget_Base {
 	 * @access public
 	 */
 	public function render_plain_content() {}    
-
-	/**
-	 * Retrieves the correct sorting arguments
-	 * 
-	 * @param $args The current query arguments
-	 * @param $sort The current sorter preference
-	 */
-	private function sortingArguments( $args = ['post_type' => 'reviews'], $sort = 'date_asc' ) {
-		
-		$sorts = [
-			'date_asc'		=> ['order' => 'ASC', 'orderby' => 'date'],
-			'date_desc'		=> ['order' => 'DESC', 'orderby' => 'date'],
-			'price_asc'     => ['order' => 'ASC', 'orderby' => 'meta_value_num', 'meta_key' => 'price'],
-			'price_desc'    => ['order' => 'DESC', 'orderby' => 'meta_value_num', 'meta_key' => 'price'],
-			'rating_asc'    => ['order' => 'ASC', 'orderby' => 'meta_value_num', 'meta_key' => 'rating'],
-			'rating_desc'   => ['order' => 'DESC', 'orderby' => 'meta_value_num', 'meta_key' => 'rating'],			
-			'title_asc'     => ['order' => 'ASC', 'orderby' => 'title'],
-			'title_desc'    => ['order' => 'DESC', 'orderby' => 'title'],  
-			'value_asc'     => [
-				'meta_query'    => [
-					'relation'  => 'AND', 
-					'price'     => ['compare' => 'EXISTS', 'key' => 'price', 'type' => 'NUMERIC'],
-					'rating'    => ['compare' => 'EXISTS', 'key' => 'rating', 'type' => 'NUMERIC']
-				],
-				'orderby'       => ['price' => 'DESC', 'rating' => 'ASC']
-			],
-			'value_desc'    => [
-				'meta_query'    => [
-					'relation'  => 'AND', 
-					'price'     => ['compare' => 'EXISTS', 'key' => 'price', 'type' => 'NUMERIC'],
-					'rating'    => ['compare' => 'EXISTS', 'key' => 'rating', 'type' => 'NUMERIC']
-				],                    
-				'orderby' => ['price' => 'ASC', 'rating' => 'DESC']
-			], 
-			'visitor_rating_asc'    => ['order' => 'ASC', 'orderby' => 'meta_value_num', 'meta_key' => 'visitors_rating'],                                     
-			'visitor_rating_desc'   => ['order' => 'DESC', 'orderby' => 'meta_value_num', 'meta_key' => 'visitors_rating']                          
-		];
-
-		foreach( $sorts as $key => $value ) {
-			if( $sort == $key ) {
-				$args = wp_parse_args($value, $args);
-			}
-		}
-	
-		return $args;
-	
-	}
 
 }        

@@ -46,6 +46,9 @@ class Plugin {
      */
     private function launch() {
 
+        // Load utility functions
+        require_once( WFR_PATH . '/functions/utilities.php' );
+
         // Hook configurations, just before the main theme does
         add_action('after_setup_theme', [$this, 'setup'], 5);
 
@@ -72,10 +75,18 @@ class Plugin {
     public function setup() {
 
         // Loads our parent instance
-        $this->parent = Waterfall::instance();        
+        $this->parent = Waterfall::instance();  
      
         // Launch the various modules of our plugin
-        foreach( ['Waterfall_Reviews\Ajax', 'Waterfall_Reviews\Score', 'Waterfall_Reviews\Filter', 'Waterfall_Reviews\Views\Archive_Reviews', 'Waterfall_Reviews\Views\Single_Reviews'] as $module ) {
+        $modules = [
+            'Waterfall_Reviews\Ajax', 
+            'Waterfall_Reviews\Score',
+            'Waterfall_Reviews\Views\Shortcodes', 
+            'Waterfall_Reviews\Views\Archive_Reviews', 
+            'Waterfall_Reviews\Views\Single_Reviews'
+        ];
+
+        foreach( $modules as $module ) {
 
             if( class_exists($module) ) {
                 new $module();

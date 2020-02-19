@@ -68,7 +68,7 @@ class Reviews extends Component {
             ],
             'button'        => isset($this->layout['reviews_archive_content_button']) && $this->layout['reviews_archive_content_button'] ? true : false,  // Displays a button to the post
             'buttonLabel'   => isset($this->layout['reviews_archive_content_button']) && $this->layout['reviews_archive_content_button'] ? $this->layout['reviews_archive_content_button'] : '',                 // Text for this button
-            'featured'      => isset($this->layout['reviews_archive_content_featured']) && $this->layout['reviews_archive_content_featured'] ? $this->layout['reviews_archive_content_featured'] : 'standard',                                                      // Determines were we get our featured image from, either the custom meta field for the logo or featured image
+            'featured'      => isset($this->layout['reviews_archive_content_featured']) && $this->layout['reviews_archive_content_featured'] ? $this->layout['reviews_archive_content_featured'] : 'standard',   // Determines were we get our featured image from, either the custom meta field for the logo or featured image. Supports 'logo' or 'standard'.
             'gridGap'       => isset($this->layout['reviews_archive_content_gap']) && $this->layout['reviews_archive_content_gap'] ? $this->layout['reviews_archive_content_gap'] : 'default', 
             'pagination'    => ['type' => 'numbers'],                                           // Displays pagination
             'price'         => isset($this->layout['reviews_archive_content_price']) && $this->layout['reviews_archive_content_price'] ? true : false,   // Displays the price

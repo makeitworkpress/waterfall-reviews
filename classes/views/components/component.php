@@ -25,7 +25,7 @@ abstract class Component {
      * Contains the parameters for a component
      * @access protected
      */
-    public $params = []; 
+    public $public = []; 
 
     /**
      * Contains the public properties, used in the template

@@ -353,6 +353,11 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
 
                 if( in_array($attribute['type'], ['checkbox', 'select']) && $attribute['values'] ) {
                     $values = array_filter( explode(',', $attribute['values']) );
+
+                    // Placeholder
+                    if( $attribute['type'] == 'select' ) {
+                        $choices[''] = __('Select', 'wfr');    
+                    }
                     
                     foreach( $values as $choice ) {
 
@@ -443,7 +448,14 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
         $id      = sanitize_key($property['name']);
 
         if( in_array($property['type'], ['checkbox', 'select']) && $property['values'] ) {
+                      
             $values = array_filter( explode(',', $property['values']) );
+
+            // Placeholder
+            if( $attribute['type'] == 'select' ) {
+                $choices[''] = __('Select', 'wfr');    
+            }            
+            
             foreach( $values as $key => $choice ) {
                 $key           = sanitize_key($choice);
                 $choices[$key] = $property['type'] == 'checkbox' ? ['label' => trim( sanitize_text_field($choice) )] : trim( sanitize_text_field($choice) );
