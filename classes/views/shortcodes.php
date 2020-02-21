@@ -63,6 +63,7 @@ class Shortcodes {
          * @todo Dry this with the \elementor\reviews.php class, arguments are essentially the same.
 		 */
 		$args		= [
+			'attributes'		=> ['class' => 'wfr-reviews-component wfr-shortcode'],
 			'button'			=> $atts['button'] ? true : false,
 			'buttonLabel'		=> $atts['button'],
 			'postProperties' 	=> [
@@ -117,11 +118,11 @@ class Shortcodes {
 		}
 
 		if( $atts['exclude'] ) {
-			$args['queryArgs']['post__not_in']	= $atts['exclude'];
+			$args['queryArgs']['post__not_in']	= [$atts['exclude']];
 		}
 		
 		if( $atts['include'] ) {
-			$args['queryArgs']['post__in']		= $atts['include'];
+			$args['queryArgs']['post__in']		= [$atts['include']];
 		}
 		
 		if( $atts['sort'] ) {
