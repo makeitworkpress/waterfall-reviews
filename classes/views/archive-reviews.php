@@ -74,12 +74,8 @@ class Archive_Reviews extends Base {
             echo '  <li><a class="atom-tab active" href="#" data-target="reviews"><i class="fa fa-list"></i> ' . __('List', 'wfr') . '</a></li>';
 
             if( $this->layout['reviews_archive_content_charts'] ) {
-                echo '  <li><a class="atom-tab" href="#" data-target="charts"><i class="fa fa-bar-chart"></i> ' . __('Charts', 'wfr') . '</a></li>';
-            }
-
-            if( $this->layout['reviews_archive_content_compare']  ) {
-                echo '  <li><a class="atom-tab" href="#" data-target="compare"><i class="fa fa-sliders"></i> ' . __('Compare', 'wfr') . '</a></li>';   
-            }            
+                echo '  <li><a class="atom-tab" href="#" data-target="charts"><i class="fa fa-bar-chart"></i> ' . __('Compare', 'wfr') . '</a></li>';
+            }          
 
             echo '</ul>';
 

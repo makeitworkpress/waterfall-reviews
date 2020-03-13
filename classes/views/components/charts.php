@@ -159,6 +159,27 @@ class Charts extends Component {
      */
     public function getChartData() {
 
+        /**
+         * There is no meta key defined.
+         * Will result in JS errors.
+         */
+        if( ! $this->params['meta'] ) {
+            return;
+        }
+
+        /**
+         * Look if we have a value stored to the object cache
+         */
+        $cache_key  = 'wfr_chart_data_' . $this->params['meta'];
+        $cache      = wp_cache_get($cache_key);
+
+        if( $cache ) {
+            return $cache;
+        }
+
+        /**
+         * Retrieve our reviews
+         */
         $args = ['fields' => 'ids', 'meta_key' => $this->params['meta'], 'orderby' => 'meta_value_num', 'posts_per_page' => -1, 'post_type' => 'reviews'];
 
         if( $this->params['categories'] ) {
@@ -182,6 +203,7 @@ class Charts extends Component {
             ],
             'labels'    => [],
         ];
+        $metrics = [];
 
         // Return an empty dataset
         if( ! $reviews ) {
@@ -196,15 +218,24 @@ class Charts extends Component {
             if( is_array($meta) && isset($meta[0]['name']) && isset($meta[0]['value']) ) {
 
                 foreach( $meta as $plan ) {
-                    $data['labels'][]               = $plan['name'];
-                    $data['dataSet']['data'][]      = $plan['value']; 
+                    $metrics[$plan['name']]         = floatval($plan['value']);
                 }
 
             } else {
-                $data['labels'][]               = get_the_title( $review );
-                $data['dataSet']['data'][]      = $meta; 
+                $metrics[get_the_title( $review )]  = floatval($meta);
             }
         }
+
+        // Sort our metrics on value
+        arsort($metrics);
+
+        // Set our chart data
+        foreach( $metrics as $label => $value ) {
+            $data['labels'][]               = $label;
+            $data['dataSet']['data'][]      = $value;             
+        }
+
+        wp_cache_set( $cache_key, $data );
 
         // Loads the chart by an instant, thus requiring the values directly.
         if( $this->params['load'] == true ) {

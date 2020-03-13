@@ -418,17 +418,9 @@ $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
 $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
     'default'       => '',
     'id'            => 'reviews_archive_content_charts',
-    'title'         => __('Enable Chart Tab in Archives', 'wfr'),
+    'title'         => __('Enable Charts & Compare Tab in Archives', 'wfr'),
     'type'          => 'checkbox'    
 ];
-
-$layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
-    'default'       => '',
-    'id'            => 'reviews_archive_content_compare',
-    'title'         => __('Enable Compare Tab in Archives.', 'wfr'),
-    'type'          => 'checkbox'    
-];
-
 
 $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
     'default'       => 'none',

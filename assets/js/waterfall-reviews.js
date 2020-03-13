@@ -156,7 +156,7 @@ var Charts = {
                     }]
                 }
             },                    
-            type: 'bar'
+            type: 'horizontalBar'
         });
 
     }
