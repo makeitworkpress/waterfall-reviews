@@ -89,11 +89,13 @@ var Charts = {
         // Format our datasets with random colors and add our data to the right canvas
         var dataSet     = {
             backgroundColor: [],
+            barThickness: 25,
             data: [],
             label: data.dataSet.label
         },
         dataSets    = [];
 
+        // Adds the data
         for( var index in data.dataSet.data ) {
             var backgroundColor = randomColor(),
                 dataSetdata     = parseFloat(data.dataSet.data[index]);
@@ -120,7 +122,7 @@ var Charts = {
                         ticks: {
                             beginAtZero:true
                         }
-                    }]
+                    }]                    
                 }
             },                    
             type: 'horizontalBar'

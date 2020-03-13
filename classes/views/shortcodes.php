@@ -25,7 +25,57 @@ class Shortcodes {
             
         }  
         
-    }
+	}
+	
+	/**
+	 * Charts shortcode
+	 */
+	public function charts( $atts = [] ) {
+
+        // Default attributes
+        $atts = shortcode_atts( [
+            'categories' => [],                                              // Only displays data from these review category ids, separate by comma
+            'default'    => __('Select data', 'wfr'),                        // Label that is used for the default option 
+            'id'         => 'wfr_chart_data',                                // The default id for the chart
+            'include'    => [],                                              // If valid, only includes these posts ids in the query 
+            'label'      => false,  										 // Label that is used for selecting charts - if set to false, hides the form
+            'meta'       => 'rating',                                        // Indicates the metafield that is used as a source of loading and ordering the default chart data 
+            'tags'       => []  											 // Only displays data from these review tag ids, separate by tag	
+		], $atts, 'charts' );
+
+		// Some sanitization of shortcode inputs
+		foreach( $atts as $key => $value ) {
+			if( in_array($key, ['id', 'meta']) ) {
+				$atts[$key] = sanitize_key($value);
+			} else {
+				$atts[$key] = sanitize_text_field($value);
+			}
+		}
+
+		$atts['load'] = $atts['label'] ? false : true; // Loads the selected chart by default if label is set
+
+		if( $atts['categories'] ) {
+            $atts['categories'] = explode(',', $atts['categories']);
+		}	
+
+		if( $atts['include'] ) {
+            $atts['include'] = explode(',', $atts['include']);
+		}
+		
+		if( $atts['tags'] ) {
+            $atts['tags'] = explode(',', $atts['categories']);
+		}	
+
+		// Render our charts
+		$charts 	= new Components\Charts( $atts );
+
+		if( $atts['load'] ) {
+			$charts->getChartData();
+		}
+
+		return $charts->render(false); 
+		 	
+	}
     
     /**
      * Reviews shortcode

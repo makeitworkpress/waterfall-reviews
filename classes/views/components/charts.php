@@ -20,14 +20,14 @@ class Charts extends Component {
      */
     protected function initialize() {
         $this->params = wp_parse_args( $this->params, [
-            'categories' => [],                                              // Only displays data from these review categories
+            'categories' => [],                                              // Only displays data from these review category ids
             'default'    => __('Select data', 'wfr'),                        // Label that is used for the default option 
             'id'         => 'wfrChartData',                                  // The default id for the chart
             'include'    => [],                                              // If valid, only includes these posts ids in the query 
             'label'      => __('Select data to display in a chart', 'wfr'),  // Label that is used for selecting charts - if set to false, hides the form
             'load'       => false,                                           // Loads the selected chart by default if set to true
             'meta'       => 'rating',                                        // Indicates the metafield that is used as a source of loading and ordering the chart data 
-            'tags'       => [],                                              // Only displays data from these review tags 
+            'tags'       => [],                                              // Only displays data from these review tag ids 
         ] );
 
         $this->template = 'charts'; 
@@ -44,11 +44,11 @@ class Charts extends Component {
 
         global $post;
 
-        $this->props['category']    = implode(',', $this->params['categories']); 
+        $this->props['category']    = is_array($this->params['categories']) ? implode(',', $this->params['categories']) : ''; 
         $this->props['default']     = $this->params['default'];
         $this->props['id']          = $this->params['id'];
         $this->props['selector']    = $this->params['label'];
-        $this->props['tag']         = implode(',', $this->params['tags']);
+        $this->props['tag']         = is_array($this->params['tags']) ? implode(',', $this->params['tags']) : '';
 
         // General information
         $this->props['selectorGroups']['general'] = [
@@ -197,9 +197,9 @@ class Charts extends Component {
         $reviews = get_posts($args);
 
         $data = [
-            'dataSet'   => [
-                'data'  => [],
-                'label' => $this->meta[$this->params['meta']]
+            'dataSet'   => [                
+                'data'          => [],
+                'label'         => $this->meta[$this->params['meta']]
             ],
             'labels'    => [],
         ];
