@@ -73,7 +73,7 @@ class Shortcodes {
 			$charts->getChartData();
 		}
 
-		return $charts->render(false); 
+		return $charts->render(true); 
 		 	
 	}
     
