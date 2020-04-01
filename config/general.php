@@ -11,6 +11,7 @@ $configurations = [
     'enqueue'   => [
         ['handle' => 'wfr-style', 'src' => WFR_URI . 'assets/css/waterfall-reviews.min.css'], 
         ['handle' => 'wfr-chart', 'src' => WFR_URI . 'assets/js/vendor/chart.min.js', 'action' => 'register'],
+        ['handle' => 'wfr-admin', 'src' => WFR_URI . 'assets/js/admin/wfr-admin.js', 'context' => 'admin'],
         [
             'handle'    => 'wfr-scripts', 
             'localize'  => [

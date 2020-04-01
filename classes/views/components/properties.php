@@ -78,6 +78,11 @@ class Properties extends Component {
         // Get our global post object
         global $post;
 
+        // $post Should be set
+        if( ! is_object($post) ) {
+            return;
+        }
+
         // The correct property should be declared
         if( ! in_array($type, ['attribute', 'property']) ) {
             return;
@@ -94,6 +99,10 @@ class Properties extends Component {
             return;
         }      
   
+        // Get our default price and price currency
+        $priceCurrency  = get_post_meta($post->ID, 'price_currency', true);
+        $priceCurrency  = $priceCurrency ? $priceCurrency : $this->options['review_currency'];
+        $priceUnit      = get_post_meta($post->ID, 'price_unit', true);
 
         /**
          * For each field, get the meta values
@@ -109,7 +118,15 @@ class Properties extends Component {
                 if( is_array($meta) ) {
                     $value      = [];
                     foreach( $meta as $plan ) {
-                        $value[] = $this->getFieldValues($attribute, $plan['value']) . ' <span class="wfr-properties-plan">(' . $plan['name'] . ')</span>'; 
+                        $planValues = $this->getFieldValues($attribute, $plan['value']);
+
+                        // Only add plans if there is a value
+                        if( $planValues ) {
+                            $planPrice  = $plan['price'] ? ' <span class="wfr-properties-price">(' . $priceCurrency . $plan['price'] . ' ' . $priceUnit . ')</span>' : '';
+                            $planName   = $plan['name'] ? ' - <span class="wfr-properties-plan">' . $plan['name'] . '</span>' : '';
+                            $value[]    = $planValues . $planName . $planPrice;
+                        }
+
                     }
                 }
             } else {
@@ -121,7 +138,7 @@ class Properties extends Component {
                 $value = implode('<br/>', $value);
             }                    
 
-            // In the end, only add the tabs if they have a value
+            // In the end, only add the values and thus the tabs if they have a value
             if( $value ) {
                 $target = $type == 'attribute' && $key ? str_replace('_', '', $key) : 'properties';
                 $this->props['tabs'][$target]['content'][] = ['label' => $attribute['name'], 'value' => $value];

@@ -104,7 +104,7 @@ class Shortcodes {
             'sort'              => 'rating_desc',
             'summary'           => false,
             'tags'              => '',
-            'title'             => 'h4',
+            'title'             => 'h3',
             'view'              => 'list'
         ], $atts, 'reviews' );  
         

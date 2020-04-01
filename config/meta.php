@@ -349,7 +349,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                 } 
 
                 $choices = [];
-                $id      = sanitize_key($attribute['name']);
+                $id      = $attribute['key'] ? sanitize_key($attribute['key']) : sanitize_key($attribute['name']);
 
                 if( in_array($attribute['type'], ['checkbox', 'select']) && $attribute['values'] ) {
                     $values = array_filter( explode(',', $attribute['values']) );
@@ -385,16 +385,22 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                                 'id'        => 'name',
                                 'columns'   => 'half',
                                 'type'      => 'input',
-                            ],                            
+                            ],                                                       
                             'value' => [
                                 'title'     => __('Value', 'wfr'),
                                 'id'        => 'value',
-                                'columns'   => 'half',
+                                'columns'   => 'fourth',
                                 'type'      => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
                                 'subtype'   => $attribute['type'] == 'number' ? 'number' : NULL,
                                 'rows'      => 3,
                                 'options'   => $choices
-                            ]
+                            ],
+                            'price' => [
+                                'title'     => __('Associated Price', 'wfr'),
+                                'id'        => 'price',
+                                'columns'   => 'fourth',
+                                'type'      => 'number',
+                            ]                            
                         ]
 
                     ];
@@ -445,7 +451,7 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
         }        
 
         $choices = [];
-        $id      = sanitize_key($property['name']);
+        $id      = $property['key'] ? sanitize_key($property['key']) : sanitize_key($property['name']);
 
         if( in_array($property['type'], ['checkbox', 'select']) && $property['values'] ) {
                       
@@ -473,16 +479,22 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
                         'id'        => 'name',
                         'columns'   => 'half',
                         'type'      => 'input',
-                    ],                            
+                    ],                             
                     'value' => [
                         'title'     => __('Value', 'wfr'),
                         'id'        => 'value',
-                        'columns'   => 'half',
+                        'columns'   => 'fourth',
                         'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
                         'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
                         'rows'      => 3,
                         'options'   => $choices
-                    ]
+                    ],
+                    'price' => [
+                        'title'     => __('Associated Price', 'wfr'),
+                        'id'        => 'price',
+                        'columns'   => 'fourth',
+                        'type'      => 'number',
+                    ]                    
                 ]
 
             ];

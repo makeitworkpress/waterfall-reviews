@@ -54,6 +54,7 @@ $options = [
                         'subtype'       => 'number',   
                     ],
                     [
+                        'class'         => 'small-text',
                         'columns'       => 'fourth',
                         'default'       => '$',
                         'id'            => 'review_currency',
@@ -173,13 +174,24 @@ $options = [
                         'remove'        => __('Remove Property', 'wfr'),
                         'fields'        => [
                             [
-                                'columns'       => 'fourth',
+                                'class'         => 'regular-text wfr-key-field',
+                                'columns'       => 'fifth',
                                 'id'            => 'name',
-                                'title'         => __('Property Name', 'wfr'),
+                                'title'         => __('Unique Property Name', 'wfr'),
+                                'description'   => __('Use an unique name for each property.', 'wfr'),
                                 'type'          => 'input'                                        
                             ],
                             [
-                                'columns'       => 'fourth',
+                                'class'         => 'medium-text wfr-key-target',
+                                'columns'       => 'fifth',
+                                'id'            => 'key',
+                                'title'         => __('Property Key', 'wfr'),
+                                'description'   => __('The unique meta key for this property.', 'wfr'),
+                                'type'          => 'input',
+                                'readonly'      => true                                        
+                            ],                            
+                            [
+                                'columns'       => 'fifth',
                                 'id'            => 'type',
                                 'title'         => __('Property Field Type', 'wfr'),
                                 'type'          => 'select',
@@ -192,7 +204,7 @@ $options = [
                                 ]                                        
                             ],
                             [
-                                'columns'       => 'fourth',
+                                'columns'       => 'fifth',
                                 'id'            => 'values',
                                 'title'         => __('Unique Property Field Values', 'wfr'),
                                 'description'   => __('Add unique values if your property field type is checkbox or select. Seperate them by comma.', 'wfr'),
@@ -200,7 +212,7 @@ $options = [
                                 'rows'          => 1                                       
                             ],
                             [
-                                'columns'       => 'fourth',
+                                'columns'       => 'fifth',
                                 'id'            => 'repeat',
                                 'title'         => __('Repeatable?', 'wfr'),
                                 'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
@@ -251,14 +263,24 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
             'remove'        => __('Remove Attribute', 'wfr'),
             'fields'        => [              
                 [
-                    'columns'       => 'fourth',
+                    'class'         => 'regular-text wfr-key-field',
+                    'columns'       => 'fifth',
                     'id'            => 'name',
                     'title'         => __('Attribute Name', 'wfr'),
-                    'description'   => __('The unique name for this attribute.', 'wfr'),
+                    'description'   => __('Use an unique name for each attribute.', 'wfr'),
                     'type'          => 'input'                                        
-                ],                
+                ],
                 [
-                    'columns'       => 'fourth',
+                    'class'         => 'medium-text wfr-key-target',
+                    'columns'       => 'fifth',
+                    'id'            => 'key',
+                    'title'         => __('Attribute Key', 'wfr'),
+                    'description'   => __('The unique meta key for this attribute.', 'wfr'),
+                    'type'          => 'input',
+                    'readonly'      => true                                         
+                ],                                 
+                [
+                    'columns'       => 'fifth',
                     'id'            => 'type',
                     'title'         => __('Attribute Field Type', 'wfr'),
                     'description'   => __('The type of field this attribute resembles.', 'wfr'),
@@ -270,7 +292,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                     ]                                        
                 ],                     
                 [
-                    'columns'       => 'fourth',
+                    'columns'       => 'fifth',
                     'id'            => 'values',
                     'title'         => __('Unique Attribute Field Values', 'wfr'),
                     'description'   => __('Add unique values if you have a select or checkbox attribute field type. Seperate them by comma.', 'wfr'),
@@ -278,7 +300,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                     'rows'          => 1                                        
                 ],
                 [
-                    'columns'       => 'fourth',
+                    'columns'       => 'fifth',
                     'id'            => 'repeat',
                     'title'         => __('Repeatable?', 'wfr'),
                     'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
