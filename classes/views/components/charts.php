@@ -28,9 +28,10 @@ class Charts extends Component {
             'label'      => __('Select data to display in a chart', 'wfr'),  // Label that is used for selecting charts - if set to false, hides the form
             'load'       => false,                                           // Loads the selected chart by default if set to true
             'meta'       => 'rating',                                        // Indicates the metafield that is used as a source of loading and ordering the chart data 
-            'normal'     => __('Normal Values', 'wfr'),                 // The button for normal chart loading
+            'normal'     => __('Normal Values', 'wfr'),                      // The button for normal chart loading
             'tags'       => [],                                              // Only displays data from these review tag ids 
-            'weighted'   => __('Price Weighted Values'),                // The button for weighted chart loading
+            'groups'     => [],                                              // Limits the display only to certain groups of criteria (for criteria, use sanitized criteria keys)
+            'weighted'   => __('Price Weighted Values'),                     // The button for weighted chart loading
             'weight'     => false                                            // Allows to load weighted charts for the given attribute by showing the weighted button
         ] );
 
@@ -106,9 +107,14 @@ class Charts extends Component {
                 }
 
                 $key  = sanitize_key($property['name']);
-                $this->props['selectorGroups']['properties']['options'][$key . '_property'] = $property['name'];
+                $this->props['selectorGroups']['properties']['options'][$key . '_property'] = esc_html($property['name']);
                 $this->meta[$key . '_property']                                             = $property['name'];
 
+            }
+
+            // Remove if we don't have any numerical properties
+            if( ! $this->props['selectorGroups']['properties']['options'] ) {
+                unset($this->props['selectorGroups']['properties']);    
             }
 
         }
@@ -132,7 +138,7 @@ class Charts extends Component {
                 if( $this->options[$key . '_attributes']  && isset($this->options[$key . '_attributes'][0]['name']) && $this->options[$key . '_attributes'][0]['name']) {
                     
                     $this->props['selectorGroups'][$key . '_attributes'] = [
-                        'label'     => sprintf( __('%s Attributes', 'wfr'), $criteria['name']),
+                        'label'     => esc_html($criteria['name']),
                         'options'   => []
                     ]; 
 
@@ -149,16 +155,27 @@ class Charts extends Component {
                         }
 
                         $unique = sanitize_key($attribute['name']);
-                        $this->props['selectorGroups'][$key . '_attributes']['options'][$unique . '_' . $key . '_attribute']    = $attribute['name'];
+                        $this->props['selectorGroups'][$key . '_attributes']['options'][$unique . '_' . $key . '_attribute']    = esc_html($attribute['name']);
                         $this->meta[$unique . '_' . $key . '_attribute']                                                        = $attribute['name'];
 
                     }
 
                 }
 
-
             }
 
+        }
+
+        /**
+         * Only allow certain groups from the selector
+         */
+        if( $this->params['groups'] ) {
+            foreach( $this->props['selectorGroups'] as $key => $group ) {
+                $group = str_replace('_attributes', '', $key);
+                if( ! in_array($group, $this->params['groups']) ) {
+                    unset($this->props['selectorGroups'][$key]);
+                }
+            }
         }
     
     }
@@ -228,7 +245,7 @@ class Charts extends Component {
                 'labels'   => [],
             ]
         ];
-        
+
         $metrics = [
             'normal'    => [],
             'weighted'  => []
