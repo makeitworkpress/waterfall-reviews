@@ -34,13 +34,16 @@ class Shortcodes {
 
         // Default attributes
         $atts = shortcode_atts( [
-            'categories' => [],                                              // Only displays data from these review category ids, separate by comma
-            'default'    => __('Select data', 'wfr'),                        // Label that is used for the default option 
-            'id'         => 'wfr_chart_data',                                // The default id for the chart
-            'include'    => [],                                              // If valid, only includes these posts ids in the query 
-            'label'      => false,  										 // Label that is used for selecting charts - if set to false, hides the form
-            'meta'       => 'rating',                                        // Indicates the metafield that is used as a source of loading and ordering the default chart data 
-            'tags'       => []  											 // Only displays data from these review tag ids, separate by tag	
+            'categories' => [],                           		// Only displays data from these review category ids, separate by comma
+            'default'    => __('Select data', 'wfr'),     		// Label that is used for the default option 
+            'id'         => 'wfr_chart_data',             		// The default id for the chart
+            'include'    => [],                           		// If valid, only includes these posts ids in the query 
+            'label'      => false,  							// Label that is used for selecting charts - if set to false, hides the form
+			'meta'       => 'rating',                       	// Indicates the metafield that is used as a source of loading and ordering the default chart data 
+			'normal'     => __('Load Normal Values', 'wfr'),	// The button for normal chart loading
+			'tags'       => [],  								// Only displays data from these review tag ids, separate by tag
+			'weighted'   => __('Load Price Weighted Values'), 	// The button for weighted chart loading
+			'weight'	 => false								// Allows the display of price weighted data if supported
 		], $atts, 'charts' );
 
 		// Some sanitization of shortcode inputs

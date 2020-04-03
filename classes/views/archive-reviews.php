@@ -66,7 +66,7 @@ class Archive_Reviews extends Base {
 
         echo '<div class="content">';
 
-        if( $this->layout['reviews_archive_content_charts'] || $this->layout['reviews_archive_content_compare']  ) {
+        if( $this->layout['reviews_archive_content_compare']  ) {
 
             echo '<div class="wfr-reviews-tabs atom-tabs">';
 
@@ -123,16 +123,18 @@ class Archive_Reviews extends Base {
         }
 
         // Make the closing of tabs for our posts
-        if( $this->layout['reviews_archive_content_charts'] || $this->layout['reviews_archive_content_compare']  ) {
+        if( $this->layout['reviews_archive_content_compare']  ) {
             echo '</section><!-- .wfr-reviews-tab -->';
         }     
 
         // Add our content charts
-        if( $this->layout['reviews_archive_content_charts'] ) {
+        if( $this->layout['reviews_archive_content_compare'] ) {
 
             echo '<section class="wfr-charts-tab atom-tab" data-id="charts">';
 
-            $args = [];
+            $args = [
+                'weight' => $this->layout['reviews_archive_content_compare_weighted']
+            ];
 
             // Filter for certain categories
             if( isset(get_queried_object()->term_id) && isset(get_queried_object()->taxonomy) && get_queried_object()->taxonomy == 'reviews_category' ) {
@@ -148,21 +150,14 @@ class Archive_Reviews extends Base {
             $charts = new Components\Charts( $args );
             $charts->render();
 
+            // Add comparison tables
+
             echo '</section>';
 
-        }
-
-        // Adds our comparison - @todo complete
-        // if( $this->layout['reviews_archive_content_compare'] ) {
-
-        //     echo '<section class="wfr-compare-tab atom-tab" data-id="compare">';
-
-        //     echo '</section>';
-
-        // }        
+        }     
 
         // Close our tabs
-        if( $this->layout['reviews_archive_content_charts'] || $this->layout['reviews_archive_content_compare']  ) {
+        if( $this->layout['reviews_archive_content_compare']  ) {
             echo '  </div><!-- .atom-tabs-content -->';
             echo '</div><!-- .atom-tabs -->';
         }

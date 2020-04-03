@@ -417,8 +417,17 @@ $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
 
 $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
     'default'       => '',
-    'id'            => 'reviews_archive_content_charts',
-    'title'         => __('Enable Charts & Compare Tab in Archives', 'wfr'),
+    'id'            => 'reviews_archive_content_compare',
+    'title'         => __('Enable Compare Tab', 'wfr'),
+    'description'   => __('Displays a tab which displays charts and tables to easily compare reviews.', 'wfr'),
+    'type'          => 'checkbox'    
+];
+
+$layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
+    'default'       => '',
+    'id'            => 'reviews_archive_content_compare_weighted',
+    'title'         => __('Weighted Comparisons', 'wfr'),
+    'description'   => __('Allows numerical values from charts and comparison tables to be weighted by price.', 'wfr'),
     'type'          => 'checkbox'    
 ];
 

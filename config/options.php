@@ -182,13 +182,12 @@ $options = [
                                 'type'          => 'input'                                        
                             ],
                             [
-                                'class'         => 'medium-text wfr-key-target',
+                                'class'         => 'regular-text wfr-key-target wfr-property-option',
                                 'columns'       => 'fifth',
                                 'id'            => 'key',
                                 'title'         => __('Property Key', 'wfr'),
                                 'description'   => __('The unique meta key for this property.', 'wfr'),
-                                'type'          => 'input',
-                                'readonly'      => true                                        
+                                'type'          => 'input'                                     
                             ],                            
                             [
                                 'columns'       => 'fifth',
@@ -271,13 +270,12 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                     'type'          => 'input'                                        
                 ],
                 [
-                    'class'         => 'medium-text wfr-key-target',
+                    'class'         => 'regular-text wfr-key-target wfr-criteria-option wfr-criteria-' . $key,
                     'columns'       => 'fifth',
                     'id'            => 'key',
                     'title'         => __('Attribute Key', 'wfr'),
                     'description'   => __('The unique meta key for this attribute.', 'wfr'),
-                    'type'          => 'input',
-                    'readonly'      => true                                         
+                    'type'          => 'input'                                        
                 ],                                 
                 [
                     'columns'       => 'fifth',

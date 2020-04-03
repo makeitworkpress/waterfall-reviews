@@ -38,7 +38,8 @@ class Ajax extends Base {
             'categories'    => array_filter( explode(',', sanitize_text_field($_POST['category'])) ),
             'include'       => isset( $_POST['include'] ) && is_array( $_POST['include'] ) ? array_filter( $include, function($v) { return is_numeric($v); } ) : [],
             'meta'          => sanitize_key( $_POST['key'] ),
-            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tag'])) ),    
+            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tag'])) ), 
+            'weight'        => true
         ] );
 
         $data = $chart->getChartData();

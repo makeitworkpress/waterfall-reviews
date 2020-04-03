@@ -6,10 +6,26 @@ jQuery(document).ready( function() {
     /**
      * 
      * @param {string} value Sanitizes a string to a key. Similar to the WordPress sanitize_key function
+     * @param {node} target The target input field that needs a sanitized key
      */
-    var sanitizeKey = function(value) {
-        value = value.toLowerCase().replace('/[^a-z0-9_\-]/', '').replace(/ /g, '_');
-        return value;
+    var sanitizeKey = function(value, target) {
+
+        var key, context = '';
+
+        if( jQuery(target).hasClass('wfr-property-option') ) {
+            context = '_property';
+        }
+
+        if( jQuery(target).hasClass('wfr-criteria-option') ) {
+            var criteria = target.classList[3].replace('wfr-criteria-', '_');
+            context = criteria + '_attribute';
+        }        
+
+        key = value.toLowerCase();
+        key = key.replace(/[^a-z0-9_-]/g,'');
+       
+        return key + context;
+
     };    
 
     /**
@@ -20,8 +36,9 @@ jQuery(document).ready( function() {
         var fieldTarget = jQuery(fieldName).closest('.wp-custom-fields-repeatable-fields').find('.wfr-key-target')[0];
 
         if( fieldName.value && ! fieldTarget.value ) {
-            console.log(sanitizeKey(fieldName.value));
-            fieldTarget.value = sanitizeKey(fieldName.value);
+
+            fieldTarget.value = sanitizeKey(fieldName.value, fieldTarget);
+
         }
 
     } );
@@ -29,12 +46,15 @@ jQuery(document).ready( function() {
     /**
      * Listen to change events for new fields
      */
-    jQuery('#waterfall_options .wfr-key-field').on('')
+    jQuery(document).on('change', '.wfr-key-field', function(event) {
 
-    if( ! fieldName.value && ! fieldTarget.value ) {
-        jQuery(fieldName).change( function(event) {
-            fieldTarget.value = event.target.value;
-        });
-    }
+        var fieldName   = this;
+        var fieldTarget = jQuery(fieldName).closest('.wp-custom-fields-repeatable-fields').find('.wfr-key-target')[0];
+
+        if( fieldName.value && ! fieldTarget.value ) {
+            fieldTarget.value = sanitizeKey(fieldName.value, fieldTarget);
+        }
+        
+    });
 
 } );

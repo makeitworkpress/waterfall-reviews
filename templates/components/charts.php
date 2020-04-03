@@ -20,4 +20,10 @@
         </form>
     <?php } ?>
     <canvas class="wfr-charts-chart"></canvas>
+    <?php if( $charts['weight'] ) { ?> 
+        <form class="wfr-charts-weight">
+            <button class="wfr-charts-normal"><?php echo $charts['normal'] ?></button>
+            <button class="wfr-charts-weighted"><?php echo $charts['weighted'] ?></button>
+        </form>
+    <?php } ?>
 </div>

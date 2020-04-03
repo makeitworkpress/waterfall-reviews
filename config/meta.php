@@ -349,7 +349,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                 } 
 
                 $choices = [];
-                $id      = $attribute['key'] ? sanitize_key($attribute['key']) : sanitize_key($attribute['name']);
+                $id      = isset($attribute['key']) && $attribute['key'] ? sanitize_key($attribute['key']) : sanitize_key($attribute['name']) . '_' . $key . '_attribute';
 
                 if( in_array($attribute['type'], ['checkbox', 'select']) && $attribute['values'] ) {
                     $values = array_filter( explode(',', $attribute['values']) );
@@ -376,7 +376,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
 
                 if( isset($attribute['repeat']) && $attribute['repeat'] ) {
                     $ratingFields[] = [
-                        'id'        => $id . '_' . $key . '_attribute',
+                        'id'        => $id,
                         'title'     => $attribute['name'],
                         'type'      => 'repeatable',
                         'fields'    => [
@@ -399,7 +399,8 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                                 'title'     => __('Associated Price', 'wfr'),
                                 'id'        => 'price',
                                 'columns'   => 'fourth',
-                                'type'      => 'number',
+                                'type'      => 'input',
+                                'subtype'   => 'number'
                             ]                            
                         ]
 
@@ -407,7 +408,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                 } else {
                     $ratingFields[] = [
                         'columns'   => 'fourth',
-                        'id'        => $id . '_' . $key . '_attribute',
+                        'id'        => $id,
                         'title'     => $attribute['name'],
                         'type'      => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
                         'subtype'   => $attribute['type'] == 'number' ? 'number' : NULL,
@@ -451,7 +452,7 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
         }        
 
         $choices = [];
-        $id      = $property['key'] ? sanitize_key($property['key']) : sanitize_key($property['name']);
+        $id      = isset($property['key']) && $property['key'] ? sanitize_key($property['key']) : sanitize_key($property['name']) . '_property';
 
         if( in_array($property['type'], ['checkbox', 'select']) && $property['values'] ) {
                       
@@ -470,7 +471,7 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
 
         if( isset($property['repeat']) && $property['repeat'] ) {
             $propertyFields[] = [
-                'id'        => $id . '_property',
+                'id'        => $id,
                 'title'     => $property['name'],
                 'type'      => 'repeatable',
                 'fields'    => [
@@ -493,15 +494,16 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
                         'title'     => __('Associated Price', 'wfr'),
                         'id'        => 'price',
                         'columns'   => 'fourth',
-                        'type'      => 'number',
-                    ]                    
+                        'type'      => 'input',
+                        'subtype'   => 'number'
+                    ]                   
                 ]
 
             ];
         } else {
             $propertyFields[] = [
                 'columns'   => 'fourth',
-                'id'        => $id . '_property',
+                'id'        => $id,
                 'title'     => $property['name'],
                 'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
                 'subtype'   => $property['type'] == 'number' ? 'number' : NULL,

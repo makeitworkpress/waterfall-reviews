@@ -7,7 +7,12 @@ var randomColor = require('./../vendor/randomcolor'),
 var Charts = {
 
     chart: false,
+    data: {
+        normal: [],
+        weighted: [], 
+    },
     posts: [],
+    
     initialize: function() {
 
         var self = this;
@@ -19,7 +24,8 @@ var Charts = {
                 ID      = jQuery(this).attr('id');
 
             if( ID && typeof(window['chart' + ID]) !== 'undefined' ) {
-                self.renderChart( window['chart' + ID], canvas );
+                this.data = window['chart' + ID];
+                self.renderChart( this.data.normal, canvas );
             }
 
         });         
@@ -28,6 +34,31 @@ var Charts = {
         jQuery('.wfr-chart-selector select').change( function() {
             self.listener(this);
         });
+
+        // Prevent submitting of the weight form
+        jQuery('.wfr-charts-weight').submit( function(event) {
+            event.preventDefault();
+        });
+
+        // Select charts based upon our weighted buttons
+        jQuery('.wfr-charts-normal').click( function(event) {
+            event.preventDefault();
+
+            var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
+            jQuery(this).toggleClass('active');
+            self.renderChart(self.data.normal, canvas);
+
+        });
+        
+        // Select charts based upon our weighted buttons
+        jQuery('.wfr-charts-weighted').click( function(event) {
+            event.preventDefault();
+
+            var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
+            jQuery(this).toggleClass('active');
+            self.renderChart(self.data.weighted, canvas);
+
+        });        
 
     },
 
@@ -43,7 +74,7 @@ var Charts = {
             return;
         }
 
-        var canvas  = jQuery(object).closest('.wfr-chart-selector').next('.wfr-charts-chart').get(0),
+        var canvas  = jQuery(object).closest('.wfr-charts').find('.wfr-charts-chart').get(0),
             self    = this;
 
         utils.ajax({
@@ -57,7 +88,7 @@ var Charts = {
                 action: 'getChartData', 
                 category: jQuery(object).closest('.wfr-chart-selector').data('category'),
                 key: jQuery(object).val(),
-                include: this.posts,
+                include: this.posts, // @todo provide support for including certain posts
                 nonce: wfr.nonce,
                 tag: jQuery(object).closest('.wfr-chart-selector').data('tag')
             },
@@ -71,7 +102,9 @@ var Charts = {
                     return;
                 }
 
-                self.renderChart(response.data, canvas);
+                self.data = response.data;
+
+                self.renderChart(response.data.normal, canvas);
 
             }
         });
@@ -118,7 +151,7 @@ var Charts = {
             },
             options: {
                 scales: {
-                    yAxes: [{
+                    xAxes: [{
                         ticks: {
                             beginAtZero:true
                         }
