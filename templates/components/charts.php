@@ -1,6 +1,6 @@
 <?php
 /**
- * Displays a selector for charts
+ * Displays a chart or a selectable chart
  */
 ?>
 <div class="wfr-charts" <?php if($charts['id']) { echo 'id="' . $charts['id'] . '"'; } ?>>

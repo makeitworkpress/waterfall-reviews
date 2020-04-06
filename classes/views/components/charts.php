@@ -110,9 +110,9 @@ class Charts extends Component {
                     continue;
                 }
 
-                $key  = sanitize_key($property['name']);
-                $this->props['selectorGroups']['properties']['options'][$key . '_property'] = esc_html($property['name']);
-                $this->meta[$key . '_property']                                             = $property['name'];
+                $key = $property['key'] ? sanitize_key($property['key']) : sanitize_key($property['name']) . '_property';
+                $this->props['selectorGroups']['properties']['options'][$key]   = esc_html($property['name']);
+                $this->meta[$key]                                               = $property['name'];
 
             }
 
@@ -132,10 +132,10 @@ class Charts extends Component {
                     continue;
                 }                
                 
-                $key = sanitize_key($criteria['name']);
+                $key = isset($criteria['key'] ) && criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
                 
                 // Criteria Rating
-                $this->props['selectorGroups']['rating']['options'][$key . '_rating'] = $criteria['name'];
+                $this->props['selectorGroups']['rating']['options'][$key . '_rating'] = esc_html($criteria['name']);
                 $this->meta[$key . '_rating']                                         = $criteria['name'];
 
                 // Rating attributes
@@ -158,9 +158,9 @@ class Charts extends Component {
                             continue;
                         }
 
-                        $unique = sanitize_key($attribute['name']);
-                        $this->props['selectorGroups'][$key . '_attributes']['options'][$unique . '_' . $key . '_attribute']    = esc_html($attribute['name']);
-                        $this->meta[$unique . '_' . $key . '_attribute']                                                        = $attribute['name'];
+                        $unique = $attribute['key'] ? sanitize_key($attribute['key']) : sanitize_key($attribute['name']) . '_' . $key . '_attribute';
+                        $this->props['selectorGroups'][$key . '_attributes']['options'][$unique]    = esc_html($attribute['name']);
+                        $this->meta[$unique]                                                        = $attribute['name'];
 
                     }
 
@@ -180,6 +180,13 @@ class Charts extends Component {
                     unset($this->props['selectorGroups'][$key]);
                 }
             }
+        }
+
+        /**
+         * Directly loads all chart data
+         */
+        if( $this->params['load'] == true ) {
+            $this->getChartData();
         }
     
     }
@@ -217,19 +224,26 @@ class Charts extends Component {
         /**
          * Retrieve our reviews
          */
-        $args = ['fields' => 'ids', 'meta_key' => sanitize_key($this->params['meta']), 'orderby' => 'meta_value_num', 'posts_per_page' => -1, 'post_type' => 'reviews'];
+        $args = [
+            'fields'            => 'ids', 
+            'meta_key'          => sanitize_key($this->params['meta']), 
+            'orderby'           => 'meta_value_num', 
+            'posts_per_page'    => -1, 
+            'post_type'         => 'reviews',
+            'status'            => 'publish'
+        ];
 
         if( $this->params['categories'] && is_array($this->params['categories']) ) {
             $args['tax_query'][] = ['taxonomy' => 'reviews_category', 'terms' => $this->params['categories']];
         }
 
+        if( $this->params['include'] && is_array($this->params['include']) ) {
+            $args['post__in'] = $this->params['include'];
+        }        
+
         if( $this->params['tags'] && is_array($this->params['tags']) ) {
             $args['tax_query'][] = ['taxonomy' => 'reviews_tag', 'terms' => $this->params['tags']];
         }        
-
-        if( $this->params['include'] && is_array($this->params['include']) ) {
-            $args['post__in'] = $this->params['include'];
-        }
 
         $reviews = get_posts($args);
 

@@ -20,6 +20,7 @@ class Rating extends Component {
         $this->params   = wp_parse_args( $this->params, [
             'author'        => '',
             'class'         => '',
+            'criteria'      => [],                                  // Only loads the rating from the given criteria. Use sanitized criteria key for this
             'id'            => 0,
             'max'           => $this->options['rating_maximum'] ? $this->options['rating_maximum'] : 5,
             'min'           => 1,

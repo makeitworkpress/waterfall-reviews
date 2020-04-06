@@ -78,10 +78,6 @@ class Shortcodes {
 		// Render our charts
 		$charts 	= new Components\Charts( $atts );
 
-		if( $atts['load'] ) {
-			$charts->getChartData();
-		}
-
 		return $charts->render(true); 
 		 	
 	}

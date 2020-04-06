@@ -123,7 +123,7 @@ class Properties extends Component {
                         // Only add plans if there is a value
                         if( $planValues ) {
                             $planPrice  = $plan['price'] ? ' <span class="wfr-properties-price">(' . $priceCurrency . $plan['price'] . ' ' . $priceUnit . ')</span>' : '';
-                            $planName   = $plan['name'] ? ' - <span class="wfr-properties-plan">' . $plan['name'] . '</span>' : '';
+                            $planName   = $plan['name'] ? ' <span class="wfr-properties-plan"> - ' . $plan['name'] . '</span>' : '';
                             $value[]    = $planValues . $planName . $planPrice;
                         }
 

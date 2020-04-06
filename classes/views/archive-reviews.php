@@ -150,7 +150,11 @@ class Archive_Reviews extends Base {
             $charts = new Components\Charts( $args );
             $charts->render();
 
+            $args['load'] = true;
+
             // Add comparison tables
+            $tables = new Components\Tables( $args );
+            $tables->render();
 
             echo '</section>';
 
