@@ -20,9 +20,7 @@ class Ajax extends Base {
             ['wp_ajax_getChartData', 'getChartData'],
             ['wp_ajax_nopriv_getChartData', 'getChartData'],
             ['wp_ajax_filterReviews', 'filterReviews'],
-            ['wp_ajax_nopriv_filterReviews', 'filterReviews'],
-            ['wp_ajax_userRateReview', 'userRateReview'],
-            ['wp_ajax_nopriv_userRateReview', 'userRateReview']
+            ['wp_ajax_nopriv_filterReviews', 'filterReviews']
         ];
 
     }
@@ -33,16 +31,17 @@ class Ajax extends Base {
     public function getChartData() {
 
         wp_verify_nonce( 'we-love-good-reviews', $_POST['action'] );
-
-        $chart      = new Views\Components\Charts( [
-            'categories'    => array_filter( explode(',', sanitize_text_field($_POST['category'])) ),
-            'include'       => isset( $_POST['include'] ) && is_array( $_POST['include'] ) ? array_filter( $include, function($v) { return is_numeric($v); } ) : [],
+        
+        $args = [
+            'categories'    => array_filter( explode(',', sanitize_text_field($_POST['category'])), function($v) { return is_numeric($v); } ),
+            'include'       => array_filter( explode(',', sanitize_text_field($_POST['include'])), function($v) { return is_numeric($v); } ),
             'meta'          => sanitize_key( $_POST['key'] ),
-            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tag'])) ), 
+            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tag'])), function($v) { return is_numeric($v); } ),
             'weight'        => true
-        ] );
+        ];
 
-        $data = $chart->getChartData();
+        $chart      = new Views\Components\Charts( $args );
+        $data       = $chart->getChartData();
 
         wp_send_json_success( $data );
 

@@ -34,14 +34,15 @@ class Shortcodes {
 
         // Default attributes
         $atts = shortcode_atts( [
-            'categories' => [],                           		// Only displays data from these review category ids, separate by comma
-            'default'    => __('Select data', 'wfr'),     		// Label that is used for the default option 
+			'categories' => [],                           		// Only displays data from these review category ids, separate by comma
+			'groups'     => [],                                 // Limits the display only to certain groups of criteria (for criteria, use sanitized criteria keys)
             'id'         => 'wfr_chart_data',             		// The default id for the chart
             'include'    => [],                           		// If valid, only includes these posts ids in the query 
             'label'      => false,  							// Label that is used for selecting charts - if set to false, hides the form
-			'meta'       => 'rating',                       	// Indicates the metafield that is used as a source of loading and ordering the default chart data 
+			'meta'       => '',                       			// Indicates the metafield that is used as a source of loading and ordering the default chart data 
 			'normal'     => __('Load Normal Values', 'wfr'),	// The button for normal chart loading
 			'tags'       => [],  								// Only displays data from these review tag ids, separate by tag
+			'select'     => __('Select data', 'wfr'),     		// Label that is used for the default option 
 			'weighted'   => __('Load Price Weighted Values'), 	// The button for weighted chart loading
 			'weight'	 => false								// Allows the display of price weighted data if supported
 		], $atts, 'charts' );
@@ -55,18 +56,23 @@ class Shortcodes {
 			}
 		}
 
-		$atts['load'] = $atts['label'] ? false : true; // Loads the selected chart by default if label is set
+		$atts['load'] = $atts['meta'] ? true : false; 	// Loads the selected chart by default if a meta key is set
+		$atts['form'] = $atts['label'] ? true : false; 	// Shows the form if we have a label
 
 		if( $atts['categories'] ) {
             $atts['categories'] = explode(',', $atts['categories']);
-		}	
+		}
+		
+		if( $atts['groups'] ) {
+            $atts['groups'] 	= explode(',', $atts['groups']);
+		}		
 
 		if( $atts['include'] ) {
-            $atts['include'] = explode(',', $atts['include']);
+            $atts['include'] 	= explode(',', $atts['include']);
 		}
 		
 		if( $atts['tags'] ) {
-            $atts['tags'] = explode(',', $atts['categories']);
+            $atts['tags'] 		= explode(',', $atts['tags']);
 		}	
 
 		// Render our charts

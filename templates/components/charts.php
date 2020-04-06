@@ -4,11 +4,11 @@
  */
 ?>
 <div class="wfr-charts" <?php if($charts['id']) { echo 'id="' . $charts['id'] . '"'; } ?>>
-    <?php if( $charts['selector'] ) { ?> 
-        <form class="wfr-chart-selector" data-category="<?php echo $charts['category']; ?>" data-tag="<?php echo $charts['tag']; ?>">
-            <label><?php echo $charts['selector']; ?></label>
+    <?php if( $charts['form'] ) { ?> 
+        <form class="wfr-chart-selector" data-category="<?php esc_attr_e($charts['category']); ?>" data-tag="<?php esc_attr_e($charts['tag']); ?>" data-include="<?php esc_attr_e($charts['include']); ?>">
+            <label><?php echo $charts['label']; ?></label>
             <select name="wfr_chart_data_source">
-                <option value=""><?php echo $charts['default']; ?></option>
+                <option value=""><?php echo $charts['select']; ?></option>
                 <?php foreach( $charts['selectorGroups'] as $group ) { ?> 
                     <optgroup label="<?php echo $group['label']; ?>">
                         <?php foreach( $group['options'] as $value => $label ) { ?>
@@ -20,10 +20,10 @@
         </form>
     <?php } ?>
     <canvas class="wfr-charts-chart"></canvas>
-    <?php if( $charts['weight'] ) { ?> 
+    <?php if( $charts['weight'] && $charts['key'] !== 'price' ) { ?> 
         <form class="wfr-charts-weight">
-            <button class="wfr-charts-normal"><?php echo $charts['normal'] ?></button>
-            <button class="wfr-charts-weighted"><?php echo $charts['weighted'] ?></button>
+            <button class="wfr-charts-normal atom atom-button atom-button-small active"><?php echo $charts['normal'] ?></button>
+            <button class="wfr-charts-weighted atom atom-button atom-button-small"><?php echo $charts['weighted'] ?></button>
         </form>
     <?php } ?>
 </div>

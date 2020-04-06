@@ -1,15 +1,15 @@
 <?php
 /**
- * Displays numerical data from reviews within a chart
+ * Displays the properties of multiple reviews within a table.
  */
 namespace Waterfall_Reviews\Views\Components;
 
 defined( 'ABSPATH' ) or die( 'Go eat veggies!' );
 
-class Charts extends Component {
+class Tables extends Component {
 
     /**
-     * Holds a list of metra attributes and their names 
+     * Holds a list of meta attributes and their names 
      * 
      * @access private
      */
@@ -21,19 +21,18 @@ class Charts extends Component {
     protected function initialize() {
 
         $this->params = wp_parse_args( $this->params, [
-            'categories' => [],                                              // Only displays data from these review category ids
-            'form'       => true,                                            // Whether to display a selection form or not
-            'groups'     => [],                                              // Limits the display only to certain groups of criteria (for criteria, use sanitized criteria keys)
-            'id'         => 'wfrChartData',                                  // The default id for the chart
-            'include'    => [],                                              // If valid, only includes these posts ids in the query 
-            'label'      => __('Select data to display in a chart', 'wfr'),  // Label that is used for selecting charts
-            'load'       => false,                                           // Loads the selected chart by default if set to true
-            'meta'       => '',                                              // Indicates the metafield that is used as a source of loading and ordering the chart data 
-            'normal'     => __('Normal Values', 'wfr'),                      // The button for normal chart loading
-            'select'     => __('Select data', 'wfr'),                        // Label that is used for the default option             
-            'tags'       => [],                                              // Only displays data from these review tag ids 
-            'weighted'   => __('Price Weighted Values'),                     // The button for weighted chart loading
-            'weight'     => false                                            // Allows to load weighted charts for the given attribute by showing the weighted button
+            'attributes'    => [],                                              // Limits the display only to the given criteria attributes (use attribute meta keys)
+            'categories'    => [],                                              // Only displays data from these review category ids
+            'groups'        => [],                                              // Limits the display only to certain groups of criteria (for criteria, use sanitized criteria keys)
+            'include'       => [],                                              // If valid, only includes these posts ids in the query 
+            'form'          => true,                                            // Whether to display a selection form or not
+            'label'         => __('Select items to compare', 'wfr'),            // Label that is used for selecting reviews
+            'load'          => false,                                           // Loads the table if set to true. If categories, include or tags are not defined, loads all reviews.
+            'properties'    => [],                                              // Limits the display only to the given properties (use property meta keys)
+            'select'        => __('Select an item', 'wfr'),                     // Label that is used for the default option 
+            'tags'          => [],                                              // Only displays data from these review tag ids 
+            'weighted'      => __('Price Weighted Values'),                     // The subtitle for weighted chart loading
+            'weight'        => false                                            // Allows to load weighted charts for the given attribute by showing the weighted button
         ] );
 
         $this->template = 'charts'; 
@@ -50,13 +49,11 @@ class Charts extends Component {
 
         global $post;
 
-        $this->props['category']        = is_array($this->params['categories']) ? implode(',', $this->params['categories']) : ''; 
-        $this->props['form']            = $this->params['form'];
+        $this->props['category']        = is_array($this->params['categories']) ? implode(',', $this->params['categories']) : '';
         $this->props['key']             = $this->params['meta'];
         $this->props['id']              = $this->params['id'];
         $this->props['include']         = is_array($this->params['include']) ? implode(',', $this->params['include']) : '';
-        $this->props['label']           = $this->params['label'];
-        $this->props['select']          = $this->params['select'];
+        $this->props['selector']        = $this->params['label'];
         $this->props['weight']          = $this->params['weight'];
 
         if( $this->params['weight'] ) {

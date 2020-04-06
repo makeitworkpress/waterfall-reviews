@@ -44,8 +44,6 @@ var Charts = {
         normal: [],
         weighted: [], 
     },
-    posts: [],
-    
     initialize: function() {
 
         var self = this;
@@ -57,8 +55,8 @@ var Charts = {
                 ID      = jQuery(this).attr('id');
 
             if( ID && typeof(window['chart' + ID]) !== 'undefined' ) {
-                this.data = window['chart' + ID];
-                self.renderChart( this.data.normal, canvas );
+                self.data = window['chart' + ID];
+                self.renderChart( self.data.normal, canvas );
             }
 
         });         
@@ -77,8 +75,11 @@ var Charts = {
         jQuery('.wfr-charts-normal').click( function(event) {
             event.preventDefault();
 
+            console.log(self.data);
+
             var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
-            jQuery(this).toggleClass('active');
+            jQuery(this).addClass('active');
+            jQuery(this).next('.wfr-charts-weighted').removeClass('active');
             self.renderChart(self.data.normal, canvas);
 
         });
@@ -88,7 +89,8 @@ var Charts = {
             event.preventDefault();
 
             var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
-            jQuery(this).toggleClass('active');
+            jQuery(this).addClass('active');
+            jQuery(this).prev('.wfr-charts-normal').removeClass('active');
             self.renderChart(self.data.weighted, canvas);
 
         });        
@@ -121,7 +123,7 @@ var Charts = {
                 action: 'getChartData', 
                 category: jQuery(object).closest('.wfr-chart-selector').data('category'),
                 key: jQuery(object).val(),
-                include: this.posts, // @todo provide support for including certain posts
+                include: jQuery(object).closest('.wfr-chart-selector').data('include'),
                 nonce: wfr.nonce,
                 tag: jQuery(object).closest('.wfr-chart-selector').data('tag')
             },

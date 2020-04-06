@@ -3,6 +3,25 @@
 /**
  * Styling for the charts component
  */
+ .wfr-charts {
+    margin: 2.25em 0;
+    .atom-button {
+        border: none;
+        &.active, &:hover {
+            background-color: #2c3e50;
+            color: #fff;     
+        }
+    }
+ }
+
 .wfr-charts-chart {
     margin: @grid-space 0;
+}
+
+.wfr-charts-weight {
+    display: none;
+}
+
+.chartjs-render-monitor + .wfr-charts-weight {
+    display: block;
 }
