@@ -9,11 +9,12 @@ var App = {
     components: {
         charts: require('./components/charts'),
         comments: require('./components/comments'),
-        filter: require('./components/filter')
+        filter: require('./components/filter'),
+        tables: require('./components/tables')
     },     
     initialize: function() {
 
-        // Initialize atoms
+        // Initialize modules
         for( var key in this.components ) {
             this.components[key].initialize();
         }    

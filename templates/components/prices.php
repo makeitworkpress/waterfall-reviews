@@ -7,9 +7,9 @@ if( ! $prices['prices'] ) {
 } ?>
 <div class="wfr-prices" >
     <?php foreach( $prices['prices'] as $price ) { ?> 
-        <div class="wfr-price <?php echo $price['class']; ?>" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer">
+        <div class="wfr-price <?php echo $price['class']; ?>"<?php if($prices['schema']) { ?> itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer"<?php } ?>>
             <?php if( $price['name'] ) { ?>
-                <span class="wfr-price-name" itemprop="name">
+                <span class="wfr-price-name"<?php if($prices['schema']) { ?>  itemprop="name"<?php } ?>>
                     <?php echo $price['name']; ?>
                 </span>
             <?php } ?> 
@@ -20,9 +20,9 @@ if( ! $prices['prices'] ) {
                     </span>
                 <?php } ?>                  
                 <?php if( $price['currency'] ) { ?>
-                    <span class="wfr-price-currency" itemprop="priceCurrency"><?php echo trim($price['currency']); ?></span>
+                    <span class="wfr-price-currency"<?php if($prices['schema']) { ?>  itemprop="priceCurrency"<?php } ?>><?php echo trim($price['currency']); ?></span>
                 <?php } ?>
-                <span class="wfr-price-number" itemprop="price">
+                <span class="wfr-price-number"<?php if($prices['schema']) { ?>  itemprop="price"<?php } ?>>
                     <?php echo $price['value']; ?>
                 </span>
                 <?php if( $price['unit'] ) { ?>

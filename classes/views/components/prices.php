@@ -22,7 +22,8 @@ class Prices extends Component {
             'currency'      => $this->options['review_currency'],
             'id'            => 0,       // The id of our post were we are retrieving the prices for
             'names'         => true,    // If we display supplier names
-            'single'        => false    // If we display only one price
+            'single'        => false,    // If we display only one price
+            'schema'        => true     // Whether microschemes should be used or not
         ] );
 
         // Define our post id
@@ -51,6 +52,8 @@ class Prices extends Component {
         if( ! $prices ) {
             return;
         }
+
+        $this->props['schema'] = $this->params['schema'];
 
         // Sort our prices
         if( $this->params['single'] ) {
@@ -99,7 +102,7 @@ class Prices extends Component {
                 $this->props['prices'][$key]['button'] = WP_Components\Build::atom(
                     'button', 
                     [
-                        'attributes'    => ['class' => 'wfr-price-button', 'href' => $price['url'], 'itemprop' => 'url', 'rel' => 'nofollow', 'target' => '_blank'], 
+                        'attributes'    => ['class' => 'wfr-price-button', 'href' => $price['url'], 'itemprop' => $this->params['schema'] ? 'url' : '', 'rel' => 'nofollow', 'target' => '_blank'], 
                         'background'    => 'default', 
                         'label'         => isset($price['button']) && $price['button'] ? $price['button'] : $this->params['buttonLabel'],
                         'size'          => 'small'

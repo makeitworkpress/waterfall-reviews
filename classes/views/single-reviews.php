@@ -16,6 +16,9 @@ class Single_Reviews extends Base {
      */
     private $noSchema;
 
+    /**
+     * Registers our associated custom fields, actions and filters
+     */
     protected function register() {
 
         $this->defaults = [
@@ -253,11 +256,13 @@ class Single_Reviews extends Base {
 
         // Loads our custom properties
         if( $this->layout['reviews_content_properties_before'] ) {
-            $properties = new Components\Properties( [
-                'criteria'      => $this->layout['reviews_content_criteria'],
-                'properties'    => true
+
+            $properties = new Components\Tables( [
+                'groups'        => $this->propertyGroups(),
+                'reviews'       => [$post->ID]
             ] );
-            $properties->render();    
+            $properties->render();
+
         }        
 
     } 
@@ -330,8 +335,11 @@ class Single_Reviews extends Base {
 
         // Loads our custom properties
         if( $this->layout['reviews_content_properties_after'] ) {
-            $properties = new Components\Properties( ['criteria' => $this->layout['reviews_content_criteria']] );
-            $properties->render();    
+            $properties = new Components\Tables( [
+                'groups'        => $this->propertyGroups(),
+                'reviews'       => [$post->ID]
+            ] );
+            $properties->render();  
         }
         
         // We have to add an extra closing bracket for our content so our sidebar aligns out nicely
@@ -551,7 +559,7 @@ class Single_Reviews extends Base {
                 'values' => $values
             ] );            
             
-            $text      = $component->render(true) . $text;
+            $text      = $component->render(false) . $text;
 
             // Additional structured data
             if( ! in_array('reviews', $this->noSchema) ) {
@@ -610,7 +618,7 @@ class Single_Reviews extends Base {
         }    
 
         $component  = new Components\Rating( ['class' => 'wfr-rating-average-visitors', 'schema' => false, 'source' => $source, 'values' => $values ] );
-        $string     = $component->render(true); 
+        $string     = $component->render(false); 
         $title      = $this->layout['reviews_visitors_rating_title'] ? '<h3 class="wfr-rating-average-visitors-title">' . $this->layout['reviews_visitors_rating_title'] . '</h3>' : '';
         
         // Remove the comments
@@ -623,6 +631,27 @@ class Single_Reviews extends Base {
         
         return $args;
 
+    }
+
+    /**
+     * Returns our property groups
+     * 
+     * @return Array $groups The array with property groups
+     */
+    private function propertyGroups() {
+
+        $groups = ['properties'];
+
+        if( $this->layout['reviews_content_criteria'] && isset($this->options['rating_criteria']) && $this->options['rating_criteria'] ) {
+
+            foreach( $this->options['rating_criteria'] as $criteria ) {
+                $groups[] = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);            
+            }
+            
+        }
+        
+        return $groups;
+        
     }
 
 }

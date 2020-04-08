@@ -35,21 +35,27 @@ class Shortcodes {
         // Default attributes
         $atts = shortcode_atts( [
 			'categories' => [],                           		// Only displays data from these review category ids, separate by comma
+			'form'		 => false,
 			'groups'     => [],                                 // Limits the display only to certain groups of criteria (for criteria, use sanitized criteria keys)
             'id'         => 'wfr_chart_data',             		// The default id for the chart
             'include'    => [],                           		// If valid, only includes these posts ids in the query 
-            'label'      => false,  							// Label that is used for selecting charts - if set to false, hides the form
+            'label'      => '',  								// Label that is used for selecting charts - if set to false, hides the form
 			'meta'       => '',                       			// Indicates the metafield that is used as a source of loading and ordering the default chart data 
-			'normal'     => __('Load Normal Values', 'wfr'),	// The button for normal chart loading
+			'normal'     => __('Normal Values', 'wfr'),			// The button for normal chart loading
 			'tags'       => [],  								// Only displays data from these review tag ids, separate by tag
 			'select'     => __('Select data', 'wfr'),     		// Label that is used for the default option 
-			'weighted'   => __('Load Price Weighted Values'), 	// The button for weighted chart loading
+			'weighted'   => __('Price Weighted Values'), 		// The button for weighted chart loading
 			'weight'	 => false								// Allows the display of price weighted data if supported
 		], $atts, 'charts' );
 
 		// Some sanitization of shortcode inputs
 		foreach( $atts as $key => $value ) {
-			if( in_array($key, ['id', 'meta']) ) {
+
+			if( in_array($key, ['categories', 'include', 'tags']) ) {
+				$atts[$key] = array_filter( explode(',', sanitize_text_field($value)), function($v) { return is_numeric($v); } );
+			} else if( in_array($key, ['groups']) ) {
+				$atts[$key] = array_filter( explode(',', sanitize_text_field($value)) );
+			} else if( in_array($key, ['id', 'meta']) ) {
 				$atts[$key] = sanitize_key($value);
 			} else {
 				$atts[$key] = sanitize_text_field($value);
@@ -59,26 +65,10 @@ class Shortcodes {
 		$atts['load'] = $atts['meta'] ? true : false; 	// Loads the selected chart by default if a meta key is set
 		$atts['form'] = $atts['label'] ? true : false; 	// Shows the form if we have a label
 
-		if( $atts['categories'] ) {
-            $atts['categories'] = explode(',', $atts['categories']);
-		}
-		
-		if( $atts['groups'] ) {
-            $atts['groups'] 	= explode(',', $atts['groups']);
-		}		
-
-		if( $atts['include'] ) {
-            $atts['include'] 	= explode(',', $atts['include']);
-		}
-		
-		if( $atts['tags'] ) {
-            $atts['tags'] 		= explode(',', $atts['tags']);
-		}	
-
 		// Render our charts
 		$charts 	= new Components\Charts( $atts );
 
-		return $charts->render(true); 
+		return $charts->render(false); 
 		 	
 	}
     
@@ -196,9 +186,54 @@ class Shortcodes {
 		}
 
 		$reviews 	= new Components\Reviews( $args );
-		return $reviews->render(false);        
+		return $reviews->render(false);
 
-    }
+	}
+	
+
+	/**
+	 * Charts shortcode
+	 */
+	public function tables( $atts = [] ) {
+
+        // Default attributes
+        $atts = shortcode_atts( [
+            'attributes'    => [],      // Limits the display only to the given criteria attributes (use attribute meta keys)
+            'categories'    => [],      // Only displays data from these review category ids
+            'form'          => false,   // Displays a review selection form (or not)
+            'groups'        => [],      // Only show the content from the given groups
+            'label'         => '', 		// Label that is used for selecting reviews
+            'load'          => true,   // Loads the table directly if set to true. Warning! Loads all reviews if a query is not defined.
+            'price'         => __('Get', 'wfr'), // Button to the offer
+            'properties'    => [],      // Limits the display only to the given properties (use property meta keys)            
+            'reviews'       => [],      // Default reviews to load
+            'tags'          => [],      // Only displays data from these review tag ids 
+            'view'          => 'table',  // We either show 'tabs' or a complete 'table'
+            'weight'        => false,   // If values need to be weighted
+		], $atts, 'charts' );
+
+		// Some sanitization of shortcode inputs
+		foreach( $atts as $key => $value ) {
+			
+			if( in_array($key, ['categories', 'reviews', 'tags']) ) {
+				$atts[$key] = array_filter( explode(',', sanitize_text_field($value)), function($v) { return is_numeric($v); } );
+			} else if( in_array($key, ['attributes', 'groups', 'properties']) ) {
+				$atts[$key] = array_filter( explode(',', sanitize_text_field($value)) );
+			} else {
+				$atts[$key] = sanitize_text_field($value);
+			}
+
+		}
+
+		// A form is set to true if we specify a label
+		$atts['form'] = $atts['label'] ? true : false;
+
+		// Render our charts
+		$tables 	= new Components\Tables( $atts );
+
+		return $tables->render(false); 
+		 	
+	}	
       
 
 }

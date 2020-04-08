@@ -26,7 +26,7 @@ class Charts extends Component {
             'groups'     => [],                                              // Limits the display only to certain groups of criteria (for criteria, use sanitized criteria keys)
             'id'         => 'wfrChartData',                                  // The default id for the chart
             'include'    => [],                                              // If valid, only includes these posts ids in the query 
-            'label'      => __('Select data to display in a chart', 'wfr'),  // Label that is used for selecting charts
+            'label'      => __('Select data to compare in a chart', 'wfr'),  // Label that is used for selecting charts
             'load'       => false,                                           // Loads the selected chart by default if set to true
             'meta'       => '',                                              // Indicates the metafield that is used as a source of loading and ordering the chart data 
             'normal'     => __('Normal Values', 'wfr'),                      // The button for normal chart loading
@@ -50,34 +50,30 @@ class Charts extends Component {
 
         global $post;
 
-        $this->props['category']        = is_array($this->params['categories']) ? implode(',', $this->params['categories']) : ''; 
-        $this->props['form']            = $this->params['form'];
-        $this->props['key']             = $this->params['meta'];
-        $this->props['id']              = $this->params['id'];
-        $this->props['include']         = is_array($this->params['include']) ? implode(',', $this->params['include']) : '';
-        $this->props['label']           = $this->params['label'];
-        $this->props['select']          = $this->params['select'];
-        $this->props['weight']          = $this->params['weight'];
-
-        if( $this->params['weight'] ) {
-            $this->props['normal']      = $this->params['normal'];
-            $this->props['weighted']    = $this->params['weighted'];
+        foreach( ['categories', 'form', 'id', 'include', 'meta', 'normal', 'label', 'select', 'tags', 'weight', 'weighted'] as $param ) {
+            if( in_array($param, ['categories', 'include', 'tags']) ) {
+                $this->props[$param] = is_array($this->params[$param]) ? implode(',', $this->params[$param]) : '';
+            } else {
+                $this->props[$param] = $this->params[$param];
+            }
         }
 
-        $this->props['tag']             = is_array($this->params['tags']) ? implode(',', $this->params['tags']) : '';
+        $this->props['class']           = $this->params['load'] ? ' wfr-charts-loaded' : '';
+
+        /**
+         * Start building our field selectors for the dropdown field
+         */
 
         // General information
         $this->props['selectorGroups']['general'] = [
             'label'     => __('General', 'wfr'),
             'options'   => [
                 'price'         => __('Price', 'wfr'),
-                // 'price_value'   => __('Price/value')
             ]
         ];
 
         // Save our labels
         $this->meta['price']        = __('Price', 'wfr');
-        // $this->meta['price_value']  = __('Price/value');
 
         // Rating
         $this->props['selectorGroups']['rating'] = [
@@ -198,12 +194,30 @@ class Charts extends Component {
      */
     public function getChartData() {
 
+        // Default data structure
+        $data = [
+            'normal'    => [
+                'dataSet'   => [                
+                    'data'          => [],
+                    'label'         => $this->meta[sanitize_key($this->params['meta'])]
+                ],
+                'labels'   => [],
+            ],
+            'weighted'  => [
+                'dataSet'   => [                
+                    'data'          => [],
+                    'label'         => $this->meta[sanitize_key($this->params['meta'])]
+                ],
+                'labels'   => [],
+            ]
+        ];
+
+
         /**
          * There is no meta key defined.
-         * Will result in JS errors.
          */
         if( ! $this->params['meta'] ) {
-            return;
+            return $data;
         }
 
         /**
@@ -246,23 +260,6 @@ class Charts extends Component {
         }        
 
         $reviews = get_posts($args);
-
-        $data = [
-            'normal'    => [
-                'dataSet'   => [                
-                    'data'          => [],
-                    'label'         => $this->meta[sanitize_key($this->params['meta'])]
-                ],
-                'labels'   => [],
-            ],
-            'weighted'  => [
-                'dataSet'   => [                
-                    'data'          => [],
-                    'label'         => $this->meta[sanitize_key($this->params['meta'])]
-                ],
-                'labels'   => [],
-            ]
-        ];
 
         $metrics = [
             'normal'    => [],
@@ -373,7 +370,7 @@ class Charts extends Component {
         }
 
         if( is_numeric($weighted) ) {
-            $data['weighted'] = ['label' => $label . $details, 'value' => floatval($weighted)];
+            $data['weighted'] = ['label' => $label . $details, 'value' => round(floatval($weighted), 2) ];
         }
 
         return $data;

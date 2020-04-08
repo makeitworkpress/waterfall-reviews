@@ -425,6 +425,14 @@ $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
 
 $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
     'default'       => '',
+    'id'            => 'reviews_archive_content_compare_category',
+    'title'         => __('Only Compare in Category Archives', 'wfr'),
+    'description'   => __('Check this to display the comparison tabs only if someone is viewing a certain category archive.', 'wfr'),
+    'type'          => 'checkbox'    
+];
+
+$layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
+    'default'       => '',
     'id'            => 'reviews_archive_content_compare_weighted',
     'title'         => __('Weighted Comparisons', 'wfr'),
     'description'   => __('Allows numerical values from charts and comparison tables to be weighted by price.', 'wfr'),

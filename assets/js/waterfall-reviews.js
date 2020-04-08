@@ -10,11 +10,12 @@ var App = {
     components: {
         charts: require('./components/charts'),
         comments: require('./components/comments'),
-        filter: require('./components/filter')
+        filter: require('./components/filter'),
+        tables: require('./components/tables')
     },     
     initialize: function() {
 
-        // Initialize atoms
+        // Initialize modules
         for( var key in this.components ) {
             this.components[key].initialize();
         }    
@@ -30,7 +31,7 @@ jQuery(document).ready( function() {
     App.initialize();
 });
 
-},{"./components/charts":2,"./components/comments":3,"./components/filter":4,"./utils":5}],2:[function(require,module,exports){
+},{"./components/charts":2,"./components/comments":3,"./components/filter":4,"./components/tables":5,"./utils":6}],2:[function(require,module,exports){
 /**
  * Handles our chart actions
  */
@@ -74,8 +75,6 @@ var Charts = {
         // Select charts based upon our weighted buttons
         jQuery('.wfr-charts-normal').click( function(event) {
             event.preventDefault();
-
-            console.log(self.data);
 
             var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
             jQuery(this).addClass('active');
@@ -121,11 +120,11 @@ var Charts = {
             },
             data: {
                 action: 'getChartData', 
-                category: jQuery(object).closest('.wfr-chart-selector').data('category'),
+                categories: jQuery(object).closest('.wfr-chart-selector').data('categories'),
                 key: jQuery(object).val(),
                 include: jQuery(object).closest('.wfr-chart-selector').data('include'),
                 nonce: wfr.nonce,
-                tag: jQuery(object).closest('.wfr-chart-selector').data('tag')
+                tags: jQuery(object).closest('.wfr-chart-selector').data('tags')
             },
             success: function(response) {
                 
@@ -138,6 +137,8 @@ var Charts = {
                 }
 
                 self.data = response.data;
+
+                jQuery(object).closest('.wfr-charts').addClass('wfr-charts-loaded');
 
                 self.renderChart(response.data.normal, canvas);
 
@@ -201,7 +202,7 @@ var Charts = {
 };
 
 module.exports = Charts;
-},{"./../utils":5,"./../vendor/randomcolor":6}],3:[function(require,module,exports){
+},{"./../utils":6,"./../vendor/randomcolor":7}],3:[function(require,module,exports){
 /**
  * Handles our comments actions
  */
@@ -229,7 +230,7 @@ var Comments = {
 };
 
 module.exports = Comments;
-},{"./../utils":5}],4:[function(require,module,exports){
+},{"./../utils":6}],4:[function(require,module,exports){
 /**
  * Handles our chart actions
  */
@@ -367,7 +368,105 @@ var Filter = {
 };
 
 module.exports = Filter;
-},{"./../utils":5}],5:[function(require,module,exports){
+},{"./../utils":6}],5:[function(require,module,exports){
+/**
+ * Handles our chart actions
+ */
+var utils       = require('./../utils');
+
+var Tables = {
+
+    reviews: [],
+    initialize: function() {
+
+        var self = this;        
+
+        // Draw charts based upon changing the select form
+        jQuery(document).on('click', '.wfr-tables-form li', function() {
+
+            var review = this.dataset.target
+
+            // Change class
+            jQuery(this).toggleClass('active');
+
+            // Remove the item if it's already there
+            if( self.reviews.includes(review) ) {
+                for(var i = self.reviews.length - 1; i >= 0; i--) {
+                    if(self.reviews[i] === review) {
+                        self.reviews.splice(i, 1);
+                    }
+                }
+            } else {
+                self.reviews.push(review);   
+            }
+
+            self.loadTables(this);
+
+        });
+
+        // Prevent submitting of the default form
+        jQuery('.wfr-tables-form').submit( function(event) {
+            event.preventDefault();
+        });       
+
+    },
+
+    /**
+     * Creates our table loader - upon changes it will load a new table
+     * 
+     * @param object The item for the current objective
+     */
+    loadTables: function(object) {
+
+
+        if( this.reviews.length < 2 ) {
+            return;
+        }
+
+        var form = jQuery(object).closest('.wfr-tables-form'),
+            self = this,
+            view = jQuery(form).next('.wfr-tables-view');
+
+        utils.ajax({
+            beforeSend: function() {
+                jQuery(view).addClass('components-loading');
+            },
+            complete: function() {
+                jQuery(view).removeClass('components-loading');
+            },
+            data: {
+                action: 'loadTables', 
+                attributes: jQuery(form).data('attributes'),
+                categories: jQuery(form).data('categories'),
+                groups: jQuery(form).data('groups'),
+                reviews: self.reviews,
+                nonce: wfr.nonce,
+                properties: jQuery(form).data('properties'),
+                tags: jQuery(form).data('tags'),
+                view: jQuery(form).data('view'),
+                weight: jQuery(form).data('weight')
+            },
+            success: function(response) {
+                
+                if( wfr.debug ) {
+                    console.log(response);
+                }
+
+                if( ! response.success ) {
+                    return;
+                }
+
+                jQuery(view).replaceWith( jQuery(response.data).find('.wfr-tables-view') );
+
+            }
+        });
+
+    }
+    
+};
+
+module.exports = Tables;
+},{"./../utils":6}],6:[function(require,module,exports){
 /**
  * A shorthand for executing jQuery ajax functions
  * @param {object} options The ajax options
@@ -405,7 +504,7 @@ module.exports.rangeValue = function(input) {
     jQuery(input).next('.wfr-range-value').html(value);
 
 };
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // randomColor by David Merfield under the CC0 license
 // https://github.com/davidmerfield/randomColor/
 

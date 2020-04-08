@@ -15,8 +15,9 @@ class Archive_Reviews extends Base {
     protected function register() {
 
         $this->defaults = [
-            'reviews_archive_content_charts'    => false,    
-            'reviews_archive_content_compare'   => false,    
+            'reviews_archive_content_charts'            => false,    
+            'reviews_archive_content_compare'           => false,    
+            'reviews_archive_content_compare_category'  => false,    
         ];
 
         $this->actions = [
@@ -64,7 +65,17 @@ class Archive_Reviews extends Base {
             return;
         }
 
+        /**
+         * We put everything here in a content wrapper,
+         * This is normally applied to the posts molecule for the given archive,
+         * but as review archives should support tabs, an extra wrapper is needed
+         */
         echo '<div class="content">';
+
+        // Only allow comparison tables within categorie pages, if set-up.
+        if( $this->layout['reviews_archive_content_compare_category'] && ! $this->checkTermQuery('reviews_category') ) {
+            return;
+        }
 
         if( $this->layout['reviews_archive_content_compare']  ) {
 
@@ -72,11 +83,7 @@ class Archive_Reviews extends Base {
 
             echo '<ul class="atom-tabs-navigation">';
             echo '  <li><a class="atom-tab active" href="#" data-target="reviews"><i class="fa fa-list"></i> ' . __('List', 'wfr') . '</a></li>';
-
-            if( $this->layout['reviews_archive_content_charts'] ) {
-                echo '  <li><a class="atom-tab" href="#" data-target="charts"><i class="fa fa-bar-chart"></i> ' . __('Compare', 'wfr') . '</a></li>';
-            }          
-
+            echo '  <li><a class="atom-tab" href="#" data-target="compare"><i class="fa fa-bar-chart"></i> ' . __('Compare', 'wfr') . '</a></li>';         
             echo '</ul>';
 
             // Open up the tabs content
@@ -122,51 +129,80 @@ class Archive_Reviews extends Base {
             return;
         }
 
-        // Make the closing of tabs for our posts
-        if( $this->layout['reviews_archive_content_compare']  ) {
-            echo '</section><!-- .wfr-reviews-tab -->';
-        }     
+        // Only allow comparison tables within categorie pages, if set-up.
+        if( $this->layout['reviews_archive_content_compare_category'] && ! $this->checkTermQuery('reviews_category') ) {
 
-        // Add our content charts
+            // Close our content wrapper
+            echo '</div><!-- .content -->';
+            return;
+
+        }        
+
+        // Add our comparison tabs
         if( $this->layout['reviews_archive_content_compare'] ) {
 
-            echo '<section class="wfr-charts-tab atom-tab" data-id="charts">';
+            // Close the post reviews tab
+            echo '      </section><!-- .wfr-reviews-tab -->';
+
+            // Start the new tab
+            echo '      <section class="wfr-compare-tab atom-tab" data-id="compare">';
 
             $args = [
                 'weight' => $this->layout['reviews_archive_content_compare_weighted']
             ];
 
             // Filter for certain categories
-            if( isset(get_queried_object()->term_id) && isset(get_queried_object()->taxonomy) && get_queried_object()->taxonomy == 'reviews_category' ) {
-                $args['categories'][] = get_queried_object()->term_id;
+            if( $this->checkTermQuery('reviews_category') ) {
+                $args['categories'] = [$this->checkTermQuery('reviews_category')];
             }  
 
             // Filter for certain tags
-            if( isset(get_queried_object()->term_id) && isset(get_queried_object()->taxonomy) && get_queried_object()->taxonomy == 'reviews_tag' ) {
-                $args['tags'][] = get_queried_object()->term_id;
+            if( $this->checkTermQuery('reviews_tag') ) {
+                $args['tags']       = [$this->checkTermQuery('reviews_tag')];
             }              
 
-            // Retrieve the category id
+            // Show our charts
             $charts = new Components\Charts( $args );
             $charts->render();
 
-            $args['load'] = true;
-
             // Add comparison tables
+            $args['form'] = true;
+            $args['load'] = false;
+            $args['view'] = 'table';
+
             $tables = new Components\Tables( $args );
             $tables->render();
 
-            echo '</section>';
+            echo '      </section>';
+
+
+            // Close our tabs
+            echo '  </div><!-- .atom-tabs-content -->';
+            echo '</div><!-- .atom-tabs -->';            
 
         }     
 
-        // Close our tabs
-        if( $this->layout['reviews_archive_content_compare']  ) {
-            echo '  </div><!-- .atom-tabs-content -->';
-            echo '</div><!-- .atom-tabs -->';
+        // Close our content wrapper
+        echo '</div><!-- .content -->';
+
+    }
+
+    /**
+     * Check if a reviews tag or category is queried, and returns the id if so
+     * 
+     * @param   String  $taxonomy   The taxonomy that needs to be checked
+     * @return  Int     @term       The queried term id
+     */
+    private function checkTermQuery( $taxonomy = '') {
+
+        $term = '';
+
+        if( isset(get_queried_object()->term_id) && isset(get_queried_object()->taxonomy) && get_queried_object()->taxonomy == $taxonomy ) {
+            $term = get_queried_object()->term_id;
         }
 
-        echo '</div><!-- .content -->';
+        return $term;
+
     }
 
 }

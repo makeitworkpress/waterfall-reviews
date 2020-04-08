@@ -1,65 +1,122 @@
 <?php
 /**
- * Displays compare tables
+ * Displays our price(s)
  */
-?>
-<div class="wfr-tables">
-    <?php if( $tables['form'] ) { ?>
 
+if( ! $tables['fields'] && $tables['load'] ) {
+    return;
+} ?>
+
+<div class="wfr-tables atom-<?php echo $tables['view']; ?>">
+
+    <?php if( $tables['form'] && count($tables['reviews']) > 1  ) { ?>
+        <form class="wfr-tables-form" <?php foreach($tables['data'] as $key => $value ) { if($value) { echo 'data-' . $key . '="' . $value . '"'; } } ?>>
+            <label><?php echo $tables['label']; ?></label>
+            <ul>
+                <?php foreach( $tables['reviews'] as $id => $review ) { ?>
+                    <li data-target="<?php echo $id; ?>">
+                        <?php echo $review['image']; ?>
+                        <p><?php echo $review['title']; ?></p>
+                    </li>
+                <?php } ?>
+            </ul>
+        </form>
     <?php } ?>
-    <?php if( $tables['values'] ) { ?>
-        <table class="wfr-tables-table">
-            <tr>
-                <th></th>
-                <?php foreach( $tables['reviews'] as $review ) { ?>
-                    <th><?php echo $review['title']; ?></th>
-                <?php } ?>
-            </tr>
-            <?php foreach( $tables['groups'] as $g => $group ) { ?>
-                <?php if( $group['label'] ) { ?>
-                    <tr>
-                        <th class="wfr-tables-group-label"><?php echo $group['label']; ?></th>
-                        <?php foreach( $tables['reviews'] as $review ) { ?><th></th><?php } ?>
-                    </tr>
-                <?php } ?>
-                <?php foreach( $group['fields'] as $key => $field ) { ?>
-                    <tr>
-                        <td class="wfr-tables-field-label">
-                            <?php echo $field['label'] ?>
-                            <?php if($tables['weight'] && isset($field['type']) && $field['type'] == 'number' ) { ?>
-                                <span class="wfr-tables-weighted-label"><?php echo $tables['weighted']; ?></span>
-                            <?php } ?>
-                        </td>    
-                        <?php foreach( $tables['reviews'] as $id => $review ) { ?>
-                            <td>
-                                <?php if( isset($tables['values'][$id][$key][0]['plan']) && isset($tables['values'][$id][$key][0]['value']) ) { ?>
 
-                                    <?php foreach( $tables['values'][$id][$key] as $plan ) { ?>
-                                        
-                                        <?php if( ! $plan['value']['normal'] ) { continue; } ?>
+    <div class="wfr-tables-view">
+        
+        <?php if( $tables['fields'] ) { ?>
 
-                                        <?php echo $plan['value']['normal']; ?><span class="wfr-tables-plain-details"> - <?php echo $plan['plan']; ?></span>
-                                        <?php if($tables['weight'] && $plan['value']['weighted'] ) { ?>
-                                            <span class="wfr-tables-weighted-value"><?php echo $plan['value']['weighted']; ?></span>
+            <?php if( $tables['view'] == 'tabs' ) { ?>
+                
+                <ul class="atom-tabs-navigation">
+                    <?php foreach( $tables['fields'] as $key => $group ) { ?>
+                        <li>
+                            <a class="atom-tab<?php if( array_search($key, array_keys($tables['fields'])) == 0 ) { ?> active<?php } ?>" href="#" data-target="<?php echo $key; ?>">
+                                <?php echo $group['label']; ?>    
+                            </a>
+                        </li>
+                    <?php 
+                        } 
+                    ?>
+                </ul>
+
+                <div class="atom-tabs-content">
+                
+                    <?php foreach( $tables['fields'] as $key => $group ) { ?>
+
+                        <section class="atom-tab<?php if( array_search($key, array_keys($tables['fields'])) == 0 ) { ?> active<?php } ?>" data-id="<?php echo $key; ?>">
+
+                            <?php if( $group['fields'] ) { ?>
+
+                                <div class="wfr-tables-wrapper">
+                                    <table class="wfr-tables-table">
+
+                                        <?php if( count($tables['reviews']) > 1 ) { ?>
+                                            <tr>
+                                                <th></th>
+                                                <?php foreach( $tables['reviews'] as $review ) { ?>
+                                                    <th>
+                                                        <a href="<?php echo $review['link']; ?>" title="<?php echo $review['title']; ?>"><?php echo $review['title']; ?></a>
+                                                        <?php if($review['price']) { echo $review['price']; } ?>
+                                                    </th>
+                                                <?php } ?>
+                                            </tr>
                                         <?php } ?>
 
-                                    <?php } ?> 
+                                        <?php foreach( $group['fields'] as $field ) { ?>
+                                            <tr>
+                                                <th><?php echo $field['label']; ?></th>
+                                                <?php foreach( $field['values'] as $id => $value ) { ?>
+                                                    <td><?php echo $value; ?></td>
+                                                <?php } ?>
+                                            </tr>
+                                        <?php } ?>
 
-                                <?php } elseif( isset($tables['values'][$id][$key]['normal']) && $tables['values'][$id][$key]['normal'] ) { ?>
+                                    </table>
+                                </div>    
 
-                                    <?php echo $tables['values'][$id][$key]['normal']; ?>
-                                    <?php if($tables['weight'] && $tables['values'][$id][$key]['weighted'] ) { ?>
-                                        <span class="wfr-tables-weighted-value"><?php echo $tables['values'][$id][$key]['weighted']; ?></span>
+                            <?php } ?>
+
+                        </section>
+
+                    <?php } ?>
+
+                </div>         
+
+            <?php } elseif( $tables['view'] == 'table') { ?>
+                <div class="wfr-tables-wrapper">
+                    <table class="wfr-tables-table">
+                        <tr>
+                            <th></th>
+                            <?php foreach( $tables['reviews'] as $review ) { ?>
+                                <th class="wfr-tables-review">
+                                    <h4>
+                                        <a href="<?php echo $review['link']; ?>" title="<?php echo $review['title']; ?>"><?php echo $review['title']; ?></a>
+                                    </h4>
+                                    <?php if($review['price']) { echo $review['price']; } ?>
+                                </th>
+                            <?php } ?>
+                        </tr>
+                        <?php foreach( $tables['fields'] as $key => $group ) { ?>
+                            <tr>
+                                <th class="wfr-tables-group-label" colspan="<?php echo count($tables['reviews']) + 1; ?>"><?php echo $group['label']; ?></th>
+                            </tr>
+                            <?php foreach( $group['fields'] as $field ) { ?>
+                                <tr>
+                                    <th><?php echo $field['label']; ?></th>
+                                    <?php foreach( $field['values'] as $id => $value ) { ?>
+                                        <td><?php echo $value; ?></td>
                                     <?php } ?>
-
-                                <?php } ?>
-                            </td>
-                        <?php } ?>
-                        
-                    </tr>
-                <?php } ?>
+                                </tr>
+                            <?php } ?>                
+                        <?php }?>        
+                    </table>
+                </div>
             <?php } ?>
-        </table>
-    <?php } ?>
-    
+
+        <?php } ?>
+
+    </div><!-- .wfr-tables-view -->
+
 </div>

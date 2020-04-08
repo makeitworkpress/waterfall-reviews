@@ -7,6 +7,12 @@ namespace Waterfall_Reviews\Views\Components;
 defined( 'ABSPATH' ) or die( 'Go eat veggies!' );
 
 class Tables extends Component {
+    
+    /**
+     * Contains our groups and fields
+     * @access private
+     */
+    private $fields = [];
 
     /**
      * Initializes our component
@@ -15,15 +21,18 @@ class Tables extends Component {
 
         $this->params   = wp_parse_args( $this->params, [
             'attributes'    => [],      // Limits the display only to the given criteria attributes (use attribute meta keys)
+            'categories'    => [],      // Only displays data from these review category ids
             'form'          => false,   // Displays a review selection form (or not)
             'groups'        => [],      // Only show the content from the given groups
-            'label'         => __('Select items to compare', 'wfr'), // Label that is used for selecting reviews
-            'load'          => false,   // Loads the table directly if set to true. Loads all reviews if a query is not defined.
+            'label'         => __('Select at least 2 items to compare', 'wfr'), // Label that is used for selecting reviews
+            'load'          => true,    // Loads the table directly if set to true. Warning! Loads all reviews if a query is not defined.
+            'price'         => __('Get', 'wfr'), // Button to the affiliate 
             'properties'    => [],      // Limits the display only to the given properties (use property meta keys)            
             'query'         => [],      // Arguments to query posts by
             'reviews'       => [],      // Default reviews to load
+            'tags'          => [],      // Only displays data from these review tag ids 
             'view'          => 'tabs',  // We either show 'tabs' or a complete 'table'
-            'weighted'      => false,
+            'weight'        => false,   // If values need to be weighted
         ] );
 
         $this->template = 'tables'; 
@@ -39,35 +48,73 @@ class Tables extends Component {
      */
     protected function query() {
 
-        $this->props['class'] = $this->params['view'];
+        $this->props['class']           = $this->params['view'];
 
-        // if( $this->params['criteria'] == true ) {
-
-        //     if( isset($this->options['rating_criteria']) && $this->options['rating_criteria'] ) { 
-        //         foreach( $this->options['rating_criteria'] as $criteria ) {
-        //             $key                        = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
-        //             $this->params['groups'][]    = $key;            
-        //         }
-        //     }
-
-        // }        
-
-        // if( $this->params['properties'] == true ) {
-        //     $this->params['groups'][] = 'properties';
-        // }
-
-        // Load the reviews for which we want to load the fields
-        if( ! $this->params['reviews'] ) {
-            $this->setReviews();
-            $this->props['reviews'] = $this->params['reviews'];
+        foreach( ['form', 'label', 'load', 'view'] as $param ) {
+            $this->props[$param]        = $this->params[$param]; 
         }
 
-        // Set our fields, function inherited from the parent
-        foreach( $this->params['reviews'] as $review ) {
-            $this->setCustomFields( $review, $this->params['weighted'], $this->params['groups']);  
+        $this->props['data']            = [];
+        foreach( ['attributes', 'categories', 'groups', 'properties', 'tags', 'view', 'weight'] as $key ) {
+            $this->props['data'][$key]  = is_array($this->params[$key]) ? esc_attr(implode(',', $this->params[$key])) : esc_attr($this->params[$key]);   
         }
-        
-        
+        $this->props['fields']          = $this->fields;
+        $this->props['reviews']         = [];
+
+        /**
+         * Get our object cache
+         */
+        if( $this->params['load'] ) {
+
+            $unique = 'fields'; 
+
+            foreach( ['categories', 'reviews', 'tags'] as $metric ) {
+                if( $this->params[$metric] && is_array($this->params[$metric]) ) {
+                    $unique .= '_' . substr($metric, 0, 1) . implode('', $this->params[$metric]);
+                }           
+            }
+            
+            if( $this->params['query'] ) {
+                $unique .= '_q' . serialize($this->params['query']);
+            }
+    
+            $cache_key  = 'wfr_tables_' . sanitize_key($unique);
+            $cache      = wp_cache_get($cache_key);
+    
+            // We have our data cached
+            if( $cache ) {
+                $this->props['reviews'] = (array) $cache['reviews'];
+                $this->props['fields']  = (array) $cache['fields'];
+                return;
+            }
+
+        }        
+
+        /**
+         * Load the reviews for which we want to load the fields
+         */
+        $this->setReviews();
+        $this->props['reviews'] = $this->params['reviews'];
+
+        if( ! $this->params['load'] ) {
+            return;
+        }        
+
+        /**
+         * Set our fields, function inherited from the parent
+         */
+        foreach( $this->params['reviews'] as $review => $properties ) {
+            $this->setCustomFields( $review );  
+        }
+
+        $this->props['fields'] = $this->fields;
+
+        /**
+         * Set our cache
+         */
+        if( $this->params['load'] ) {
+            wp_cache_set( $cache_key, ['reviews' => $this->props['reviews'], 'fields' => $this->props['fields']] );
+        }    
     
     }
     
@@ -80,34 +127,319 @@ class Tables extends Component {
             $this->params['query'] = ['fields' => 'ids', 'post_type' => 'reviews', 'posts_per_page' => -1, 'status' => 'publish']; 
         }
 
-        // if( $this->params['include'] && is_array($this->params['include']) ) {
-        //     $args['post__in'] = $this->params['include'];
-        // }  
+        if( $this->params['categories'] && is_array($this->params['categories']) ) {
+            $this->params['query']['tax_query'][] = ['taxonomy' => 'reviews_category', 'terms' => $this->params['categories']];
+        }
 
-        // if( $this->params['categories'] && is_array($this->params['categories']) ) {
-        //     $args['tax_query'][] = ['taxonomy' => 'reviews_category', 'terms' => $this->params['categories']];
-        // }
-
-        // if( $this->params['tags'] && is_array($this->params['tags']) ) {
-        //     $args['tax_query'][] = ['taxonomy' => 'reviews_tag', 'terms' => $this->params['tags']];
-        // } 
+        if( $this->params['tags'] && is_array($this->params['tags']) ) {
+            $this->params['query']['tax_query'][] = ['taxonomy' => 'reviews_tag', 'terms' => $this->params['tags']];
+        } 
         
-        $reviews = get_posts($this->params['query']);
+        // Query or retrieve
+        $reviews = $this->params['reviews'] ? $this->params['reviews'] : get_posts($this->params['query']);
+        
+        // Rebuilt our array
+        $this->params['reviews'] = [];
 
         if( ! $reviews ) {
             return;
         }
             
+        // Set our array of reviews
         foreach( $reviews as $review ) {
-            $title = get_the_title($review);
+            $title  = get_the_title($review);
+            
+            if( $this->params['form'] ) {
+                $logo   = rtrim( get_post_meta($review, 'logo', true), ',' );
+                $image  = $logo ? $logo : get_post_thumbnail_id($review); 
+            }
+
             $this->params['reviews'][$review] = [
-                'image' => $this->params['form'] ? get_the_post_thumbnail($review, 'thumbnail', ['alt' => esc_attr($title)]) : '',
+                'image' => $this->params['form'] ? wp_get_attachment_image($image, 'thumbnail', false, ['alt' => esc_attr($title)]) : '',
+                'link'  => esc_url( get_the_permalink($review) ),
                 'title' => esc_html($title)
             ];
+
+            // Adds a price button
+            if( $this->params['price'] ) {
+
+                $prices = new Prices([
+                    'button'        => true, 
+                    'buttonLabel'   => $this->params['price'], 
+                    'id'            => $review,
+                    'names'         => false,
+                    'schema'        => false, 
+                    'single'        => true
+                ]);
+                   
+                $this->params['reviews'][$review]['price'] = $prices->render(false);
+
+            }
         }
         
     
-    }    
+    }
 
+    
+    /**
+     * Gets the values for our custom fields and transforms them into an array with labels,
+     * so they can be used by components
+     * 
+     * @param   Float   $post The id for the given post
+     * @param   Array   $groups Only return values from these groups (use sanitized criteria names, 'properties' or 'general')
+     * @param   Array   $properties Only return values from these properties
+     * @param   Array   $attributes Only return values from these attributes
+     * @param   Boolean $weighted If weighted values should be returned as well
+     * 
+     * @return void
+     */
+    protected function setCustomFields( $post, $weighted = false, $groups = [], $attributes = [], $properties = []) {
+
+        // $post Should be set and an integer
+        if( ! is_int($post) ) {
+            return;
+        } 
+
+        // Default group labels
+        $labels = ['general' => __('General', 'wfr'), 'properties' => __('Properties', 'wfr')];
+        
+        // Define our groups if they are not set by default
+        if( ! $this->params['groups'] ) {
+            $groups = ['general', 'properties']; 
+        }
+
+        if( isset($this->options['rating_criteria']) && $this->options['rating_criteria'] ) { 
+            foreach( $this->options['rating_criteria'] as $criteria ) {
+                $key                        = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
+                $labels[$key]               = sanitize_text_field($criteria['name']);
+                if( ! $this->params['groups'] ) {
+                    $groups[]   = $key;
+                }
+                
+            }
+        }
+
+        if( $this->params['groups'] ) {
+            $groups = $this->params['groups'];
+        }
+
+        /**
+         * Get our default price, price unit and price currency
+         */
+        $priceCurrency  = get_post_meta($post, 'price_currency', true);
+        $priceCurrency  = $priceCurrency ? $priceCurrency : $this->options['review_currency'];
+        $priceUnit      = get_post_meta($post, 'price_unit', true);
+        $price          = get_post_meta($post, 'price', true);          
+
+        foreach( $groups as $group ) {
+
+            if( ! isset($this->fields[$group]) ) {
+                $this->fields[$group] = [
+                    'label'     => $labels[$group],
+                    'fields'    => []    
+                ];
+            }
+
+            /**
+             * General groups
+             */
+            if( $group == 'general' ) {
+
+                $fields = ['price' => __('Price', 'wfr'), 'rating' => __('Overall Rating', 'wfr')];
+                
+                if( isset($this->options['rating_criteria']) && $this->options['rating_criteria'] ) { 
+                    foreach( $this->options['rating_criteria'] as $criteria ) {
+                        $key            = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
+                        $fields[$key]   = sanitize_text_field($criteria['name']);
+                    }
+                }
+
+                // Loop through our general fields
+                foreach( $fields as $fkey => $flabel ) {
+
+                    if( ! isset($this->fields[$group]['fields'][$fkey]) ) {
+                        $this->fields[$group]['fields'][$fkey] = [
+                            'label'     => esc_html($flabel), 
+                            'values'    => []
+                        ];
+                    }
+                    
+                    if( $fkey == 'price' ) {
+
+                        $prices = new Prices([
+                            'button'        => true, 
+                            'buttonLabel'   => $this->params['price'], 
+                            'id'            => $post,
+                            'names'         => false, 
+                            'schema'        => false,
+                            'single'        => true
+                        ]);
+
+                        $this->fields[$group]['fields'][$fkey]['values'][$post] = $prices->render(false); 
+
+                    } else {
+
+                        $rating = new Rating([
+                            'criteria'      => $fkey == 'rating' ? [] : [$fkey],
+                            'id'            => $post,
+                            'names'         => false, 
+                            'schema'        => false,
+                            'source'        => $fkey == 'rating' ? ['overall'] : ['criteria']
+                        ]);
+
+                        $this->fields[$group]['fields'][$fkey]['values'][$post] = $rating->render(false);
+
+                    }
+
+                }
+
+
+            /**
+             * Dynamic groups (properties and criteria)
+             */    
+            } else {
+
+                $gkey = $group == 'properties' ? $group : $group . '_attributes';
+
+                // This group doesn't have any options yet
+                if( ! isset($this->options[$gkey]) || ! array_filter($this->options[$gkey]) ) {
+                    continue;
+                }
+                
+                foreach( $this->options[$gkey] as $field ) {
+
+                    $ftype  = $group == 'properties' ? '_property' : '_' . $group . '_attribute'; 
+                    $fkey   = isset($field['key']) && $field['key'] ? sanitize_key($field['key']) : sanitize_key($field['name']) . $ftype;
+
+                    // Skip this field if we have custom properties defined
+                    if( $group == 'properties' && $this->params['properties'] && ! in_array($fkey, $this->params['properties']) ) {
+                        continue;
+                    }
+
+                    // Skip this field if we have custom criteria attributes defined
+                    if( $group == 'attributes' && $this->params['attributes'] && ! in_array($fkey, $this->params['attributes']) ) {
+                        continue;
+                    } 
+                    
+                    $meta   = get_post_meta($post, $fkey, true);
+
+                    if( $field['repeat'] && is_array($meta) ) {
+                        $value      = [];
+                        foreach( $meta as $plan ) {
+                            $planValues = $this->getFieldValues( $field, $plan['value'], $plan['price'] );
+    
+                            // Only add plans if there is a value
+                            if( $planValues ) {
+                                $planPrice  = $plan['price'] ? ' <span class="wfr-fields-price">(' . esc_html($priceCurrency) . esc_html($plan['price']) . ' ' . esc_html($priceUnit) . ')</span>' : '';
+                                $planName   = $plan['name'] ? ' <span class="wfr-fields-plan"> - ' . esc_html($plan['name']) . '</span>' : '';
+                                $value[]    = '<span class="wfr-fields-repeatable">' . $planValues . $planName . $planPrice . '</span>';
+                            }
+    
+                        }                        
+                    } else {
+                        $value = $this->getFieldValues( $field, $meta, $price );
+                    }
+
+                    // Repreatable fields are an array, and are seperated by a line break
+                    if( is_array($value) ) {
+                        $value = implode( '<br/>', array_filter($value) );
+                    }
+                    
+                    if( $value ) {
+
+                        if( ! isset($this->fields[$group]['fields'][$fkey]) ) {
+                            $this->fields[$group]['fields'][$fkey] = [
+                                'label'     => esc_html($field['name']), 
+                                'values'    => []
+                            ];
+                        }
+
+                        $this->fields[$group]['fields'][$fkey]['values'][$post] = $value;
+
+                    }
+
+                }
+
+            }
+
+            /**
+             * If we don't have any fields for all the groups, unset it
+             */
+            if( ! $this->fields[$group]['fields'] ) {
+                unset($this->fields[$group]);
+            }
+
+        }
+
+    } 
+    
+    /**
+     * Retrieves the values of a given field
+     *
+     * @param array     $attributes     The field attributes of a saved field
+     * @param mixed     $meta           The saved metavalues for a given field
+     * @param mixed     $price          The price for the given field
+     * @param boolean   $weighted       If you want to return weighted values
+     * 
+     * 
+     * @return string   $value          The formatted value
+     */
+    private function getFieldValues( $attribute, $meta, $price = false ) {
+        
+        switch( $attribute['type'] ) {
+            case 'input':
+            case 'number':
+            case 'textarea':
+                $value = esc_html($meta);
+
+                if( $this->params['weight'] && is_numeric($value) && is_numeric($price) ) {
+                    $value .= '<span class="wfr-fields-weighted"> / ' . round(floatval($value/$price), 2) . ' ' . __('(weighted)', 'wfr') . '</span>';
+                }
+
+                break;
+            case 'checkbox':
+            case 'select':
+                $value  = '';
+                $values = array_filter( explode(',', $attribute['values']) );
+                
+                foreach( $values as $choice ) {
+
+                    $identifier     = sanitize_key($choice);
+
+                    // If a key value is seperated through a colon, we have to find the label and the value
+                    if( strpos($choice, ':') ) {
+                        $divide     = explode(':', $choice);
+                        $identifier = sanitize_text_field($divide[0]);
+                        $choice     = $divide[1];
+                    }
+                    
+                    // If multiple options are checked
+                    if( is_array($meta) && $meta[$identifier] == true ) {
+
+                        if( ! $value ) {
+                            $value  = [];
+                        }
+
+                        $value[]    = esc_html($choice);
+
+                    // If it is just a single option, being checked
+                    } elseif( $identifier == $meta ) {
+                        $value      = esc_html($choice);    
+                    }
+                } 
+
+                // Array values are comma seperated
+                if( is_array($value) ) {
+                    $value = esc_html( implode( ', ', $value ) );
+                }
+
+                break;
+            default:
+                $value = '';
+        }
+
+        return $value;
+
+    }    
 
 }

@@ -1,0 +1,105 @@
+// main: ../waterfall-reviews.less
+.wfr-tables {
+    margin: 2.25em 0;
+    ul.atom-tabs-navigation {
+        list-style: none;
+        margin: 0;
+        max-width: inherit;
+        padding: 0;
+    }   
+    .atom-tabs-content {
+        background: #fff;
+    }
+    table {
+        margin: 0;
+        max-width: inherit;
+        th {
+            border-bottom: none;
+            font-weight: 500;
+            min-width: @grid-space*4;
+            max-width: @grid-space*6;
+            &.wfr-tables-group-label {
+                font-weight: 600;
+                padding-top: 1em;
+                border-bottom: 1px solid @border;
+                max-width: auto;
+            }
+            &.wfr-tables-review {
+                font-weight: normal;
+                max-width: auto;
+                padding-top: 1.5em;
+            }
+        }
+        th, td {
+            padding: 0.5em;
+            vertical-align: top;
+        }
+        td {
+            min-width: @grid-space*4;
+        }
+    }
+    .wfr-price {
+        border-radius: 5px;
+    }
+    .wfr-price-value {
+        font-size: 0.8em;
+    }
+}
+
+.wfr-tables-wrapper {
+    overflow-x: scroll;
+} 
+
+.wfr-tables-form {
+    margin: @grid-space 0;
+    label {
+        display: block;
+        margin-bottom: 0.5em;
+    }
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        li {
+            align-items: center;
+            background-color: #f5f5f5;
+            border: 1px solid @border; 
+            border-radius: @grid-space/4;
+            display: flex;
+            margin-right: 10px;
+            overflow: hidden;
+            padding: @grid-space/2;
+            transition: all 200ms ease-out;
+            width: 224px;
+            &.active {
+                background-color: #fff;
+            }
+            &:hover {
+                cursor: pointer; 
+                border: 1px solid #c5c5c5;  
+                transform: scale(1.01); 
+            }
+            img {
+                float: left;
+                margin: 0 0.5em 0 0;
+                max-width: 50px;
+            }
+            p {
+                line-height: 1.25;
+                margin: 0;
+                overflow: hidden;
+            }            
+        }
+    }
+}
+
+.wfr-fields-plan, .wfr-fields-price, .wfr-fields-weighted {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.wfr-fields-weighted {
+    font-size: 0.8em;
+}

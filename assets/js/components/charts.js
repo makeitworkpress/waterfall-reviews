@@ -42,8 +42,6 @@ var Charts = {
         jQuery('.wfr-charts-normal').click( function(event) {
             event.preventDefault();
 
-            console.log(self.data);
-
             var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
             jQuery(this).addClass('active');
             jQuery(this).next('.wfr-charts-weighted').removeClass('active');
@@ -88,11 +86,11 @@ var Charts = {
             },
             data: {
                 action: 'getChartData', 
-                category: jQuery(object).closest('.wfr-chart-selector').data('category'),
+                categories: jQuery(object).closest('.wfr-chart-selector').data('categories'),
                 key: jQuery(object).val(),
                 include: jQuery(object).closest('.wfr-chart-selector').data('include'),
                 nonce: wfr.nonce,
-                tag: jQuery(object).closest('.wfr-chart-selector').data('tag')
+                tags: jQuery(object).closest('.wfr-chart-selector').data('tags')
             },
             success: function(response) {
                 
@@ -105,6 +103,8 @@ var Charts = {
                 }
 
                 self.data = response.data;
+
+                jQuery(object).closest('.wfr-charts').addClass('wfr-charts-loaded');
 
                 self.renderChart(response.data.normal, canvas);
 

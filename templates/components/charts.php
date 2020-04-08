@@ -3,9 +3,9 @@
  * Displays a chart or a selectable chart
  */
 ?>
-<div class="wfr-charts" <?php if($charts['id']) { echo 'id="' . $charts['id'] . '"'; } ?>>
+<div class="wfr-charts<?php echo $charts['class']; ?>" <?php if($charts['id']) { echo 'id="' . $charts['id'] . '"'; } ?>>
     <?php if( $charts['form'] ) { ?> 
-        <form class="wfr-chart-selector" data-category="<?php esc_attr_e($charts['category']); ?>" data-tag="<?php esc_attr_e($charts['tag']); ?>" data-include="<?php esc_attr_e($charts['include']); ?>">
+        <form class="wfr-chart-selector" data-categories="<?php esc_attr_e($charts['categories']); ?>" data-tags="<?php esc_attr_e($charts['tags']); ?>" data-include="<?php esc_attr_e($charts['include']); ?>">
             <label><?php echo $charts['label']; ?></label>
             <select name="wfr_chart_data_source">
                 <option value=""><?php echo $charts['select']; ?></option>
@@ -20,7 +20,7 @@
         </form>
     <?php } ?>
     <canvas class="wfr-charts-chart"></canvas>
-    <?php if( $charts['weight'] && $charts['key'] !== 'price' ) { ?> 
+    <?php if( $charts['weight'] && $charts['meta'] !== 'price' ) { ?> 
         <form class="wfr-charts-weight">
             <button class="wfr-charts-normal atom atom-button atom-button-small active"><?php echo $charts['normal'] ?></button>
             <button class="wfr-charts-weighted atom atom-button atom-button-small"><?php echo $charts['weighted'] ?></button>

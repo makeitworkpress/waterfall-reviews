@@ -5,6 +5,10 @@
  */
  .wfr-charts {
     margin: 2.25em 0;
+    label {
+        display: block;
+        margin-bottom: 0.5em;
+    }
     .atom-button {
         border: none;
         &.active, &:hover {
@@ -12,10 +16,15 @@
             color: #fff;     
         }
     }
+
  }
 
 .wfr-charts-chart {
+    display: none;
     margin: @grid-space 0;
+    .wfr-charts-loaded & {
+        display: block;
+    }
 }
 
 .wfr-charts-weight {

@@ -19,6 +19,8 @@ class Ajax extends Base {
         $this->actions = [
             ['wp_ajax_getChartData', 'getChartData'],
             ['wp_ajax_nopriv_getChartData', 'getChartData'],
+            ['wp_ajax_loadTables', 'loadTables'],
+            ['wp_ajax_nopriv_loadTables', 'loadTables'],            
             ['wp_ajax_filterReviews', 'filterReviews'],
             ['wp_ajax_nopriv_filterReviews', 'filterReviews']
         ];
@@ -33,10 +35,10 @@ class Ajax extends Base {
         wp_verify_nonce( 'we-love-good-reviews', $_POST['action'] );
         
         $args = [
-            'categories'    => array_filter( explode(',', sanitize_text_field($_POST['category'])), function($v) { return is_numeric($v); } ),
+            'categories'    => array_filter( explode(',', sanitize_text_field($_POST['categories'])), function($v) { return is_numeric($v); } ),
             'include'       => array_filter( explode(',', sanitize_text_field($_POST['include'])), function($v) { return is_numeric($v); } ),
             'meta'          => sanitize_key( $_POST['key'] ),
-            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tag'])), function($v) { return is_numeric($v); } ),
+            'tags'          => array_filter( explode(',', sanitize_text_field($_POST['tags'])), function($v) { return is_numeric($v); } ),
             'weight'        => true
         ];
 
@@ -46,6 +48,32 @@ class Ajax extends Base {
         wp_send_json_success( $data );
 
     }
+
+    /**
+     * Loads comparison tables for the selected reviews
+     */
+    public function loadTables() {
+
+        wp_verify_nonce( 'we-love-good-reviews', $_POST['action'] );
+        
+        $args = [
+            'attributes'    => isset($_POST['attributes']) ? array_filter( explode(',', sanitize_text_field($_POST['attributes'])) ) : [],
+            'categories'    => isset($_POST['categories']) ? array_filter( explode(',', sanitize_text_field($_POST['categories'])), function($v) { return is_numeric($v); } ) : [],
+            'form'          => false,
+            'groups'        => isset($_POST['groups']) ? array_filter( explode(',', sanitize_text_field($_POST['groups'])) ) : [],
+            'load'          => true,
+            'properties'    => isset($_POST['properties']) ? array_filter( explode(',', sanitize_text_field($_POST['properties'])) ) : [],
+            'reviews'       => array_filter( $_POST['reviews'], function($v) { return is_numeric($v); } ),
+            'tags'          => isset($_POST['tags']) ? array_filter( explode(',', sanitize_text_field($_POST['tags'])), function($v) { return is_numeric($v); } ) : [],
+            'view'          => sanitize_text_field($_POST['view']),
+            'weight'        => sanitize_text_field($_POST['weight'])
+        ];
+
+        $tables      = new Views\Components\Tables( $args );
+
+        wp_send_json_success( $tables->render(false) );
+
+    }    
 
     /**
      * Executes a filter action for use in filters
