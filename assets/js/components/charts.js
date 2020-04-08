@@ -75,7 +75,14 @@ var Charts = {
         }
 
         var canvas  = jQuery(object).closest('.wfr-charts').find('.wfr-charts-chart').get(0),
-            self    = this;
+            self    = this,
+            weight  = jQuery(object).closest('.wfr-charts').find('.wfr-charts-weight');
+
+        // Reset weighted display
+        if( weight.length > 0 ) {
+            jQuery(weight).find('.wfr-charts-normal').addClass('active');    
+            jQuery(weight).find('.wfr-charts-weighted').removeClass('active');    
+        }   
 
         utils.ajax({
             beforeSend: function() {

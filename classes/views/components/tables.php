@@ -333,14 +333,16 @@ class Tables extends Component {
                             $planName   = '';
 
                             // Retrieve the correct plan name and price from our selection of plans
-                            foreach( $plans as $plan ) {
+                            if( $plans ) {
+                                foreach( $plans as $plan ) {
 
-                                if( sanitize_key($plan['name']) == $planValueSet['name'] ) { 
-                                    $planPrice  = $plan['price'];
-                                    $planName   = $plan['name'];
-                                    break;
+                                    if( sanitize_key($plan['name']) == $planValueSet['name'] ) { 
+                                        $planPrice  = $plan['price'];
+                                        $planName   = $plan['name'];
+                                        break;
+                                    }
+
                                 }
-
                             }
 
                             $planValues = $this->getFieldValues( $field, $planValueSet['value'], $planPrice );
