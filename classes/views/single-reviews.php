@@ -196,7 +196,10 @@ class Single_Reviews extends Base {
 
         // Displays the prices
         if( ! $this->layout['reviews_header_prices_disable'] ) {
-            $prices = new Components\Prices( ['best' => isset($this->layout['reviews_prices_best']) ? $this->layout['reviews_prices_best']: false ]);
+            $prices = new Components\Prices( [
+                'best' => isset($this->layout['reviews_prices_best']) ? $this->layout['reviews_prices_best'] : false, 
+                'schema' => in_array('reviews', $this->noSchema) ? false : true
+            ]);
             $prices->render();
         }
 
@@ -250,7 +253,7 @@ class Single_Reviews extends Base {
 
         // Loads the prices within our review
         if( $this->layout['reviews_content_prices'] ) {
-            $prices = new Components\Prices(['best' => $this->layout['reviews_prices_best']]);
+            $prices = new Components\Prices(['best' => $this->layout['reviews_prices_best'], 'schema' => in_array('reviews', $this->noSchema) ? false : true]);
             $prices->render();
         }             
 
@@ -329,7 +332,7 @@ class Single_Reviews extends Base {
         }
         
         if( $this->layout['reviews_content_prices_after'] ) {
-            $prices = new Components\Prices( ['best' => $this->layout['reviews_prices_best']] );
+            $prices = new Components\Prices( ['best' => $this->layout['reviews_prices_best'], 'schema' => in_array('reviews', $this->noSchema) ? false : true] );
             $prices->render();
         }        
 
