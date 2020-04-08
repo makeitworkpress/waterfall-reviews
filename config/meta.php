@@ -4,6 +4,25 @@
  */
 defined( 'ABSPATH' ) or die('Go eat veggies!');
 
+/**
+ * Set-up our plans for dynamic display
+ */
+$options = [];
+if( isset($_GET['post']) && is_numeric($_GET['post']) ) {
+
+    $plans = get_post_meta( intval($_GET['post']), 'plans', true );
+
+    if( ! is_array(array_filter($plans)) ) {
+        return;
+    }
+
+    foreach( $plans as $plan ) {
+        $key = sanitize_key($plan['name']);
+        $options[$key] = $plan['name'];
+    }
+
+}
+
 $reviewMeta  = [
     'frame'     => 'meta',
     'fields'    => [
@@ -62,9 +81,7 @@ $reviewMeta  = [
                     [
                         'id'            => 'prices',
                         'title'         => __('Prices and Vendors', 'wfr'),
-                        'description'   => __('Adds one or more prices and possible links to their suppliers.', 'wfr'),
-                        'add'           => __('Add New Price', 'wfr'),
-                        'remove'        => __('Remove Price', 'wfr'),
+                        'description'   => __('Adds one or more prices and possible affiliated links to their suppliers. These prices are shown in the review.', 'wfr'),
                         'type'          => 'repeatable',
                         'fields'        => [                                   
                             [
@@ -111,6 +128,38 @@ $reviewMeta  = [
                             ]                                                                                                                                                                                     
                         ]                                
                     ],
+                    [
+                        'id'            => 'plans',
+                        'title'         => __('Item Plans', 'wfr'),
+                        'description'   => __('Adds pricing plans for this item. These plans can be used to display dynamic tables and link repeatable attributes and properties.', 'wfr'),
+                        'type'          => 'repeatable',
+                        'fields'        => [ 
+                            [
+                                'columns'       => 'fourth',
+                                'id'            => 'name',
+                                'title'         => __('Name', 'wfr'),
+                                'description'   => __('The unique name for this plan.', 'wfr'), 
+                                'type'          => 'input'                    
+                            ],                                                              
+                            [
+                                'columns'       => 'fourth',
+                                'id'            => 'price',
+                                'title'         => __('Price', 'wfr'),
+                                'description'   => __('The price for this plan.', 'wfr'), 
+                                'min'           => 0,
+                                'step'          => 0.01,                   
+                                'subtype'       => 'number', 
+                                'type'          => 'input'                    
+                            ],
+                            [
+                                'columns'       => 'half',
+                                'id'            => 'description',
+                                'title'         => __('Description', 'wfr'),
+                                'description'   => __('An optional description for the plan.', 'wfr'),
+                                'type'          => 'textarea'                    
+                            ]
+                        ]
+                    ],                    
                     [
                         'id'            => 'summary',
                         'title'         => __('Review Summary', 'wfr'),
@@ -381,27 +430,22 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                         'type'      => 'repeatable',
                         'fields'    => [
                             'name' => [
-                                'title'     => __('Name', 'wfr'),
-                                'id'        => 'name',
-                                'columns'   => 'half',
-                                'type'      => 'input',
+                                'title'         => __('Associated Plan', 'wfr'),
+                                'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
+                                'id'            => 'name',
+                                'columns'       => 'half',
+                                'placeholder'   => __('Select a plan', 'wfr'),
+                                'type'          => 'select',
+                                'options'       => $options
                             ],                                                       
                             'value' => [
-                                'title'     => __('Value', 'wfr'),
-                                'id'        => 'value',
-                                'columns'   => 'fourth',
-                                'type'      => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
-                                'subtype'   => $attribute['type'] == 'number' ? 'number' : NULL,
-                                'rows'      => 3,
-                                'options'   => $choices
-                            ],
-                            'price' => [
-                                'title'     => __('Associated Price', 'wfr'),
-                                'id'        => 'price',
-                                'columns'   => 'fourth',
-                                'type'      => 'input',
-                                'subtype'   => 'number'
-                            ]                            
+                                'title'         => __('Value', 'wfr'),
+                                'id'            => 'value',
+                                'columns'       => 'half',
+                                'type'          => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
+                                'subtype'       => $attribute['type'] == 'number' ? 'number' : NULL,
+                                'options'       => $choices
+                            ],                           
                         ]
 
                     ];
@@ -475,28 +519,24 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
                 'title'     => $property['name'],
                 'type'      => 'repeatable',
                 'fields'    => [
-                    'name'  => [
-                        'title'     => __('Name', 'wfr'),
-                        'id'        => 'name',
-                        'columns'   => 'half',
-                        'type'      => 'input',
+                    'name' => [
+                        'title'         => __('Associated Plan', 'wfr'),
+                        'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
+                        'id'            => 'name',
+                        'columns'       => 'half',
+                        'placeholder'   => __('Select a plan', 'wfr'),
+                        'type'          => 'select',
+                        'options'       => $options
                     ],                             
                     'value' => [
                         'title'     => __('Value', 'wfr'),
                         'id'        => 'value',
-                        'columns'   => 'fourth',
+                        'columns'   => 'half',
                         'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
                         'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
                         'rows'      => 3,
                         'options'   => $choices
-                    ],
-                    'price' => [
-                        'title'     => __('Associated Price', 'wfr'),
-                        'id'        => 'price',
-                        'columns'   => 'fourth',
-                        'type'      => 'input',
-                        'subtype'   => 'number'
-                    ]                   
+                    ]                  
                 ]
 
             ];

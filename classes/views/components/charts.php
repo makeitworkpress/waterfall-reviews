@@ -280,13 +280,29 @@ class Charts extends Component {
              * and eventually add weighted charts. A bit ugly now, but it works.
              */
             $priceCurrency  = get_post_meta($review, 'price_currency', true);
-            $priceUnit      = get_post_meta($review, 'price_unit', true);         
+            $priceUnit      = get_post_meta($review, 'price_unit', true);   
+            $plans          = get_post_meta($review, 'plans', true);      
 
             // If a number field is repeatable, thus has multiple values. Often used for various plans in one item
             if( is_array($meta) && isset($meta[0]['name']) && isset($meta[0]['value']) ) {
 
-                foreach( $meta as $plan ) {
-                    $values = $this->formatData( $plan['value'], $plan['name'], $plan['price'], $priceCurrency, $priceUnit ); 
+                foreach( $meta as $planValueSet ) {
+
+                    $planPrice  = '';
+                    $planName   = '';
+
+                    // Retrieve the correct plan name and price from our selection of plans
+                    if( is_array($plans) ) {
+                        foreach( $plans as $plan ) {
+                            if( sanitize_key($plan['name']) == $planValueSet['name'] ) {
+                                $planPrice  = $plan['price'];
+                                $planName   = $plan['name'];
+                                break;
+                            }
+                        }    
+                    }               
+
+                    $values = $this->formatData( $planValueSet['value'], $planName, $planPrice, $priceCurrency, $priceUnit ); 
                    
                     if( $values['normal'] ) {
                         $metrics['normal'][] = $values['normal'];

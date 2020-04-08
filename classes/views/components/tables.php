@@ -229,7 +229,8 @@ class Tables extends Component {
         $priceCurrency  = get_post_meta($post, 'price_currency', true);
         $priceCurrency  = $priceCurrency ? $priceCurrency : $this->options['review_currency'];
         $priceUnit      = get_post_meta($post, 'price_unit', true);
-        $price          = get_post_meta($post, 'price', true);          
+        $price          = get_post_meta($post, 'price', true);   
+        $plans          = get_post_meta($post, 'plans', true);
 
         foreach( $groups as $group ) {
 
@@ -323,15 +324,31 @@ class Tables extends Component {
                     
                     $meta   = get_post_meta($post, $fkey, true);
 
+                    // This is a repeatable field with multiple items, linked to a plan
                     if( $field['repeat'] && is_array($meta) ) {
                         $value      = [];
-                        foreach( $meta as $plan ) {
-                            $planValues = $this->getFieldValues( $field, $plan['value'], $plan['price'] );
+                        foreach( $meta as $planValueSet ) {
+
+                            $planPrice  = '';
+                            $planName   = '';
+
+                            // Retrieve the correct plan name and price from our selection of plans
+                            foreach( $plans as $plan ) {
+
+                                if( sanitize_key($plan['name']) == $planValueSet['name'] ) { 
+                                    $planPrice  = $plan['price'];
+                                    $planName   = $plan['name'];
+                                    break;
+                                }
+
+                            }
+
+                            $planValues = $this->getFieldValues( $field, $planValueSet['value'], $planPrice );
     
                             // Only add plans if there is a value
                             if( $planValues ) {
-                                $planPrice  = $plan['price'] ? ' <span class="wfr-fields-price">(' . esc_html($priceCurrency) . esc_html($plan['price']) . ' ' . esc_html($priceUnit) . ')</span>' : '';
-                                $planName   = $plan['name'] ? ' <span class="wfr-fields-plan"> - ' . esc_html($plan['name']) . '</span>' : '';
+                                $planPrice  = $planPrice ? ' <span class="wfr-fields-price">(' . esc_html($priceCurrency) . esc_html($planPrice) . ' ' . esc_html($priceUnit) . ')</span>' : '';
+                                $planName   = $planName ? ' <span class="wfr-fields-plan"> - ' . esc_html($planName) . '</span>' : '';
                                 $value[]    = '<span class="wfr-fields-repeatable">' . $planValues . $planName . $planPrice . '</span>';
                             }
     

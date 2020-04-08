@@ -186,7 +186,7 @@ $options = [
                                 'columns'       => 'fifth',
                                 'id'            => 'key',
                                 'title'         => __('Property Key', 'wfr'),
-                                'description'   => __('The unique meta key for this property.', 'wfr'),
+                                'description'   => __('The unique meta key for this property. Changing this key will remove the saved property values for existing reviews!', 'wfr'),
                                 'type'          => 'input'                                     
                             ],                            
                             [
@@ -213,7 +213,7 @@ $options = [
                             [
                                 'columns'       => 'fifth',
                                 'id'            => 'repeat',
-                                'title'         => __('Repeatable?', 'wfr'),
+                                'title'         => __('Repeatable Plan?', 'wfr'),
                                 'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
                                 'type'          => 'checkbox',
                                 'single'        => true,
@@ -274,7 +274,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                     'columns'       => 'fifth',
                     'id'            => 'key',
                     'title'         => __('Attribute Key', 'wfr'),
-                    'description'   => __('The unique meta key for this attribute.', 'wfr'),
+                    'description'   => __('The unique meta key for this attribute. Changing this key will remove the saved attribute values for existing reviews!', 'wfr'),
                     'type'          => 'input'                                        
                 ],                                 
                 [
@@ -300,7 +300,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                 [
                     'columns'       => 'fifth',
                     'id'            => 'repeat',
-                    'title'         => __('Repeatable?', 'wfr'),
+                    'title'         => __('Repeatable Plan?', 'wfr'),
                     'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
                     'type'          => 'checkbox',
                     'single'        => true,
