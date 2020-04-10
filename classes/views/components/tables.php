@@ -313,14 +313,14 @@ class Tables extends Component {
                     $fkey   = isset($field['key']) && $field['key'] ? sanitize_key($field['key']) : sanitize_key($field['name']) . $ftype;
 
                     // Skip this field if we have custom properties defined
-                    if( $group == 'properties' && $this->params['properties'] && ! in_array($fkey, $this->params['properties']) ) {
+                    if( $gkey == 'properties' && $this->params['properties'] && ! in_array($fkey, $this->params['properties']) ) {
                         continue;
                     }
 
                     // Skip this field if we have custom criteria attributes defined
-                    if( $group == 'attributes' && $this->params['attributes'] && ! in_array($fkey, $this->params['attributes']) ) {
+                    if( strpos($gkey, '_attributes') && $this->params['attributes'] && ! in_array($fkey, $this->params['attributes']) ) {
                         continue;
-                    } 
+                    }
                     
                     $meta   = get_post_meta($post, $fkey, true);
 
