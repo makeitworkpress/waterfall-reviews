@@ -429,23 +429,40 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                         'title'     => $attribute['name'],
                         'type'      => 'repeatable',
                         'fields'    => [
-                            'name' => [
-                                'title'         => __('Associated Plan', 'wfr'),
-                                'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
-                                'id'            => 'name',
-                                'columns'       => 'half',
-                                'placeholder'   => __('Select a plan', 'wfr'),
-                                'type'          => 'select',
-                                'options'       => $options
-                            ],                                                       
                             'value' => [
                                 'title'         => __('Value', 'wfr'),
                                 'id'            => 'value',
-                                'columns'       => 'half',
+                                'columns'       => 'fourth',
                                 'type'          => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
                                 'subtype'       => $attribute['type'] == 'number' ? 'number' : NULL,
                                 'options'       => $choices
-                            ],                           
+                            ],                              
+                            'plan' => [
+                                'title'         => __('Associated Plan', 'wfr'),
+                                'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
+                                'id'            => 'plan',
+                                'columns'       => 'fourth',
+                                'placeholder'   => __('Select a plan', 'wfr'),
+                                'type'          => 'select',
+                                'options'       => $options
+                            ], 
+                            'name' => [
+                                'title'         => __('Custom Name', 'wfr'),
+                                'description'   => __('A custom name for this item. Overwrites the name from the associated plan.', 'wfr'),
+                                'id'            => 'name',
+                                'columns'       => 'fourth',
+                                'type'          => 'input'
+                            ],
+                            'price' => [
+                                'title'         => __('Custom Price', 'wfr'),
+                                'description'   => __('A custom price for this item. Overwrites the price from the associated plan.', 'wfr'),
+                                'id'            => 'price',
+                                'columns'       => 'fourth',
+                                'type'          => 'input',
+                                'subtype'       => 'number',
+                                'min'           => 0,
+                                'step'          => 0.01
+                            ]                                                                                                                                        
                         ]
 
                     ];
@@ -519,24 +536,41 @@ if( isset($themeOptions['properties']) && $themeOptions['properties'] ) {
                 'title'     => $property['name'],
                 'type'      => 'repeatable',
                 'fields'    => [
-                    'name' => [
-                        'title'         => __('Associated Plan', 'wfr'),
-                        'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
-                        'id'            => 'name',
-                        'columns'       => 'half',
-                        'placeholder'   => __('Select a plan', 'wfr'),
-                        'type'          => 'select',
-                        'options'       => $options
-                    ],                             
                     'value' => [
                         'title'     => __('Value', 'wfr'),
                         'id'        => 'value',
-                        'columns'   => 'half',
+                        'columns'   => 'fourth',
                         'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
                         'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
                         'rows'      => 3,
                         'options'   => $choices
-                    ]                  
+                    ],                    
+                    'plan' => [
+                        'title'         => __('Associated Plan', 'wfr'),
+                        'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
+                        'id'            => 'plan',
+                        'columns'       => 'fourth',
+                        'placeholder'   => __('Select a plan', 'wfr'),
+                        'type'          => 'select',
+                        'options'       => $options
+                    ],                             
+                    'name' => [
+                        'title'         => __('Custom Name', 'wfr'),
+                        'description'   => __('A custom name for this item. Overwrites the name from the associated plan.', 'wfr'),
+                        'id'            => 'name',
+                        'columns'       => 'fourth',
+                        'type'          => 'input'
+                    ],
+                    'price' => [
+                        'title'         => __('Custom Price', 'wfr'),
+                        'description'   => __('A custom price value for this item. Overwrites the price from the associated plan.', 'wfr'),
+                        'id'            => 'price',
+                        'columns'       => 'fourth',
+                        'type'          => 'input',
+                        'subtype'       => 'number',
+                        'min'           => 0,
+                        'step'          => 0.01
+                    ]                                      
                 ]
 
             ];

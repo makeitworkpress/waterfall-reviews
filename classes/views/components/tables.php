@@ -329,19 +329,17 @@ class Tables extends Component {
                         $value      = [];
                         foreach( $meta as $planValueSet ) {
 
-                            $planPrice  = '';
-                            $planName   = '';
+                            $planPrice  = $planValueSet['price'];
+                            $planName   = $planValueSet['name'];
 
                             // Retrieve the correct plan name and price from our selection of plans
                             if( $plans ) {
                                 foreach( $plans as $plan ) {
-
-                                    if( sanitize_key($plan['name']) == $planValueSet['name'] ) { 
-                                        $planPrice  = $plan['price'];
-                                        $planName   = $plan['name'];
+                                    if( sanitize_key($plan['name']) == $planValueSet['plan'] ) { 
+                                        $planPrice  = $planPrice ? $planPrice : $plan['price'];
+                                        $planName   = $planName ? $planName : $plan['name'];
                                         break;
                                     }
-
                                 }
                             }
 
