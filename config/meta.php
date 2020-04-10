@@ -12,13 +12,15 @@ if( isset($_GET['post']) && is_numeric($_GET['post']) ) {
 
     $plans = get_post_meta( intval($_GET['post']), 'plans', true );
 
-    if( ! is_array(array_filter($plans)) ) {
-        return;
-    }
+    if( is_array($plans) ) {
 
-    foreach( $plans as $plan ) {
-        $key = sanitize_key($plan['name']);
-        $options[$key] = $plan['name'];
+        $plans = array_filter($plans);
+
+        foreach( $plans as $plan ) {
+            $key = sanitize_key($plan['name']);
+            $options[$key] = $plan['name'];
+        }
+
     }
 
 }
@@ -156,7 +158,8 @@ $reviewMeta  = [
                                 'id'            => 'description',
                                 'title'         => __('Description', 'wfr'),
                                 'description'   => __('An optional description for the plan.', 'wfr'),
-                                'type'          => 'textarea'                    
+                                'type'          => 'textarea',
+                                'rows'          => 3                    
                             ]
                         ]
                     ],                    

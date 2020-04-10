@@ -66,19 +66,25 @@ class Tables extends Component {
          */
         if( $this->params['load'] ) {
 
-            $unique = 'fields'; 
+            $unique = ''; 
 
             foreach( ['categories', 'reviews', 'tags'] as $metric ) {
                 if( $this->params[$metric] && is_array($this->params[$metric]) ) {
-                    $unique .= '_' . substr($metric, 0, 1) . implode('', $this->params[$metric]);
+                    $unique .= '_' . substr($metric, 0, 1) . implode('_', $this->params[$metric]);
                 }           
             }
+
+            foreach( ['attributes', 'properties', 'groups'] as $metric ) {
+                if( $this->params[$metric] && is_array($this->params[$metric]) ) {
+                    $unique .= '_' . substr($metric, 0, 1) . implode('_', $this->params[$metric]);
+                }           
+            }            
             
             if( $this->params['query'] ) {
                 $unique .= '_q' . serialize($this->params['query']);
             }
     
-            $cache_key  = 'wfr_tables_' . sanitize_key($unique);
+            $cache_key  = 'wfr_tables_fields_' . md5( sanitize_key($unique) );
             $cache      = wp_cache_get($cache_key);
     
             // We have our data cached
