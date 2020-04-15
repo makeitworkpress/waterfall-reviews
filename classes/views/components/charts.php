@@ -236,9 +236,24 @@ class Charts extends Component {
         }
 
         /**
+         * Let's draft up a unique cache key based on some variables
+         */
+        $unique = sanitize_key($this->params['meta']); 
+
+        foreach( ['categories', 'include', 'tags'] as $metric ) {
+            if( $this->params[$metric] && is_array($this->params[$metric]) ) {
+                $unique .= '_' . substr($metric, 0, 1) . implode('_', $this->params[$metric]);
+            }           
+        }
+
+        if( $this->params['weight'] ) {
+            $unique .= '_weighted';
+        }                   
+
+        /**
          * Look if we have a value stored to the object cache
          */
-        $cache_key  = 'wfr_chart_data_' . sanitize_key($this->params['meta']);
+        $cache_key  = 'wfr_chart_data_' . md5( sanitize_key($unique) );
         $cache      = wp_cache_get($cache_key);
 
         if( $cache ) {
@@ -350,6 +365,7 @@ class Charts extends Component {
             return strcmp($b['value'], $a['value']);
         });
 
+        // Sort weighted values if we have them
         if( $this->params['weight'] ) {
             usort( $metrics['weighted'], function($a, $b) {
                 return strcmp($b['value'], $a['value']);

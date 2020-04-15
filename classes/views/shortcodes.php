@@ -211,7 +211,7 @@ class Shortcodes {
 			'title'         => true,    // Displaces the title of a review within the table
             'view'          => 'table',  // We either show 'tabs' or a complete 'table'
             'weight'        => false,   // If values need to be weighted
-		], $atts, 'charts' );
+		], $atts, 'tables' );
 
 		// Some sanitization of shortcode inputs
 		foreach( $atts as $key => $value ) {
