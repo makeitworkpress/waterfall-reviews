@@ -52,7 +52,7 @@ if( ! $tables['fields'] && $tables['load'] ) {
                                 <div class="wfr-tables-wrapper">
                                     <table class="wfr-tables-table">
 
-                                        <?php if( count($tables['reviews']) > 1 ) { ?>
+                                        <?php if( count($tables['reviews']) > 1 && $tables['title'] ) { ?>
                                             <tr>
                                                 <th></th>
                                                 <?php foreach( $tables['reviews'] as $review ) { ?>
@@ -87,17 +87,19 @@ if( ! $tables['fields'] && $tables['load'] ) {
             <?php } elseif( $tables['view'] == 'table') { ?>
                 <div class="wfr-tables-wrapper">
                     <table class="wfr-tables-table">
-                        <tr>
-                            <th></th>
-                            <?php foreach( $tables['reviews'] as $review ) { ?>
-                                <th class="wfr-tables-review">
-                                    <h4>
-                                        <a href="<?php echo $review['link']; ?>" title="<?php echo $review['title']; ?>"><?php echo $review['title']; ?></a>
-                                    </h4>
-                                    <?php if($review['price']) { echo $review['price']; } ?>
-                                </th>
-                            <?php } ?>
-                        </tr>
+                        <?php if( $tables['title'] ) { ?>
+                            <tr>
+                                <th></th>
+                                <?php foreach( $tables['reviews'] as $review ) { ?>
+                                    <th class="wfr-tables-review">
+                                        <h4>
+                                            <a href="<?php echo $review['link']; ?>" title="<?php echo $review['title']; ?>"><?php echo $review['title']; ?></a>
+                                        </h4>
+                                        <?php if($review['price']) { echo $review['price']; } ?>
+                                    </th>
+                                <?php } ?>
+                            </tr>
+                        <?php } ?>     
                         <?php foreach( $tables['fields'] as $key => $group ) { ?>
                             <tr>
                                 <th class="wfr-tables-group-label" colspan="<?php echo count($tables['reviews']) + 1; ?>"><?php echo $group['label']; ?></th>
@@ -110,7 +112,7 @@ if( ! $tables['fields'] && $tables['load'] ) {
                                     <?php } ?>
                                 </tr>
                             <?php } ?>                
-                        <?php }?>        
+                        <?php } ?>        
                     </table>
                 </div>
             <?php } ?>

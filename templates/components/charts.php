@@ -20,7 +20,7 @@
         </form>
     <?php } ?>
     <canvas class="wfr-charts-chart"></canvas>
-    <?php if( $charts['weight'] && $charts['meta'] !== 'price' ) { ?> 
+    <?php if( $charts['weight'] ) { ?> 
         <form class="wfr-charts-weight">
             <button class="wfr-charts-normal atom atom-button atom-button-small active"><?php echo $charts['normal'] ?></button>
             <button class="wfr-charts-weighted atom atom-button atom-button-small"><?php echo $charts['weighted'] ?></button>

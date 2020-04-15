@@ -31,6 +31,7 @@ class Tables extends Component {
             'query'         => [],      // Arguments to query posts by
             'reviews'       => [],      // Default reviews to load
             'tags'          => [],      // Only displays data from these review tag ids 
+            'title'         => true,    // Displaces the title of a review within the table
             'view'          => 'tabs',  // We either show 'tabs' or a complete 'table'
             'weight'        => false,   // If values need to be weighted
         ] );
@@ -50,14 +51,25 @@ class Tables extends Component {
 
         $this->props['class']           = $this->params['view'];
 
-        foreach( ['form', 'label', 'load', 'view'] as $param ) {
+        foreach( ['form', 'label', 'load', 'title', 'view'] as $param ) {
             $this->props[$param]        = $this->params[$param]; 
         }
 
         $this->props['data']            = [];
+        
         foreach( ['attributes', 'categories', 'groups', 'properties', 'tags', 'view', 'weight'] as $key ) {
+
+            // Clean up our arrays of whitespace that may have been adedd through the use of shortcodes or ajax
+            if( is_array($this->params[$key]) ) {
+                foreach( $this->params[$key] as $pk => $pv ) {
+                    $this->params[$key][$pk] = trim($pv);
+                }
+            }            
+
             $this->props['data'][$key]  = is_array($this->params[$key]) ? esc_attr(implode(',', $this->params[$key])) : esc_attr($this->params[$key]);   
+
         }
+
         $this->props['fields']          = $this->fields;
         $this->props['reviews']         = [];
 
@@ -192,14 +204,10 @@ class Tables extends Component {
      * so they can be used by components
      * 
      * @param   Float   $post The id for the given post
-     * @param   Array   $groups Only return values from these groups (use sanitized criteria names, 'properties' or 'general')
-     * @param   Array   $properties Only return values from these properties
-     * @param   Array   $attributes Only return values from these attributes
-     * @param   Boolean $weighted If weighted values should be returned as well
      * 
      * @return void
      */
-    protected function setCustomFields( $post, $weighted = false, $groups = [], $attributes = [], $properties = []) {
+    protected function setCustomFields( $post ) {
 
         // $post Should be set and an integer
         if( ! is_int($post) ) {
@@ -399,23 +407,22 @@ class Tables extends Component {
     /**
      * Retrieves the values of a given field
      *
-     * @param array     $attributes     The field attributes of a saved field
-     * @param mixed     $meta           The saved metavalues for a given field
-     * @param mixed     $price          The price for the given field
-     * @param boolean   $weighted       If you want to return weighted values
+     * @param array     $field      The field attributes of a saved field
+     * @param mixed     $meta       The saved metavalues for a given field
+     * @param mixed     $price      The price for the given field
      * 
      * 
-     * @return string   $value          The formatted value
+     * @return string   $value      The formatted value
      */
-    private function getFieldValues( $attribute, $meta, $price = false ) {
+    private function getFieldValues( $field, $meta, $price = false ) {
         
-        switch( $attribute['type'] ) {
+        switch( $field['type'] ) {
             case 'input':
             case 'number':
             case 'textarea':
                 $value = esc_html($meta);
 
-                if( $this->params['weight'] && is_numeric($value) && is_numeric($price) ) {
+                if( $this->params['weight'] && is_numeric($value) && is_numeric($price) && $field['weighted'] ) {
                     $value .= '<span class="wfr-fields-weighted"> / ' . round(floatval($value/$price), 2) . ' ' . __('(weighted)', 'wfr') . '</span>';
                 }
 
@@ -423,7 +430,7 @@ class Tables extends Component {
             case 'checkbox':
             case 'select':
                 $value  = '';
-                $values = array_filter( explode(',', $attribute['values']) );
+                $values = array_filter( explode(',', $field['values']) );
                 
                 foreach( $values as $choice ) {
 

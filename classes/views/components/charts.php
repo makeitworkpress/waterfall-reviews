@@ -16,6 +16,13 @@ class Charts extends Component {
     private $meta = [];
 
     /**
+     * Holds a list of attribute ids that are weighted
+     * 
+     * @access private
+     */
+    private $weighted = [];    
+
+    /**
      * Initialize our component parameters
      */
     protected function initialize() {
@@ -110,6 +117,10 @@ class Charts extends Component {
                 $this->props['selectorGroups']['properties']['options'][$key]   = esc_html($property['name']);
                 $this->meta[$key]                                               = $property['name'];
 
+                if( $property['weighted'] ) {
+                    $this->weighted[] = $key;    
+                }
+
             }
 
             // Remove if we don't have any numerical properties
@@ -157,6 +168,10 @@ class Charts extends Component {
                         $unique = $attribute['key'] ? sanitize_key($attribute['key']) : sanitize_key($attribute['name']) . '_' . $key . '_attribute';
                         $this->props['selectorGroups'][$key . '_attributes']['options'][$unique]    = esc_html($attribute['name']);
                         $this->meta[$unique]                                                        = $attribute['name'];
+
+                        if( $attribute['weighted'] ) {
+                            $this->weighted[] = $unique;    
+                        }                       
 
                     }
 
@@ -308,7 +323,7 @@ class Charts extends Component {
                         $metrics['normal'][] = $values['normal'];
                     }
 
-                    if( $this->params['weight'] && $values['weighted'] ) {
+                    if( $this->params['weight'] && $values['weighted'] && in_array($this->params['meta'], $this->weighted) ) {
                         $metrics['weighted'][] = $values['weighted'];
                     }
 
@@ -323,7 +338,7 @@ class Charts extends Component {
                     $metrics['normal'][] = $values['normal'];
                 }
 
-                if( $this->params['weight'] && $values['weighted'] && $this->params['meta'] !== 'price' ) {
+                if( $this->params['weight'] && $values['weighted'] && in_array($this->params['meta'], $this->weighted) ) {
                     $metrics['weighted'][] = $values['weighted'];
                 }
 

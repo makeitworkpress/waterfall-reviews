@@ -58,6 +58,11 @@ var Charts = {
             if( ID && typeof(window['chart' + ID]) !== 'undefined' ) {
                 self.data = window['chart' + ID];
                 self.renderChart( self.data.normal, canvas );
+
+                if( self.data.weighted.dataSet.data.length > 0 ) {
+                    jQuery(this).find('.wfr-charts-weight').show();
+                }
+
             }
 
         });         
@@ -116,7 +121,10 @@ var Charts = {
         if( weight.length > 0 ) {
             jQuery(weight).find('.wfr-charts-normal').addClass('active');    
             jQuery(weight).find('.wfr-charts-weighted').removeClass('active');    
-        }   
+        }  
+        
+        // Hide our weighted display
+        jQuery(object).closest('.wfr-charts').find('.wfr-charts-weight').hide();
 
         utils.ajax({
             beforeSend: function() {
@@ -146,6 +154,10 @@ var Charts = {
                 self.data = response.data;
 
                 jQuery(object).closest('.wfr-charts').addClass('wfr-charts-loaded');
+
+                if( self.data.weighted.dataSet.data.length > 0 ) {
+                    jQuery(object).closest('.wfr-charts').find('.wfr-charts-weight').show();
+                }                
 
                 self.renderChart(response.data.normal, canvas);
 

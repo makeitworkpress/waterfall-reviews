@@ -180,7 +180,7 @@ $options = [
                                 'title'         => __('Unique Property Name', 'wfr'),
                                 'description'   => __('Use an unique name for each property.', 'wfr'),
                                 'type'          => 'input'                                        
-                            ],
+                            ], 
                             [
                                 'class'         => 'regular-text wfr-key-target wfr-property-option',
                                 'columns'       => 'fifth',
@@ -188,7 +188,7 @@ $options = [
                                 'title'         => __('Property Key', 'wfr'),
                                 'description'   => __('The unique meta key for this property. Changing this key will remove the saved property values for existing reviews!', 'wfr'),
                                 'type'          => 'input'                                     
-                            ],                            
+                            ],                                                    
                             [
                                 'columns'       => 'fifth',
                                 'id'            => 'type',
@@ -201,19 +201,33 @@ $options = [
                                     'select'    => __('Select Dropdown', 'wfr'),
                                     'checkbox'  => __('Checkboxes', 'wfr'),
                                 ]                                        
-                            ],
+                            ],                           
                             [
                                 'columns'       => 'fifth',
                                 'id'            => 'values',
                                 'title'         => __('Unique Property Field Values', 'wfr'),
                                 'description'   => __('Add unique values if your property field type is checkbox or select. Seperate them by comma.', 'wfr'),
                                 'type'          => 'textarea',
+                                'dependency'    => ['source' => 'type', 'equation' => '!=', 'value' => 'number'],
                                 'rows'          => 1                                       
                             ],
                             [
                                 'columns'       => 'fifth',
+                                'id'            => 'weighted',
+                                'title'         => __('Weighted Values', 'wfr'),
+                                'description'   => __('Makes this field weighted, which will enable an additional automatically price weighted value for this field.', 'wfr'),
+                                'type'          => 'checkbox',
+                                'dependency'    => ['source' => 'type', 'equation' => '=', 'value' => 'number'],
+                                'single'        => true,
+                                'style'         => 'switcher', 
+                                'options'       => [
+                                    'enable'    => ['label' => __('Enable', 'wfr')]
+                                ]                                      
+                            ],                             
+                            [
+                                'columns'       => 'fifth',
                                 'id'            => 'repeat',
-                                'title'         => __('Repeatable Plan?', 'wfr'),
+                                'title'         => __('Repeatable', 'wfr'),
                                 'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
                                 'type'          => 'checkbox',
                                 'single'        => true,
@@ -221,7 +235,7 @@ $options = [
                                 'options'       => [
                                     'enable'    => ['label' => __('Enable', 'wfr')]
                                 ]                                      
-                            ]                                                                                                                                                
+                            ]                                                                                                                                                                           
                         ]                                
                     ]                                
                 ]
@@ -295,12 +309,26 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
                     'title'         => __('Unique Attribute Field Values', 'wfr'),
                     'description'   => __('Add unique values if you have a select or checkbox attribute field type. Seperate them by comma.', 'wfr'),
                     'type'          => 'textarea',
+                    'dependency'    => ['source' => 'type', 'equation' => '!=', 'value' => 'number'],
                     'rows'          => 1                                        
                 ],
                 [
                     'columns'       => 'fifth',
+                    'id'            => 'weighted',
+                    'title'         => __('Weighted Values', 'wfr'),
+                    'description'   => __('Makes this field weighted, which will enable an additional automatically price weighted value for this field.', 'wfr'),
+                    'type'          => 'checkbox',
+                    'dependency'    => ['source' => 'type', 'equation' => '=', 'value' => 'number'],
+                    'single'        => true,
+                    'style'         => 'switcher', 
+                    'options'       => [
+                        'enable'    => ['label' => __('Enable', 'wfr')]
+                    ]                                      
+                ],                
+                [
+                    'columns'       => 'fifth',
                     'id'            => 'repeat',
-                    'title'         => __('Repeatable Plan?', 'wfr'),
+                    'title'         => __('Repeatable?', 'wfr'),
                     'description'   => __('Makes this field repeatable. Useful if a reviewed item has plans with different properties.', 'wfr'),
                     'type'          => 'checkbox',
                     'single'        => true,

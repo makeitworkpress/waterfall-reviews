@@ -262,7 +262,8 @@ class Single_Reviews extends Base {
 
             $properties = new Components\Tables( [
                 'groups'        => $this->propertyGroups(),
-                'reviews'       => [$post->ID]
+                'reviews'       => [$post->ID],
+                'weight'        => true
             ] );
             $properties->render();
 
@@ -340,7 +341,8 @@ class Single_Reviews extends Base {
         if( $this->layout['reviews_content_properties_after'] ) {
             $properties = new Components\Tables( [
                 'groups'        => $this->propertyGroups(),
-                'reviews'       => [$post->ID]
+                'reviews'       => [$post->ID],
+                'weight'        => true
             ] );
             $properties->render();  
         }

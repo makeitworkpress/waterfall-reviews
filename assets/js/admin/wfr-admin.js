@@ -33,7 +33,7 @@ jQuery(document).ready( function() {
      */
     jQuery('#waterfall_options .wfr-key-field').each( function(index, fieldName) {
 
-        var fieldTarget = jQuery(fieldName).closest('.wp-custom-fields-repeatable-fields').find('.wfr-key-target')[0];
+        var fieldTarget = jQuery(fieldName).closest('.wpcf-repeatable-fields').find('.wfr-key-target')[0];
 
         if( fieldName.value && ! fieldTarget.value ) {
 
@@ -49,7 +49,7 @@ jQuery(document).ready( function() {
     jQuery(document).on('change', '.wfr-key-field', function(event) {
 
         var fieldName   = this;
-        var fieldTarget = jQuery(fieldName).closest('.wp-custom-fields-repeatable-fields').find('.wfr-key-target')[0];
+        var fieldTarget = jQuery(fieldName).closest('.wpcf-repeatable-fields').find('.wfr-key-target')[0];
 
         if( fieldName.value && ! fieldTarget.value ) {
             fieldTarget.value = sanitizeKey(fieldName.value, fieldTarget);

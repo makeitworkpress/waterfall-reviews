@@ -203,11 +203,12 @@ class Shortcodes {
             'form'          => false,   // Displays a review selection form (or not)
             'groups'        => [],      // Only show the content from the given groups
             'label'         => '', 		// Label that is used for selecting reviews
-            'load'          => true,   // Loads the table directly if set to true. Warning! Loads all reviews if a query is not defined.
+            'load'          => true,    // Loads the table directly if set to true. Warning! Loads all reviews if a query is not defined.
             'price'         => __('Get', 'wfr'), // Button to the offer
             'properties'    => [],      // Limits the display only to the given properties (use property meta keys)            
             'reviews'       => [],      // Default reviews to load
-            'tags'          => [],      // Only displays data from these review tag ids 
+			'tags'          => [],      // Only displays data from these review tag ids 
+			'title'         => true,    // Displaces the title of a review within the table
             'view'          => 'table',  // We either show 'tabs' or a complete 'table'
             'weight'        => false,   // If values need to be weighted
 		], $atts, 'charts' );
