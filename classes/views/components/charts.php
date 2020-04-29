@@ -248,7 +248,7 @@ class Charts extends Component {
 
         if( $this->params['weight'] ) {
             $unique .= '_weighted';
-        }                   
+        }  
 
         /**
          * Look if we have a value stored to the object cache
@@ -362,13 +362,13 @@ class Charts extends Component {
 
         // Sort our metrics on value
         usort( $metrics['normal'], function($a, $b) {
-            return strcmp($b['value'], $a['value']);
+            return $b['value'] <=> $a['value'];
         });
 
         // Sort weighted values if we have them
         if( $this->params['weight'] ) {
             usort( $metrics['weighted'], function($a, $b) {
-                return strcmp($b['value'], $a['value']);
+                return $b['value'] <=> $a['value'];
             });       
         }
 

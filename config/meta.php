@@ -8,6 +8,8 @@ defined( 'ABSPATH' ) or die('Go eat veggies!');
  * Set-up our plans for dynamic display
  */
 $options = [];
+
+// Get's the plans
 if( isset($_GET['post']) && is_numeric($_GET['post']) ) {
 
     $plans = get_post_meta( intval($_GET['post']), 'plans', true );
@@ -25,6 +27,19 @@ if( isset($_GET['post']) && is_numeric($_GET['post']) ) {
 
 }
 
+
+$themeOptions = wf_get_theme_option();
+
+if( isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'automatic' && isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] ) {
+    $columns = 'third'; 
+} elseif( isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] ) {
+    $columns = 'half';
+} elseif( isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'automatic' ) {
+    $columns = 'half'; 
+} else {
+    $columns = 'full';
+} 
+
 $reviewMeta  = [
     'frame'     => 'meta',
     'fields'    => [
@@ -37,17 +52,111 @@ $reviewMeta  = [
         'title'     => __('Review Settings', 'wfr'),
         'type'      => 'post',
         'sections'  => [
-            [
+            'general' => [
                 'icon'      => 'build',
                 'id'        => 'general',
                 'title'     => __('General', 'wfr'),
                 'fields'    => [
-                    [
+                    'rating' => [
+                        'columns'       => $columns,
+                        'id'            => 'rating',
+                        'title'         => __('Overall Rating', 'wfr'),
+                        'description'   => isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'visitors' 
+                            ? __('The overall rating. Automatically calculated when visitors leave a rating as defined in the Theme Settings, ', 'wfr') 
+                            : __('The overall rating. Automatically calculated if automatic calculation is turned on in the Theme Settings.', 'wfr'),
+                        'min'           => 0,
+                        'max'           => isset($themeOptions['rating_maximum']) && $themeOptions['rating_maximum'] ? $themeOptions['rating_maximum'] : 5,
+                        'step'          => 0.1,
+                        'type'          => 'input',                                        
+                        'subtype'       => 'number'                                        
+                    ],  
+                    'visitors_rating' => [
+                            'columns'       => $columns,
+                            'id'            => 'visitors_rating',
+                            'title'         => __('Visitor Rating', 'wfr'),
+                            'description'   => __('The average rating from visitors. This is calculated when visitors leave ratings at this review.', 'wfr'),
+                            'min'           => 0,
+                            'max'           => isset($themeOptions['rating_maximum']) && $themeOptions['rating_maximum'] ? $themeOptions['rating_maximum'] : 5,
+                            'step'          => 0.1,
+                            'readonly'      => true,
+                            'type'          => 'input',                                        
+                            'subtype'       => 'number'                                        
+                    ], 
+                    'disable_calculation' => [
+                            'columns'       => $columns,
+                            'id'            => 'disable_calculation',
+                            'title'         => __('Disable Automatic Calculation', 'wfr'), 
+                            'description'   => __('In some cases you want to disable the automatic rating for this review specifically and add a manual rating.', 'wfr'), 
+                            'type'          => 'checkbox', 
+                            'single'        => true,          
+                            'style'         => 'switcher switcher-disable',
+                            'options'       => ['disable' => ['label' => __('Disable automatic calculation for the Overall Rating.')]]           
+                    ],                                                                  
+                    'summary' => [
+                        'columns'       => 'half',
+                        'id'            => 'summary',
+                        'title'         => __('Review Summary', 'wfr'),
+                        'description'   => __('The summary for the review, rendered at the beginning.', 'wfr'),
+                        'type'          => 'textarea',
+                        'rows'          => 3                                      
+                    ], 
+                    'reviewed_item' => [
+                        'columns'       => 'half',
                         'id'            => 'reviewed_item',
                         'title'         => __('Product Reviewed', 'wfr'),
                         'description'   => __('Name of the Product that is reviewed.', 'wfr'),
                         'type'          => 'input'                     
+                    ],               
+                    'advantages' => [
+                        'columns'       => 'half',
+                        'id'            => 'advantages',
+                        'title'         => __('Advantages', 'wfr'),
+                        'description'   => __('Adds advantages for this review, displayed under the summary.', 'wfr'),
+                        'add'           => __('Add New Advantage', 'wfr'), 
+                        'remove'        => __('Remove Advantage', 'wfr'),
+                        'type'          => 'repeatable',
+                        'fields'        => [
+                            [
+                                'id'            => 'name',
+                                'title'         => __('Advantage', 'wfr'),
+                                'type'          => 'input',                                         
+                            ],
+                        ]
+                    ], 
+                    'disadvantages' => [
+                        'columns'       => 'half',
+                        'id'            => 'disadvantages',
+                        'title'         => __('Disadvantages', 'wfr'),
+                        'description'   => __('Adds disadvantages for this review, displayed under the summary.', 'wfr'),
+                        'add'           => __('Add New Disadvantage', 'wfr'), 
+                        'remove'        => __('Remove Disadvantage', 'wfr'),
+                        'type'          => 'repeatable',
+                        'fields'        => [
+                            [
+                                'id'            => 'name',
+                                'title'         => __('Disadvantage', 'wfr'),
+                                'type'          => 'input',                                         
+                            ],
+                        ]
                     ],
+                    'manual_editing' => [
+                        'id'            => 'manual_editing',
+                        'title'         => __('Manual Templating', 'wfr'),
+                        'description'   => __('Removes the default layout element within the content, allowing you to build up the review content using content builders.', 'wfr'),
+                        'type'          => 'checkbox',
+                        'single'        => true,
+                        'style'         => 'switcher switcher-disable',
+                        'options'       => [
+                            'manual' => array( 'label' => __('Remove Default Review Content Element', 'wfr') )
+                        ]  
+                    ]                          
+                ]
+            ],
+            [
+                'icon'      => 'attach_money',
+                'id'        => 'prices',
+                'title'     => __('Prices', 'wfr'),
+                'fields'    => [  
                     [
                         'columns'       => 'fourth',
                         'id'            => 'price_prefix',
@@ -82,7 +191,7 @@ $reviewMeta  = [
                     ],                                                                                                                                                       
                     [
                         'id'            => 'prices',
-                        'title'         => __('Prices and Vendors', 'wfr'),
+                        'title'         => __('Item Vendors', 'wfr'),
                         'description'   => __('Adds one or more prices and possible affiliated links to their suppliers. These prices are shown in the review.', 'wfr'),
                         'type'          => 'repeatable',
                         'fields'        => [                                   
@@ -162,59 +271,9 @@ $reviewMeta  = [
                                 'rows'          => 3                    
                             ]
                         ]
-                    ],                    
-                    [
-                        'id'            => 'summary',
-                        'title'         => __('Review Summary', 'wfr'),
-                        'description'   => __('The summary for the review, rendered at the beginning.', 'wfr'),
-                        'type'          => 'textarea',
-                        'rows'          => 3                                      
-                    ], 
-                    [
-                        'columns'       => 'half',
-                        'id'            => 'advantages',
-                        'title'         => __('Advantages', 'wfr'),
-                        'description'   => __('Adds advantages for this review, displayed under the summary.', 'wfr'),
-                        'add'           => __('Add New Advantage', 'wfr'), 
-                        'remove'        => __('Remove Advantage', 'wfr'),
-                        'type'          => 'repeatable',
-                        'fields'        => [
-                            [
-                                'id'            => 'name',
-                                'title'         => __('Advantage', 'wfr'),
-                                'type'          => 'input',                                         
-                            ],
-                        ]
-                    ], 
-                    [
-                        'columns'       => 'half',
-                        'id'            => 'disadvantages',
-                        'title'         => __('Disadvantages', 'wfr'),
-                        'description'   => __('Adds disadvantages for this review, displayed under the summary.', 'wfr'),
-                        'add'           => __('Add New Disadvantage', 'wfr'), 
-                        'remove'        => __('Remove Disadvantage', 'wfr'),
-                        'type'          => 'repeatable',
-                        'fields'        => [
-                            [
-                                'id'            => 'name',
-                                'title'         => __('Disadvantage', 'wfr'),
-                                'type'          => 'input',                                         
-                            ],
-                        ]
-                    ],
-                    [
-                        'id'            => 'manual_editing',
-                        'title'         => __('Manual Templating', 'wfr'),
-                        'description'   => __('Removes the default layout element within the content, allowing you to build up the review content using content builders.', 'wfr'),
-                        'type'          => 'checkbox',
-                        'single'        => true,
-                        'style'         => 'switcher switcher-disable',
-                        'options'       => [
-                            'manual' => array( 'label' => __('Remove Default Review Content Element', 'wfr') )
-                        ]  
-                    ]                          
-                ]
-            ],
+                    ]                
+                ] 
+            ],         
             [
                 'icon'      => 'camera_enhance',
                 'id'        => 'media',
@@ -241,7 +300,7 @@ $reviewMeta  = [
                     [
                         'id'            => 'video',
                         'title'         => __('Review Video URL', 'wfr'),
-                        'description'   => __('You can specify the url to a video here. It will be shown just near the summary as the first slide if enabled.', 'wfr'),
+                        'description'   => __('You can specify the url to a video here. It will be shown if enabled within the customizer settings.', 'wfr'),
                         'multiple'      => false,
                         'type'          => 'input', 
                         'subtype'       => 'url'                   
@@ -255,7 +314,6 @@ $reviewMeta  = [
                 'title'     => __('Relations', 'wfr'),
                 'fields'    => [
                     [
-                        'columns'       => 'half',
                         'id'            => 'similar',
                         'title'         => __('Similar Products', 'wfr'),
                         'description'   => __('You can select reviews which are, for example, from the same product range.', 'wfr'),
@@ -265,10 +323,9 @@ $reviewMeta  = [
                         'source'        => 'reviews'                     
                     ],
                     [
-                        'columns'       => 'half',
                         'id'            => 'related',
                         'title'         => __('Related Products', 'wfr'),
-                        'description'   => __('You can select custom related products here. These will overwrite the general related products.', 'wfr'),
+                        'description'   => __('Custom related products here. These will overwrite the general related products.', 'wfr'),
                         'type'          => 'select', 
                         'multiple'      => true,     
                         'object'        => 'posts',               
@@ -281,61 +338,19 @@ $reviewMeta  = [
 ];
 
 /**
+ * These fields are removed depending on our settings
+ */
+if( ! isset($themeOptions['rating_visitors']) || ! $themeOptions['rating_visitors'] ) {
+    unset($reviewMeta['fields']['sections']['general']['fields']['visitors_rating']);
+}
+
+if( ! isset($themeOptions['rating_calculation']) || ! $themeOptions['rating_calculation'] == 'automatic' ) {
+    unset($reviewMeta['fields']['sections']['general']['fields']['disable_calculation']);   
+}
+
+/**
  * Fields that are added dynamically through our options
  */
-$themeOptions = wf_get_theme_option();
-
-if( isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'automatic' && isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] ) {
-    $columns = 'third'; 
-} elseif( isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] ) {
-    $columns = 'half';
-} elseif( isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'automatic' ) {
-    $columns = 'half'; 
-} else {
-    $columns = 'full';
-} 
-
-$ratingFields = [
-    [
-        'columns'       => $columns,
-        'id'            => 'rating',
-        'title'         => __('Overall Rating', 'wfr'),
-        'description'   => isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'visitors' ? __('The overall rating for this review. This will be automatically filled when visitors leave a rating, because Rating Calculation is set to Visitors in the Theme Settings, ', 'wfr') : __('The overall rating for this review. It is calculated automatically if automatic calculation is turned on in the theme settings and can be influenced by visitors if allowed in the Theme Settings.', 'wfr'),
-        'min'           => 0,
-        'max'           => isset($themeOptions['rating_maximum']) && $themeOptions['rating_maximum'] ? $themeOptions['rating_maximum'] : 5,
-        'step'          => 0.1,
-        'type'          => 'input',                                        
-        'subtype'       => 'number'                                        
-    ]  
-];
-
-if( isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] ) {
-    $ratingFields[] = [
-        'columns'       => $columns,
-        'id'            => 'visitors_rating',
-        'title'         => __('Visitor Rating', 'wfr'),
-        'description'   => __('The average rating from visitors. This is calculated when visitors leave ratings at this review.', 'wfr'),
-        'min'           => 0,
-        'max'           => isset($themeOptions['rating_maximum']) && $themeOptions['rating_maximum'] ? $themeOptions['rating_maximum'] : 5,
-        'step'          => 0.1,
-        'readonly'      => true,
-        'type'          => 'input',                                        
-        'subtype'       => 'number'                                        
-    ]; 
-}
-
-if( isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'automatic' ) {
-    $ratingFields[] = [
-        'columns'       => $columns,
-        'id'            => 'disable_calculation',
-        'title'         => __('Disable Automatic Calculation', 'wfr'), 
-        'description'   => __('In some cases you want to disable the automatic rating for this review specifically and add a manual rating. This also removes the combined influence of visitors on the rating.', 'wfr'), 
-        'type'          => 'checkbox', 
-        'single'        => true,          
-        'style'         => 'switcher switcher-disable',
-        'options'       => ['disable' => ['label' => __('Disable automatic calculation for the Overall Rating.')]]           
-    ];            
-}
 
 /**
  * Based upon what top level review criteria are added, we add additional settings. Hence, we can add dynamic fields
@@ -351,15 +366,11 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
         }
 
         $key = sanitize_key($criteria['name']);
+        $ratingFields = [];
 
         /**
          * This adds extra meta fields for our rating
          */
-        $ratingFields[] = [
-            'id'            => $key . '_heading',
-            'title'         => $criteria['name'], 
-            'type'          => 'heading'           
-        ];
         $ratingFields[] = [
             'columns'       => isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] ? 'half' : 'full',
             'id'            => $key . '_rating',
@@ -483,20 +494,20 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
 
 
             }
-        } 
+
+        }
         
+        /**
+         * Add our additional rating meta fields
+         */
+        $reviewMeta['fields']['sections'][$key] = [
+            'icon'          => 'grade',
+            'id'            => $key,
+            'title'         => esc_html($criteria['name']),
+            'fields'        => $ratingFields
+        ];    
+             
     }
-
-
-    /**
-     * Add our additional rating meta fields
-     */
-    $reviewMeta['fields']['sections'][] = [
-        'icon'          => 'grade',
-        'id'            => 'rating',
-        'title'         => __('Rating', 'wfr'),
-        'fields'        => $ratingFields
-    ];    
 
 }
 

@@ -177,7 +177,8 @@ var Charts = {
         // Format our datasets with random colors and add our data to the right canvas
         var dataSet     = {
             backgroundColor: [],
-            barThickness: 25,
+            barThickness: 100,
+            maxBarThickness: 100,
             data: [],
             label: data.dataSet.label
         },
@@ -196,7 +197,12 @@ var Charts = {
 
         // Redefine the chart data if our chart already exists
         if( this.chart ) {
-            this.chart.destroy();
+            this.chart.data = {
+                datasets: dataSets,
+                labels: data.labels               
+            };
+            this.chart.update();
+            return;
         }
 
         this.chart = new Chart(canvas, {
@@ -205,8 +211,10 @@ var Charts = {
                 labels: data.labels
             },
             options: {
+                maintainAspectRatio: false,
                 scales: {
                     xAxes: [{
+                        barPercentage: 0.8,                     
                         ticks: {
                             beginAtZero:true
                         }
