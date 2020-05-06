@@ -20,7 +20,15 @@ $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
     'default'       => '',
     'id'            => 'reviews_header_title',
     'title'         => __('Title Section Review Fields', 'wfr'),  
-    'type'          => 'heading'   
+    'type'          => 'heading',
+    'choices'       => [
+        'reviews_header_media',
+        'reviews_header_rating',
+        'reviews_header_rating_criteria',
+        'reviews_header_prices_disable',
+        'reviews_prices_best',
+        'reviews_price_button'
+    ]    
 ];
 
 $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
@@ -76,7 +84,20 @@ $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
     'default'       => '',
     'id'            => 'reviews_content_title',
     'title'         => __('Main Content Review Fields', 'wfr'),  
-    'type'          => 'heading'   
+    'type'          => 'heading',
+    'choices'       => [
+        'reviews_content_summary_disable',
+        'reviews_ad_title',
+        'reviews_dis_title',
+        'reviews_content_rating_disable',
+        'reviews_content_prices',
+        'reviews_content_properties_before',
+        'reviews_content_criteria',
+        'reviews_content_summary_after',
+        'reviews_content_rating_after',
+        'reviews_content_prices_after',
+        'reviews_content_properties_after'
+    ]          
 ];
 
 $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
@@ -163,8 +184,15 @@ $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
 $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
     'default'       => '',
     'id'            => 'reviews_related_title_heading',
-    'title'         => __('Extra Settings for Related Reviews', 'wfr'),  
-    'type'          => 'heading'   
+    'title'         => __('Related Reviews Extra Settings', 'wfr'),
+    'type'          => 'heading',
+    'choices'       => [
+        'reviews_related_featured',
+        'reviews_related_price',
+        'reviews_related_price_button',
+        'reviews_related_rating',
+        'reviews_related_summary'
+    ]       
 ];
 
 $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
@@ -218,7 +246,24 @@ $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
     'default'       => '',
     'id'            => 'reviews_similar_title_heading',
     'title'         => __('Similar Reviews Settings', 'wfr'),  
-    'type'          => 'heading'   
+    'type'          => 'heading',
+    'choices'       => [
+        'reviews_similar',
+        'reviews_similar_title',
+        'reviews_similar_number',
+        'reviews_similar_style',
+        'reviews_similar_grid',
+        'reviews_similar_height',
+        'reviews_similar_image',
+        'reviews_similar_image_float',
+        'reviews_similar_image_enlarge',
+        'reviews_similar_button',
+        'reviews_similar_featured',
+        'reviews_similar_price',
+        'reviews_similar_price_button',
+        'reviews_similar_rating',
+        'reviews_similar_summary'
+    ]        
 ];
 
 $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
@@ -299,7 +344,7 @@ $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
     'id'            => 'reviews_similar_button',
     'title'         => __('Text of Similar Reviews Button', 'waterfall'),
     'description'   => __('The title inside the buttons. Leave empty to remove the button.', 'waterfall'), 
-    'selector'      => array('selector' => '.wfr-similar-reviews .atom-button span', 'html' => true),
+    'selector'      => ['selector' => '.wfr-similar-reviews .atom-button span', 'html' => true],
     'transport'     => 'postMessage',                   
     'type'          => 'input'
 ];
@@ -356,7 +401,13 @@ if( isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] 
         'default'       => '',
         'id'            => 'reviews_visitor_title',
         'title'         => __('Visitor Ratings Settings', 'wfr'),
-        'type'          => 'heading'    
+        'type'          => 'heading',
+        'choices'       => [
+            'reviews_visitors_rating_add',
+            'reviews_visitors_rating_component',
+            'reviews_visitors_rating_title',
+            'reviews_visitors_rating_reply'
+        ]             
     ];    
 
     $layoutPanel['fields']['sections']['reviews_content']['fields'][] = [
@@ -412,7 +463,16 @@ $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
     'default'       => '',
     'id'            => 'reviews_archive_title_heading',
     'title'         => __('Additional Reviews Settings', 'wfr'),  
-    'type'          => 'heading'   
+    'type'          => 'heading',
+    'choices'       => [
+        'reviews_archive_content_compare',
+        'reviews_archive_content_compare_category',
+        'reviews_archive_content_compare_weighted',
+        'reviews_archive_content_price',
+        'reviews_archive_content_price_button',
+        'reviews_archive_content_summary',
+        'reviews_archive_content_rating'
+    ]   
 ];
 
 $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
