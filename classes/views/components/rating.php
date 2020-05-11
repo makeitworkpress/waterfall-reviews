@@ -76,7 +76,7 @@ class Rating extends Component {
         // Set-up our users rating criteria
         if( in_array('users', $this->params['source']) ) {
             $this->props['ratings'][] = [
-                'name'      => __('Visitors', 'wfr'), 
+                'name'      => __('User Rating', 'wfr'),
                 'source'    => 'users',               
                 'value'     => isset($this->params['values']['users']) ? $this->params['values']['users'] : get_post_meta( $this->params['id'], 'visitors_rating', true)
             ];
