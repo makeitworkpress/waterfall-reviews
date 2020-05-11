@@ -55,7 +55,7 @@ class Score extends Base {
                     continue;
                 }
 
-                $key     = sanitize_key($criteria['name']);
+                $key     = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
                 
                 if( isset($_POST[$key]) ) {
                     $rating = intval($_POST[$key]) > $this->options['rating_maximum'] ? intval($this->options['rating_maximum']) : intval($_POST[$key]);
@@ -100,6 +100,11 @@ class Score extends Base {
             return;
         }
 
+        // Ratings that are not counted are not processed, this is there is only replying and not rating
+        if( get_comment_meta($comment->comment_ID, 'rating_not_counted', true) ) {
+            return;
+        }
+
         // Retrieve the post for the given comment
         $post  = get_post( $comment->comment_post_ID );
         
@@ -120,18 +125,18 @@ class Score extends Base {
             $newRating = ( (($count + 1) * $currentRating ) - $visitorRating ) / $count;
         } 
 
-        // Check if we end up with a number. For example, if a first comment is the rating is 0
-        if( ! isset($newRating) || is_nan($newRating) ) {
-            $newRating = 0;
+        // Check if we end up with a number and update our post meta.
+        if( isset($newRating) && is_numeric($newRating) ) {
+            // Update our post meta, so that the rating for all visitors are tied to a post
+            update_post_meta( $comment->comment_post_ID, 'visitors_rating', round($newRating, 1) );
+
+            // If only visitors calculate the rating for a review, it is updated here
+            if( $this->options['rating_calculation'] == 'visitors' ) {
+                update_post_meta( $comment->comment_post_ID, 'rating', round($newRating, 1) );
+            }
         }
     
-        // Update our post meta, so that the rating for all visitors are tied to a post
-        update_post_meta( $comment->comment_post_ID, 'visitors_rating', round($newRating, 1) );
 
-        // If only visitors calculate the rating for a review, it is updated here
-        if( $this->options['rating_calculation'] == 'visitors' ) {
-            update_post_meta( $comment->comment_post_ID, 'rating', round($newRating, 1) );
-        }
 
         // Update the criteria ratings for visitors
         if( $this->options['rating_criteria'] && is_array($this->options['rating_criteria']) ) {
@@ -142,7 +147,7 @@ class Score extends Base {
                     continue;
                 }
 
-                $key    = sanitize_key($criteria['name']);
+                $key    = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
                 $cR     = get_post_meta( $comment->comment_post_ID, 'visitors_rating_' . $key, true );
                 $vR     = intval( get_comment_meta($comment->comment_ID, 'rating_' . $key, true) );
                 
@@ -152,8 +157,9 @@ class Score extends Base {
                     $nR = ( (($count + 1) * $cR ) - $vR ) / $count;
                 }
 
+                // Don't update if it is not a number
                 if( ! isset($nR) || is_nan($nR) ) {
-                    $nR = 0;
+                    continue;
                 }
 
                 update_post_meta( $comment->comment_post_ID, 'visitors_rating_' . $key, round($nR, 1) );

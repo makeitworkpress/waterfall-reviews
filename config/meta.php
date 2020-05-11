@@ -365,7 +365,7 @@ if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] 
             continue;
         }
 
-        $key = sanitize_key($criteria['name']);
+        $key = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
         $ratingFields = [];
 
         /**

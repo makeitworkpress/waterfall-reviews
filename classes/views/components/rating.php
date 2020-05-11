@@ -93,7 +93,7 @@ class Rating extends Component {
                 }
 
                 // Our criteria key
-                $key = isset($criteria['key']) ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
+                $key = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
 
                 // Only show the rating for a certain criteria
                 if( $this->params['criteria'] && ! in_array($key, $this->params['criteria']) ) {

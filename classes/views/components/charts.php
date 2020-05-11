@@ -113,7 +113,7 @@ class Charts extends Component {
                     continue;
                 }
 
-                $key = $property['key'] ? sanitize_key($property['key']) : sanitize_key($property['name']) . '_property';
+                $key = isset($property['key']) && $property['key'] ? sanitize_key($property['key']) : sanitize_key($property['name']) . '_property';
                 $this->props['selectorGroups']['properties']['options'][$key]   = esc_html($property['name']);
                 $this->meta[$key]                                               = $property['name'];
 
@@ -139,7 +139,7 @@ class Charts extends Component {
                     continue;
                 }                
                 
-                $key = isset($criteria['key'] ) && criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
+                $key = isset($criteria['key'] ) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
                 
                 // Criteria Rating
                 $this->props['selectorGroups']['rating']['options'][$key . '_rating'] = esc_html($criteria['name']);

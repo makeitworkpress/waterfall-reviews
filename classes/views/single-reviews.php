@@ -487,7 +487,7 @@ class Single_Reviews extends Base {
                     continue;
                 }
 
-                $key     = sanitize_key($criteria['name']);
+                $key     = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
 
                 $output .= '<p class="comment-form-rating wfr-comment-form-criteria-rating">';
                 $output .= '<label for="' . $key . '">' . sprintf( __('%s Rating', 'wfr'), $criteria['name'] ) . '</label>';
@@ -540,7 +540,7 @@ class Single_Reviews extends Base {
                 if( ! isset($criteria['name']) || ! $criteria['name'] ) {
                     continue;
                 }                
-                $key            = sanitize_key($criteria['name']);
+                $key            = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
                 $values[$key]   = get_comment_meta( $id, 'rating_' . $key, true );
             }
 
@@ -612,7 +612,7 @@ class Single_Reviews extends Base {
                 if( ! isset($criteria['name']) || ! $criteria['name'] ) {
                     continue;
                 }                
-                $key            = sanitize_key($criteria['name']);
+                $key            = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
                 $values[$key]   = get_post_meta( $post->ID, 'visitors_rating_' . $key, true );
             }
 
@@ -620,7 +620,7 @@ class Single_Reviews extends Base {
                 $source[] = 'criteria';
             }
 
-        }    
+        }
 
         $component  = new Components\Rating( ['class' => 'wfr-rating-average-visitors', 'schema' => false, 'source' => $source, 'values' => $values ] );
         $string     = $component->render(false); 
