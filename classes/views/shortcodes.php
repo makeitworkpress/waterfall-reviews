@@ -123,6 +123,7 @@ class Shortcodes {
 					'attributes' 	=> ['class' => 'entry-image'],
 					'enlarge' 		=> $atts['image_enlarge'], 
 					'float' 		=> $atts['image_float'], 
+					'link'      	=> 'post',
 					'size' 			=> $atts['image_size'] ? $atts['image_size'] : 'ld-square'
 				]
 			],

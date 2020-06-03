@@ -420,6 +420,7 @@ class Reviews extends Elementor\Widget_Base {
 					],
 					'enlarge' 		=> $settings['image_enlarge'], 
 					'float' 		=> $settings['image_float'], 
+					'link'      	=> 'post',
 					'size' 			=> $settings['image_size'] ? $settings['image_size'] : 'ld-square'
 				]
 			],
