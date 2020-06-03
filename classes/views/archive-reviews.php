@@ -168,6 +168,7 @@ class Archive_Reviews extends Base {
             // Add comparison tables
             $args['form'] = true;
             $args['load'] = false;
+            $args['price'] = false;
             $args['view'] = 'table';
 
             $tables = new Components\Tables( $args );

@@ -175,6 +175,11 @@ class Charts extends Component {
 
                     }
 
+                    // Remove if we don't have any numerical properties
+                    if( ! $this->props['selectorGroups'][$key . '_attributes']['options'] ) {
+                        unset($this->props['selectorGroups'][$key . '_attributes']);    
+                    }                    
+
                 }
 
             }

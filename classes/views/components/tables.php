@@ -26,7 +26,7 @@ class Tables extends Component {
             'groups'        => [],      // Only show the content from the given groups
             'label'         => __('Select at least 2 items to compare', 'wfr'), // Label that is used for selecting reviews
             'load'          => true,    // Loads the table directly if set to true. Warning! Loads all reviews if a query is not defined.
-            'price'         => __('Get', 'wfr'), // Button to the affiliate 
+            'price'         => __('Get', 'wfr'), // Button to the affiliate, set false to hide
             'properties'    => [],      // Limits the display only to the given properties (use property meta keys)            
             'query'         => [],      // Arguments to query posts by
             'reviews'       => [],      // Default reviews to load
@@ -373,7 +373,7 @@ class Tables extends Component {
 
                     // Repreatable fields are an array, and are seperated by a line break
                     if( is_array($value) ) {
-                        $value = implode( '<br/>', array_filter($value) );
+                        $value = implode( '', array_filter($value) );
                     }
                     
                     if( $value ) {

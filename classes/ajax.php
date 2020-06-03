@@ -62,6 +62,7 @@ class Ajax extends Base {
             'form'          => false,
             'groups'        => isset($_POST['groups']) ? array_filter( explode(',', sanitize_text_field($_POST['groups'])) ) : [],
             'load'          => true,
+            'price'         => false,
             'properties'    => isset($_POST['properties']) ? array_filter( explode(',', sanitize_text_field($_POST['properties'])) ) : [],
             'reviews'       => array_filter( $_POST['reviews'], function($v) { return is_numeric($v); } ),
             'tags'          => isset($_POST['tags']) ? array_filter( explode(',', sanitize_text_field($_POST['tags'])), function($v) { return is_numeric($v); } ) : [],
