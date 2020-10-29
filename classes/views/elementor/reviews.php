@@ -352,12 +352,12 @@ class Reviews extends Elementor\Widget_Base {
 			'categories' => [
 				'description'	=> __('Displays reviews from the selected categories', 'wfr'),
 				'label' 		=> 'Reviews Category', 
-				'terms' 		=> get_terms( ['fields' => 'id=>name', 'hide_empty' => false, 'parent' => 0, 'taxonomy' => 'reviews_category'] ) 
+				'terms' 		=> get_terms( ['fields' => 'id=>name', 'hide_empty' => false, 'taxonomy' => 'reviews_category'] ) 
 			],
 			'tags'		 => [
 				'description'	=> __('Displays reviews from the selected tags', 'wfr'),
 				'label' 		=> 'Reviews tag', 
-				'terms' 		=> get_terms( ['fields' => 'id=>name', 'hide_empty' => false, 'parent' => 0, 'taxonomy' => 'reviews_tag'] ) 				
+				'terms' 		=> get_terms( ['fields' => 'id=>name', 'hide_empty' => false, 'taxonomy' => 'reviews_tag'] )				
 			]
 		];
 
