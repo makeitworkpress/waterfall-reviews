@@ -199,8 +199,6 @@ var Charts = {
 
         dataSets.push(dataSet);
 
-        console.log(dataSets);
-
         // Redefine the chart data if our chart already exists
         if( this.chart ) {
             this.chart.data = {
