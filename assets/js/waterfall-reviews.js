@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /**
  * All modules are bundled into one application
  */
@@ -177,12 +177,16 @@ var Charts = {
         // Format our datasets with random colors and add our data to the right canvas
         var dataSet     = {
             backgroundColor: [],
-            barThickness: 100,
-            maxBarThickness: 100,
+            barThickness: 30,
+            // maxBarThickness: 100,
             data: [],
             label: data.dataSet.label
         },
         dataSets    = [];
+
+        if( typeof data.dataSet === 'undefined' ) {
+            return;
+        }
 
         // Adds the data
         for( var index in data.dataSet.data ) {
@@ -195,6 +199,8 @@ var Charts = {
 
         dataSets.push(dataSet);
 
+        console.log(dataSets);
+
         // Redefine the chart data if our chart already exists
         if( this.chart ) {
             this.chart.data = {
@@ -202,19 +208,29 @@ var Charts = {
                 labels: data.labels               
             };
             this.chart.update();
+            this.setChartHeight(dataSets, dataSet.barThickness, canvas);
             return;
         }
 
+        // Setup the cart
         this.chart = new Chart(canvas, {
             data: {
                 datasets: dataSets,
                 labels: data.labels
             },
             options: {
+                legend: {
+                    display: false
+                }, 
+                title: {
+                    display: true,
+                    text: dataSet.label
+                },                          
+                responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                     xAxes: [{
-                        barPercentage: 0.8,                     
+                        // barPercentage: 0.8,
                         ticks: {
                             beginAtZero:true
                         }
@@ -224,6 +240,30 @@ var Charts = {
             type: 'horizontalBar'
         });
 
+        // Set dynamic height
+        this.setChartHeight(dataSets, dataSet.barThickness, canvas);
+
+    },
+
+    /**
+     * Sets the minimum height of a chart based upon the amount of datasets
+     * @param {array}   datasets    The datasets passed to the charts
+     * @param {int}     thickness   The thickness of each bar
+     * @param {node}    canvas      The canvas to which the height needs to be applied
+     */
+    setChartHeight: function(datasets, thickness, canvas) {
+        
+        var height = canvas.height;
+
+        if( typeof datasets[0] !== 'undefined' && typeof datasets[0].data !== 'undefined' ) {
+            height = datasets[0].data.length * (thickness + 10) + 64;
+        }
+
+        if( height < 500 ) {
+            height = 500;
+        }
+        
+        jQuery(canvas).closest('.wfr-charts-wrapper').height(height);
     }
     
 };

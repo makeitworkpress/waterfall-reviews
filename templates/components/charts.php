@@ -19,7 +19,9 @@
             </select>
         </form>
     <?php } ?>
-    <canvas class="wfr-charts-chart"></canvas>
+    <div class="wfr-charts-wrapper">
+        <canvas class="wfr-charts-chart"></canvas>
+    </div>
     <?php if( $charts['weight'] ) { ?> 
         <form class="wfr-charts-weight">
             <button class="wfr-charts-normal atom atom-button atom-button-small active"><?php echo $charts['normal'] ?></button>

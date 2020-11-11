@@ -94,7 +94,7 @@ class Charts extends Component {
         $this->meta['rating']       = __('Overall Rating', 'wfr');      
 
         // Properties
-        if( $this->options['properties'] && isset($this->options['properties'][0]['name']) && $this->options['properties'][0]['name'] ) {
+        if( isset($this->options['properties']) && $this->options['properties'] && isset($this->options['properties'][0]['name']) && $this->options['properties'][0]['name'] ) {
 
             $this->props['selectorGroups']['properties'] = [
                 'label'     => __('Properties', 'wfr'),
@@ -131,7 +131,7 @@ class Charts extends Component {
         }
 
         // Additional rating criteria
-        if( $this->options['rating_criteria'] ) {
+        if( isset($this->options['rating_criteria']) && $this->options['rating_criteria'] ) {
 
             foreach( $this->options['rating_criteria'] as $criteria ) {
 
@@ -214,19 +214,21 @@ class Charts extends Component {
      */
     public function getChartData() {
 
+        $metakey = sanitize_key($this->params['meta']);
+
         // Default data structure
         $data = [
             'normal'    => [
                 'dataSet'   => [                
                     'data'          => [],
-                    'label'         => $this->meta[sanitize_key($this->params['meta'])]
+                    'label'         => isset($this->meta[$metakey]) ? $this->meta[$metakey] : ''
                 ],
                 'labels'   => [],
             ],
             'weighted'  => [
                 'dataSet'   => [                
                     'data'          => [],
-                    'label'         => $this->meta[sanitize_key($this->params['meta'])]
+                    'label'         => isset($this->meta[$metakey]) ? $this->meta[$metakey] : ''
                 ],
                 'labels'   => [],
             ]
@@ -243,7 +245,7 @@ class Charts extends Component {
         /**
          * Let's draft up a unique cache key based on some variables
          */
-        $unique = sanitize_key($this->params['meta']); 
+        $unique = $metakey; 
 
         foreach( ['categories', 'include', 'tags'] as $metric ) {
             if( $this->params[$metric] && is_array($this->params[$metric]) ) {

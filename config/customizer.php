@@ -468,6 +468,7 @@ $layoutPanel['fields']['sections']['reviews_archives']['fields'][] = [
         'reviews_archive_content_compare',
         'reviews_archive_content_compare_category',
         'reviews_archive_content_compare_weighted',
+        'reviews_archive_content_featured',
         'reviews_archive_content_price',
         'reviews_archive_content_price_button',
         'reviews_archive_content_summary',

@@ -294,15 +294,20 @@ class Reviews extends Elementor\Widget_Base {
 			]
 		);
 
-		$posts = get_posts( ['fields' => 'ids', 'post_type' => 'reviews'] );
+		$reviews = wp_cache_get('wfr_reviews_select_values');
 
-		if( $posts ) {
-			foreach( $posts as $id ) {
-				$reviews[$id] = get_the_title($id);
-			}
-		} 
+		if( ! $reviews ) {
+			$posts = get_posts( ['fields' => 'ids', 'post_type' => 'reviews', 'posts_per_page' => -1, 'order_by' => 'title', 'order' => 'ASC'] );
+			
+			if( $posts ) {
+				foreach( $posts as $id ) {
+					$reviews[$id] = get_the_title($id);
+				}
+				wp_cache_add('wfr_reviews_select_values', $reviews);
+			} 
+		}
 		
-		if( isset($reviews) ) {
+		if( $reviews ) {
 			foreach( ['exclude' => __('Exclude', 'wfr'), 'include' => __('Include', 'wfr')] as $key => $label ) {
 				$this->add_control(
 					$key,
@@ -421,7 +426,7 @@ class Reviews extends Elementor\Widget_Base {
 					'enlarge' 		=> $settings['image_enlarge'], 
 					'float' 		=> $settings['image_float'], 
 					'link'      	=> 'post',
-					'size' 			=> $settings['image_size'] ? $settings['image_size'] : 'ld-square'
+					'size' 			=> isset($settings['image_size']) && $settings['image_size'] ? $settings['image_size'] : 'ld-square'
 				]
 			],
 			'featured'			=> $settings['image_featured'],

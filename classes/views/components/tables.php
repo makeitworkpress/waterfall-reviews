@@ -250,7 +250,7 @@ class Tables extends Component {
 
             if( ! isset($this->fields[$group]) ) {
                 $this->fields[$group] = [
-                    'label'     => $labels[$group],
+                    'label'     => isset($labels[$group]) ? $labels[$group] : '',
                     'fields'    => []    
                 ];
             }

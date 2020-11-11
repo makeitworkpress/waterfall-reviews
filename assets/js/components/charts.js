@@ -143,12 +143,16 @@ var Charts = {
         // Format our datasets with random colors and add our data to the right canvas
         var dataSet     = {
             backgroundColor: [],
-            barThickness: 100,
-            maxBarThickness: 100,
+            barThickness: 30,
+            // maxBarThickness: 100,
             data: [],
             label: data.dataSet.label
         },
         dataSets    = [];
+
+        if( typeof data.dataSet === 'undefined' ) {
+            return;
+        }
 
         // Adds the data
         for( var index in data.dataSet.data ) {
@@ -161,6 +165,8 @@ var Charts = {
 
         dataSets.push(dataSet);
 
+        console.log(dataSets);
+
         // Redefine the chart data if our chart already exists
         if( this.chart ) {
             this.chart.data = {
@@ -168,19 +174,29 @@ var Charts = {
                 labels: data.labels               
             };
             this.chart.update();
+            this.setChartHeight(dataSets, dataSet.barThickness, canvas);
             return;
         }
 
+        // Setup the cart
         this.chart = new Chart(canvas, {
             data: {
                 datasets: dataSets,
                 labels: data.labels
             },
             options: {
+                legend: {
+                    display: false
+                }, 
+                title: {
+                    display: true,
+                    text: dataSet.label
+                },                          
+                responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                     xAxes: [{
-                        barPercentage: 0.8,                     
+                        // barPercentage: 0.8,
                         ticks: {
                             beginAtZero:true
                         }
@@ -190,6 +206,30 @@ var Charts = {
             type: 'horizontalBar'
         });
 
+        // Set dynamic height
+        this.setChartHeight(dataSets, dataSet.barThickness, canvas);
+
+    },
+
+    /**
+     * Sets the minimum height of a chart based upon the amount of datasets
+     * @param {array}   datasets    The datasets passed to the charts
+     * @param {int}     thickness   The thickness of each bar
+     * @param {node}    canvas      The canvas to which the height needs to be applied
+     */
+    setChartHeight: function(datasets, thickness, canvas) {
+        
+        var height = canvas.height;
+
+        if( typeof datasets[0] !== 'undefined' && typeof datasets[0].data !== 'undefined' ) {
+            height = datasets[0].data.length * (thickness + 10) + 64;
+        }
+
+        if( height < 500 ) {
+            height = 500;
+        }
+        
+        jQuery(canvas).closest('.wfr-charts-wrapper').height(height);
     }
     
 };

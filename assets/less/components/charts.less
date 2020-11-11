@@ -3,7 +3,7 @@
 /**
  * Styling for the charts component
  */
- .wfr-charts {
+.wfr-charts {
     margin: 2.25em 0;
     label {
         display: block;
@@ -16,12 +16,15 @@
             color: #fff;     
         }
     }
+}
 
- }
+.wfr-charts-wrapper {
+    position: relative;
+}
 
 .wfr-charts-chart {
     display: none;
-    margin: @grid-space 0;
+    padding: @grid-space 0;
     .wfr-charts-loaded & {
         display: block;
     }    
