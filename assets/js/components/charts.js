@@ -186,10 +186,10 @@ var Charts = {
                 legend: {
                     display: false
                 }, 
-                title: {
-                    display: true,
-                    text: dataSet.label
-                },                          
+                // title: {
+                //     display: true,
+                //     text: dataSet.label
+                // },                          
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
