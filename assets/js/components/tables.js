@@ -47,7 +47,6 @@ var Tables = {
      */
     loadTables: function(object) {
 
-
         if( this.reviews.length < 2 ) {
             return;
         }
@@ -55,6 +54,8 @@ var Tables = {
         var form = jQuery(object).closest('.wfr-tables-form'),
             self = this,
             view = jQuery(form).next('.wfr-tables-view');
+
+        console.log(view);
 
         utils.ajax({
             beforeSend: function() {

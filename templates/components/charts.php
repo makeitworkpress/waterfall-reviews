@@ -20,6 +20,12 @@
         </form>
     <?php } ?>
     <div class="wfr-charts-wrapper">
+        <div class="wfr-load-ellipsis">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <canvas class="wfr-charts-chart"></canvas>
     </div>
     <?php if( $charts['weight'] ) { ?> 

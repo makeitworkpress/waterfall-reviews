@@ -6,26 +6,33 @@ var randomColor = require('./../vendor/randomcolor'),
 
 var Charts = {
 
-    chart: false,
-    data: {
-        normal: [],
-        weighted: [], 
-    },
+    charts: {}, // Contains active charts, per id
+    data: {}, // Contains the data of chart
     initialize: function() {
 
         var self = this;
 
-        // Draw charts if we have an id, and thus we may load the chart
+        // Initial set-up
         jQuery('.wfr-charts').each( function() {
 
             var canvas  = jQuery(this).find('.wfr-charts-chart').get(0),
                 ID      = jQuery(this).attr('id');
 
-            if( ID && typeof(window['chart' + ID]) !== 'undefined' ) {
-                self.data = window['chart' + ID];
-                self.renderChart( self.data.normal, canvas );
+            // Default data values
+            self.data[ID] = {
+                normal: [],
+                weighted: []
+            };
 
-                if( self.data.weighted.dataSet.data.length > 0 ) {
+            // Our chart is not yet initialized
+            self.charts[ID] = false;
+
+            // Draw charts if we have an id with data attached, and thus we may load the chart
+            if( ID && typeof(window['chart' + ID]) !== 'undefined' ) {
+                self.data[ID] = window['chart' + ID]
+                self.renderChart( self.data[ID].normal, canvas, ID );
+
+                if( self.data[ID].weighted.dataSet.data.length > 0 ) {
                     jQuery(this).find('.wfr-charts-weight').show();
                 }
 
@@ -47,10 +54,12 @@ var Charts = {
         jQuery('.wfr-charts-normal').click( function(event) {
             event.preventDefault();
 
-            var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
+            var canvas  = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0),
+                ID      = jQuery(this).closest('.wfr-charts').attr('id');
+            
             jQuery(this).addClass('active');
             jQuery(this).next('.wfr-charts-weighted').removeClass('active');
-            self.renderChart(self.data.normal, canvas);
+            self.renderChart(self.data[ID].normal, canvas, ID);
 
         });
         
@@ -58,10 +67,12 @@ var Charts = {
         jQuery('.wfr-charts-weighted').click( function(event) {
             event.preventDefault();
 
-            var canvas = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0);
+            var canvas  = jQuery(this).closest('.wfr-charts').find('.wfr-charts-chart').get(0),
+                ID      = jQuery(this).closest('.wfr-charts').attr('id');
+
             jQuery(this).addClass('active');
             jQuery(this).prev('.wfr-charts-normal').removeClass('active');
-            self.renderChart(self.data.weighted, canvas);
+            self.renderChart(self.data[ID].weighted, canvas, ID);
 
         });        
 
@@ -70,18 +81,19 @@ var Charts = {
     /**
      * Creates our form listener - upon changes it will load a new chart
      * 
-     * @param object The select for the current objective
+     * @param selector The select element for the current objective, defines the context of our chart
      */
-    listener: function(object) {
+    listener: function(selector) {
 
         // A key should be defined
-        if( ! jQuery(object).val() ) {
+        if( ! jQuery(selector).val() ) {
             return;
         }
 
-        var canvas  = jQuery(object).closest('.wfr-charts').find('.wfr-charts-chart').get(0),
+        var canvas  = jQuery(selector).closest('.wfr-charts').find('.wfr-charts-chart').get(0),
+            ID      = jQuery(selector).closest('.wfr-charts').attr('id'),
             self    = this,
-            weight  = jQuery(object).closest('.wfr-charts').find('.wfr-charts-weight');
+            weight  = jQuery(selector).closest('.wfr-charts').find('.wfr-charts-weight');
 
         // Reset weighted display
         if( weight.length > 0 ) {
@@ -90,22 +102,22 @@ var Charts = {
         }  
         
         // Hide our weighted display
-        jQuery(object).closest('.wfr-charts').find('.wfr-charts-weight').hide();
+        jQuery(selector).closest('.wfr-charts').find('.wfr-charts-weight').hide();
 
         utils.ajax({
             beforeSend: function() {
-                jQuery(canvas).addClass('components-loading');
+                jQuery(canvas).closest('.wfr-charts-wrapper').addClass('components-loading');
             },
             complete: function() {
-                jQuery(canvas).removeClass('components-loading');
+                jQuery(canvas).closest('.wfr-charts-wrapper').removeClass('components-loading');
             },
             data: {
                 action: 'getChartData', 
-                categories: jQuery(object).closest('.wfr-chart-selector').data('categories'),
-                key: jQuery(object).val(),
-                include: jQuery(object).closest('.wfr-chart-selector').data('include'),
+                categories: jQuery(selector).closest('.wfr-chart-selector').data('categories'),
+                key: jQuery(selector).val(),
+                include: jQuery(selector).closest('.wfr-chart-selector').data('include'),
                 nonce: wfr.nonce,
-                tags: jQuery(object).closest('.wfr-chart-selector').data('tags')
+                tags: jQuery(selector).closest('.wfr-chart-selector').data('tags')
             },
             success: function(response) {
                 
@@ -117,15 +129,16 @@ var Charts = {
                     return;
                 }
 
-                self.data = response.data;
+                self.data[ID] = response.data;
 
-                jQuery(object).closest('.wfr-charts').addClass('wfr-charts-loaded');
+                // Chart has been loaded
+                jQuery(selector).closest('.wfr-charts').addClass('wfr-charts-loaded');
 
-                if( self.data.weighted.dataSet.data.length > 0 ) {
-                    jQuery(object).closest('.wfr-charts').find('.wfr-charts-weight').show();
+                if( self.data[ID].weighted.dataSet.data.length > 0 ) {
+                    jQuery(selector).closest('.wfr-charts').find('.wfr-charts-weight').show();
                 }                
 
-                self.renderChart(response.data.normal, canvas);
+                self.renderChart(response.data.normal, canvas, ID);
 
             }
         });
@@ -135,10 +148,11 @@ var Charts = {
     /**
      * Displays the chart
      * 
-     * @param object data   The data object with unformatted data objects, either from an ajax response or direct response
-     * @param object canvas The canvas to render the chart in
+     * @param {object} data   The data object with unformatted data objects, either from an ajax response or direct response
+     * @param {object} canvas The canvas to render the chart in
+     * @param {string} ID     The ID of the rendered chart
      */
-    renderChart: function(data, canvas) {
+    renderChart: function(data, canvas, ID) {
 
         // Format our datasets with random colors and add our data to the right canvas
         var dataSet     = {
@@ -166,18 +180,19 @@ var Charts = {
         dataSets.push(dataSet);
 
         // Redefine the chart data if our chart already exists
-        if( this.chart ) {
-            this.chart.data = {
+        if( this.charts[ID] ) {
+            this.charts[ID].data = {
                 datasets: dataSets,
                 labels: data.labels               
             };
-            this.chart.update();
+            this.charts[ID].options.title.text = dataSet.label; 
+            this.charts[ID].update();
             this.setChartHeight(dataSets, dataSet.barThickness, canvas);
             return;
         }
 
         // Setup the cart
-        this.chart = new Chart(canvas, {
+        this.charts[ID] = new Chart(canvas, {
             data: {
                 datasets: dataSets,
                 labels: data.labels
@@ -186,10 +201,10 @@ var Charts = {
                 legend: {
                     display: false
                 }, 
-                // title: {
-                //     display: true,
-                //     text: dataSet.label
-                // },                          
+                title: {
+                    display: true,
+                    text: dataSet.label
+                },                          
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {

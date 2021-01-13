@@ -3,7 +3,7 @@
 Plugin Name:  Waterfall Reviews
 Plugin URI:   https://www.makeitwork.press/wordpress-plugins/waterfall-reviews/
 Description:  The Waterfall Reviews plugin turns your Waterfall WordPress theme into a killer-review site. Works great with ElasticPress and Elementor too.
-Version:      0.1.3
+Version:      0.1.4
 Author:       Make it WorkPress
 Author URI:   https://makeitwork.press/
 License:      GPL3
@@ -24,26 +24,38 @@ if( $theme->template != 'waterfall' ) {
 }
 
 /**
- * Registers the autoloading for classes and our vendors within the waterfall reviews plugin
+ * Registers the autoloading for theme classes
  */
-spl_autoload_register( function($classname) {
-
-    $class      = str_replace( ['\\', 'waterfall-reviews/'], [DIRECTORY_SEPARATOR, ''], str_replace( '_', '-', strtolower($classname) ) );
-    $classes    = dirname(__FILE__) .  DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $class . '.php';
+spl_autoload_register( function($className) {
     
-    $theme      = str_replace( '\\', DIRECTORY_SEPARATOR, str_replace( '_', '-', strtolower($classname) ) );
-    $theme      = get_template_directory() .  DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $theme . '.php';
+    $calledClass    = str_replace( '\\', DIRECTORY_SEPARATOR, str_replace( '_', '-', strtolower($className) ) );
     
-    $vendor     = str_replace( 'makeitworkpress' . DIRECTORY_SEPARATOR, '', $class );
-    $vendor     = 'makeitworkpress' . DIRECTORY_SEPARATOR . preg_replace( '/\//', '/src/', $vendor, 1 ); // Replace the first slash for the src folder
-    $vendors    = get_template_directory() .  DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . $vendor . '.php';
+    // Plugin Classes
+    $pluginClass    = str_replace( 'waterfall-reviews' . DIRECTORY_SEPARATOR, '', $calledClass);
+    $pluginClass    = dirname(__FILE__) .  DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $pluginClass . '.php';
+    
+    if( file_exists($pluginClass) ) {
+        require_once( $pluginClass );
+        return;
+    } 
+    
+    // Theme classes
+    $themeDir      = get_template_directory() . DIRECTORY_SEPARATOR;
+    $themeClass    = $themeDir . 'classes' . DIRECTORY_SEPARATOR . $calledClass . '.php';
 
-    if( file_exists($classes) ) {
-        require_once( $classes );
-    } if( file_exists($theme) ) {
-        require_once( $theme );
-    } elseif( file_exists($vendors) ) {
-        require_once( $vendors );    
+    if( file_exists($themeClass) ) {
+        require_once( $themeClass );
+        return;
+    } 
+    
+    // Require Vendor (composer) classes
+    $classNames     = explode(DIRECTORY_SEPARATOR, $calledClass);
+    array_splice($classNames, 2, 0, 'src');
+
+    $vendorClass    = $themeDir . 'vendor' . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $classNames) . '.php';
+
+    if( file_exists($vendorClass) ) {
+        require_once( $vendorClass );    
     }
    
 } );

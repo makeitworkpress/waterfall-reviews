@@ -24,6 +24,13 @@ if( ! $tables['fields'] && $tables['load'] ) {
     <?php } ?>
 
     <div class="wfr-tables-view">
+
+        <div class="wfr-load-ellipsis">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>    
         
         <?php if( $tables['fields'] ) { ?>
 
