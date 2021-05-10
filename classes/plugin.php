@@ -65,7 +65,8 @@ class Plugin {
         /**
          * Set-up the updater
          */
-        new Updater\Boot(['source' => 'https://github.com/makeitworkpress/waterfall-reviews', 'type' => 'plugin']);
+        $updater = Updater\Boot::instance();
+        $updater->add(['source' => 'https://github.com/makeitworkpress/waterfall-reviews', 'type' => 'plugin']);
 
     }
 
