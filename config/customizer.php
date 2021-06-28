@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die('Go eat veggies!');
 /**
  * We initialize our initial ratingsfields here, and add it later once we have completed adding all fields
  */
-$themeOptions = wf_get_theme_option(); 
+$themeOptions = wf_get_data(); 
 
 
 /**

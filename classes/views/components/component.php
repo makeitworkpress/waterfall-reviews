@@ -48,9 +48,9 @@ abstract class Component {
      */
     public function __construct( $params = [], $format = true, $render = false ) {  
         
-        $this->customizer   = wf_get_theme_option('customizer');
-        $this->layout       = wf_get_theme_option('layout');
-        $this->options      = wf_get_theme_option();
+        $this->customizer   = wf_get_data('customizer');
+        $this->layout       = wf_get_data('layout');
+        $this->options      = wf_get_data();
         $this->params       = $params;
 
         $this->initialize();     

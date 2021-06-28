@@ -157,7 +157,7 @@ class Ajax extends Base {
         // Manual Rating
         if( isset($_POST['rating']) && $_POST['rating'] ) {
 
-            $options = wf_get_theme_option();
+            $options = wf_get_data();
             $compare = $options['rating_maximum'] == $_POST['rating'] ? '=' : '>=';
 
             $args['meta_query'][] = [

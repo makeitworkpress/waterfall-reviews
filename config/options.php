@@ -247,7 +247,7 @@ $options = [
 /**
  * We initialize our initial ratingsfields here, and add it later once we have completed adding all fields
  */
-$themeOptions = wf_get_theme_option(); 
+$themeOptions = wf_get_data(); 
 
 /**
  * Based upon what top level review criteria are added, we add additional settings. Hence, we can add dynamic fields

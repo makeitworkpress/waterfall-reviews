@@ -28,7 +28,7 @@ if( isset($_GET['post']) && is_numeric($_GET['post']) ) {
 }
 
 
-$themeOptions = wf_get_theme_option();
+$themeOptions = wf_get_data();
 
 if( isset($themeOptions['rating_calculation']) && $themeOptions['rating_calculation'] == 'automatic' && isset($themeOptions['rating_visitors']) && $themeOptions['rating_visitors'] ) {
     $columns = 'third'; 

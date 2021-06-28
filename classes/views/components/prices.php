@@ -19,7 +19,7 @@ class Prices extends Component {
             'best'          => false,   // Examines the best price and set this on top
             'button'        => true,    // If we want to display a button to our suppliers
             'buttonLabel'   => isset($this->layout['reviews_price_button']) ? $this->layout['reviews_price_button'] : '', // The default label for our button
-            'currency'      => $this->options['review_currency'],
+            'currency'      => isset($this->options['review_currency']) ? $this->options['review_currency'] : '',
             'id'            => 0,       // The id of our post were we are retrieving the prices for
             'names'         => true,    // If we display supplier names
             'single'        => false,    // If we display only one price

@@ -22,13 +22,13 @@ class Rating extends Component {
             'class'         => '',
             'criteria'      => [],                                  // Only loads the rating from the given criteria. Use sanitized criteria key for this
             'id'            => 0,
-            'max'           => $this->options['rating_maximum'] ? $this->options['rating_maximum'] : 5,
+            'max'           => isset($this->options['rating_maximum']) && $this->options['rating_maximum'] ? $this->options['rating_maximum'] : 5,
             'min'           => 1,
             'names'         => true,
             'nothing'       => __('No ratings have been found', 'wfr'),
             'schema'        => 'aggregate',                         // Accepts aggregate or review
             'source'        => ['overall'],                         // Determines our source and the use microschemes. Accepts [overall, criteria, users] to load our rating for these aspects
-            'style'         => $this->options['rating_style'],      // If defined, overwrites our style from the options. Accepts stars, bars, circles, numbers, smileys, percentages
+            'style'         => isset($this->options['rating_style']) ? $this->options['rating_style'] : '',      // If defined, overwrites our style from the options. Accepts stars, bars, circles, numbers, smileys, percentages
             'values'        => []                                   // Accepts custom rating values, matching their keys (overall, users, sanitized criteria name)
         ] );
 
@@ -128,7 +128,7 @@ class Rating extends Component {
             $rating['item']     = get_post_meta( $this->params['id'], 'reviewed_item', true );
             $rating['value']    = $rating['value'] ? $rating['value'] : 0;
    
-            $setting            = wf_get_theme_option('colors', 'rating_color');
+            $setting            = wf_get_data('colors', 'rating_color');
             $color              = $setting ? $setting : '#FD4A5B';            
 
             switch( $this->params['style'] ) {

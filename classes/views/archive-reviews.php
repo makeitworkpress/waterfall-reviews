@@ -48,7 +48,7 @@ class Archive_Reviews extends Base {
             return $types;     
         }  
         
-        if( $this->options['review_scheme'] == 'BlogPosting' ) {
+        if( isset($this->options['review_scheme']) && $this->options['review_scheme'] == 'BlogPosting' ) {
             $types[] = 'reviews';
         }
 

@@ -98,7 +98,7 @@ class Single_Reviews extends Base {
             return $types;     
         }        
 
-        if( $this->options['review_scheme'] == 'BlogPosting' ) {
+        if( isset($this->options['review_scheme']) && $this->options['review_scheme'] == 'BlogPosting' ) {
             $types[] = 'reviews';
         }
 
@@ -123,7 +123,7 @@ class Single_Reviews extends Base {
             return $schema;     
         }
 
-        if( $this->options['review_scheme'] != 'BlogPosting' ) {
+        if( isset($this->options['review_scheme']) && $this->options['review_scheme'] != 'BlogPosting' ) {
             $schema = 'itemscope="itemscope" itemtype="http://schema.org/' . $this->options['review_scheme'] . '"';   
         }
 
@@ -233,7 +233,7 @@ class Single_Reviews extends Base {
             if( $this->layout['reviews_visitors_rating_add'] ) {
                 $source[] = 'users';
             }
-            if( $this->options['rating_criteria'] ) {
+            if( isset($this->options['rating_criteria']) && $this->options['rating_criteria'] ) {
                 $source[] = 'criteria';
             } 
 
