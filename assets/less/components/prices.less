@@ -9,7 +9,7 @@
 
 .atom-button ~ .wfr-prices .wfr-price {
     float: right;
-    margin-left: @grid-space/2;
+    margin-left: @grid-space*0.5;
 }
 
 .wfr-regular-price {
@@ -19,22 +19,22 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: @grid-space/4 @grid-space/2;
+    padding: @grid-space*0.25 @grid-space*0.5;
     .single .content & {
-        padding: @grid-space/2 @grid-space;    
+        padding: @grid-space*0.5 @grid-space;    
         .atom-button {
-            padding: @grid-space/2 @grid-space; 
+            padding: @grid-space*0.5 @grid-space; 
         }
     }
     .single .content .wfr-reviews-component &, .single .content .wfr-tables & {
-        padding: @grid-space/4 @grid-space/2;
+        padding: @grid-space*0.25 @grid-space*0.5;
         .atom-button {
-            padding: @grid-space/4 @grid-space/2;
+            padding: @grid-space*0.25 @grid-space*0.5;
         }
     }
     .molecule-post & {
         border: none;
-        padding: @grid-space/4 0;
+        padding: @grid-space*0.25 0;
         &:last-of-type {
             border: none;
         }
@@ -54,22 +54,22 @@
         }            
     }
     > span {
-        margin-bottom: @grid-space/4;
-        margin-top: @grid-space/4;
+        margin-bottom: @grid-space*0.25;
+        margin-top: @grid-space*0.25;
     }
 }
 
 .wfr-price-name {
     flex-grow: 1;
     font-size: 1.2em;
-    margin-right: @grid-space/2;
+    margin-right: @grid-space*0.5;
     .main-header & {
         width: 100%;    
     }    
 }
 
 .wfr-price-value {
-    margin-right: @grid-space/2;
+    margin-right: @grid-space*0.5;
 }
 
 .wfr-price-currency {

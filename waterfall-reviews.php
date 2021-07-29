@@ -3,7 +3,7 @@
 Plugin Name:  Waterfall Reviews
 Plugin URI:   https://www.makeitwork.press/wordpress-plugins/waterfall-reviews/
 Description:  The Waterfall Reviews plugin turns your Waterfall WordPress theme into a killer-review site. Works great with ElasticPress and Elementor too.
-Version:      0.1.5
+Version:      0.1.6
 Author:       Make it WorkPress
 Author URI:   https://makeitwork.press/
 License:      GPL3
@@ -31,7 +31,7 @@ spl_autoload_register( function($class_name) {
     $called_class   = str_replace( '\\', '/', str_replace('_', '-', strtolower($class_name)) );
     
     // Plugin Classes
-    $plugin_spaces  = explode( '/', str_replace( 'waterfall-events/', '', $called_class) );
+    $plugin_spaces  = explode( '/', str_replace( 'waterfall-reviews/', '', $called_class) );
     $final_class    = array_pop($plugin_spaces);
     $class_rel_path = $plugin_spaces ? implode('/', $plugin_spaces) . '/class-' . $final_class : 'class-' . $final_class;
     $class_file     = dirname(__FILE__) .  '/classes/' . $class_rel_path . '.php';

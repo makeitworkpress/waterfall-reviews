@@ -31,7 +31,7 @@ class Reviews extends Component {
         $noSchema = isset($this->options['scheme_post_types_disable']) && $this->options['scheme_post_types_disable'] ? $this->options['scheme_post_types_disable'] : [];
         
         // Our default parameters
-        $this->params   = WP_Components\Build::multiParseArgs( $this->params, [
+        $this->params   = WP_Components\Build::multi_parse_args( $this->params, [
             'ajax'              => true,
             'attributes'        => [
                 'class'         => 'wfr-reviews-component',
@@ -115,7 +115,8 @@ class Reviews extends Component {
                 'atom'          => 'button', 
                 'properties'    => [
                     'background'    => 'light',
-                    'icon_after'    => 'angle-right',
+                    'icon_after'    => isset($this->layout['reviews_archive_content_button_icon']) && $this->layout['reviews_archive_content_button_icon'] ? 'angle-right' : '',
+                    'icon_visible'  => 'hover',
                     'label'         => $this->params['button_label'],
                     'size'          => 'small'                   
                 ]

@@ -63,17 +63,17 @@ class Single_Reviews extends Base {
         $this->actions = [  
             ['comment_form_top', 'comment_fields'],
             ['components_post_header_container_end', 'header'],   
-            ['waterfall_before_reviews_content', 'before'],   
-            ['waterfall_after_reviews_content', 'after'],   
-            ['waterfall_before_reviews_related', 'similar']   
+            ['waterfall_before_reviews_content', 'before_content'],   
+            ['waterfall_after_reviews_content', 'after_content'],   
+            ['waterfall_before_reviews_related', 'similar_reviews']   
         ];
 
         $this->filters = [
             ['comment_text', 'comment_text'],
             ['waterfall_blog_schema_post_types', 'blog_schema'],
             ['waterfall_singular_schema', 'article_schema'],
-            ['waterfall_related_args', 'related'], 
-            ['waterfall_content_content_args', 'content'],
+            ['waterfall_related_args', 'modify_related_args'], 
+            ['waterfall_content_content_args', 'modify_content_args'],
             ['waterfall_content_footer_args', 'comment_rating'], 
         ];
 
@@ -136,7 +136,7 @@ class Single_Reviews extends Base {
      * 
      * @return void
      */
-    public function header() {
+    public function reviews_header() {
 
         if( ! is_singular('reviews') ) {
             return;
@@ -208,7 +208,7 @@ class Single_Reviews extends Base {
     /**
      * Adds a couple of sections before our content
      */
-    public function before() {
+    public function before_content() {
 
         if( ! is_singular('reviews') ) {
             return;
@@ -277,7 +277,7 @@ class Single_Reviews extends Base {
      * @param array $args The arguments for the content element
      * @return array $args The altered arguments for the content element
      */
-    public function content( $args ) {
+    public function modify_content_args( $args ) {
 
         if( ! is_singular('reviews') ) {
             return $args;
@@ -291,7 +291,7 @@ class Single_Reviews extends Base {
     /**
      * Adds a couple of sections after our content
      */
-    public function after() {
+    public function after_content() {
 
         if( ! is_singular('reviews') ) {
             return;
@@ -358,7 +358,7 @@ class Single_Reviews extends Base {
      * @param array $args The arguments filtered
      * @return array $args The altered arguments
      */
-    public function related( $args ) {
+    public function modify_related_args( $args ) {
 
         if( ! is_singular('reviews') ) {
             return $args;
@@ -399,7 +399,7 @@ class Single_Reviews extends Base {
     /**
      * Displays a host of similar posts
      */
-    public function similar() {
+    public function similar_reviews() {
 
         if( ! is_singular('reviews') ) {
             return;
@@ -424,7 +424,7 @@ class Single_Reviews extends Base {
                 'style'         => ['min-height' => $this->layout['reviews_similar_height'] ? $this->layout['reviews_similar_height'] . 'px' : '']
             ],
             'button'            => $this->layout['reviews_similar_button'] ? true : false,
-            'button_label'       => $this->layout['reviews_similar_button'],
+            'button_label'      => $this->layout['reviews_similar_button'],
             'featured'          => $this->layout['reviews_similar_featured'],
             'pagination'        => false,
             'post_properties'    => [

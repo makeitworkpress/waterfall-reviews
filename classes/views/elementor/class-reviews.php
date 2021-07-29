@@ -5,7 +5,6 @@
 namespace Waterfall_Reviews\Views\Elementor;
 use Waterfall_Reviews\Views\Components as Components;
 use Elementor as Elementor;
-use Elementor\Controls_Manager as Controls_Manager;
 
 defined( 'ABSPATH' ) or die( 'Go eat veggies!' );
 
@@ -54,91 +53,12 @@ class Reviews extends Elementor\Widget_Base {
 	protected function _register_controls() {
 
         /**
-         * Elements
-         */
-        $this->start_controls_section( 
-            'section_elements',
-            [
-                'label' => esc_html__( 'Elements', 'wfr' ),
-            ]
-		);
-		
-		$this->add_control(
-			'button',
-			[
-				'label'     	=> __( 'Button Text', 'wfr' ),
-				'description'   => __( 'Button text for the button linking to the review. Leave empty to disable the button.', 'wfr' ),
-				'type'      	=> Controls_Manager::TEXT,
-				'default'   	=> '',
-			]
-		); 
-		
-		$this->add_control(
-			'excerpt',
-			[
-				'label'     	=> __( 'Show Excerpt', 'wfr' ),
-				'description'   => __( 'Displays the excerpt in each item.', 'wfr' ),
-				'type'      	=> Controls_Manager::SWITCHER,
-				'default'   	=> 'no',
-				'label_on'  	=> __( 'Yes', 'wfr' ),
-				'label_off' 	=> __( 'No', 'wfr' ),
-			]
-		);	
-		
-		$this->add_control(
-			'price',
-			[
-				'label'     	=> __( 'Show Price', 'wfr' ),
-				'type'      	=> Controls_Manager::SWITCHER,
-				'default'   	=> 'yes',
-				'label_on'  	=> __( 'Yes', 'wfr' ),
-				'label_off' 	=> __( 'No', 'wfr' ),
-			]
-		);
-
-		$this->add_control(
-			'price_button',
-			[
-				'label'     	=> __( 'Price Button Text', 'wfr' ),
-				'description'   => __( 'Button text for the button linking to first vendor of the reviewed item. Leave empty to disable this button.', 'wfr' ),
-				'type'      	=> Controls_Manager::TEXT,
-				'default'   	=> '',
-			]
-		); 		
-		
-		$this->add_control(
-			'rating',
-			[
-				'label'     	=> __( 'Show Ratings', 'wfr' ),
-				'description'   => __( 'Displays the overall rating of the review within each item.', 'wfr' ),
-				'type'      	=> Controls_Manager::SWITCHER,
-				'default'   	=> 'yes',
-				'label_on'  	=> __( 'Yes', 'wfr' ),
-				'label_off' 	=> __( 'No', 'wfr' ),
-			]
-		);
-		
-		$this->add_control(
-			'summary',
-			[
-				'label'     	=> __( 'Show Summary', 'wfr' ),
-				'description'   => __( 'Displays the review summary within each item.', 'wfr' ),
-				'type'      	=> Controls_Manager::SWITCHER,
-				'default'   	=> 'no',
-				'label_on'  	=> __( 'Yes', 'wfr' ),
-				'label_off' 	=> __( 'No', 'wfr' ),
-			]
-        );		
-        
-        $this->end_controls_section();
-
-        /**
-         * Our general style
+         * Our general settings
          */
         $this->start_controls_section( 
             'section_general',
             [
-                'label' => esc_html__( 'General', 'wfr' ),
+                'label' => esc_html__( 'Display', 'wfr' ),
             ]
 		);
 		
@@ -146,7 +66,7 @@ class Reviews extends Elementor\Widget_Base {
 			'title_tag',
 			[
 				'label'     => __( 'Headings Tag', 'wfr' ),
-				'type'      => Controls_Manager::SELECT,
+				'type'      => Elementor\Controls_Manager::SELECT,
 				'default'   => 'h4',
 				'options'   => [
 					'h2' => __('H2', 'wfr'),
@@ -161,7 +81,7 @@ class Reviews extends Elementor\Widget_Base {
 			'view',
 			[
 				'label'     => __( 'Display Type', 'wfr' ),
-				'type'      => Controls_Manager::SELECT,
+				'type'      => Elementor\Controls_Manager::SELECT,
 				'default'   => 'list',
 				'options'   => wf_get_grid_options()
 			]
@@ -171,31 +91,91 @@ class Reviews extends Elementor\Widget_Base {
 			'grid',
 			[
 				'label'     => __( 'Grid Columns', 'wfr' ),
-				'type'      => Controls_Manager::SELECT,
+				'type'      => Elementor\Controls_Manager::SELECT,
 				'default'   => 'third',
 				'options'   => wf_get_column_options()
 			]
-		);  		
+		);
+
+        $this->end_controls_section();		
+
+        /**
+         * Elements
+         */
+        $this->start_controls_section( 
+            'section_elements',
+            [
+                'label' => esc_html__( 'Elements', 'wfr' ),
+            ]
+		);
 		
+		$this->add_control(
+			'button',
+			[
+				'label'     	=> __( 'Button Text', 'wfr' ),
+				'description'   => __( 'Button text for the button linking to the review. Leave empty to disable the button.', 'wfr' ),
+				'type'      	=> Elementor\Controls_Manager::TEXT,
+				'default'   	=> '',
+			]
+		); 
 		
+		$this->add_control(
+			'excerpt',
+			[
+				'label'     	=> __( 'Show Excerpt', 'wfr' ),
+				'description'   => __( 'Displays the excerpt in each item.', 'wfr' ),
+				'type'      	=> Elementor\Controls_Manager::SWITCHER,
+				'default'   	=> 'no',
+				'label_on'  	=> __( 'Yes', 'wfr' ),
+				'label_off' 	=> __( 'No', 'wfr' ),
+			]
+		);	
+		
+		$this->add_control(
+			'price',
+			[
+				'label'     	=> __( 'Show Price', 'wfr' ),
+				'type'      	=> Elementor\Controls_Manager::SWITCHER,
+				'default'   	=> 'yes',
+				'label_on'  	=> __( 'Yes', 'wfr' ),
+				'label_off' 	=> __( 'No', 'wfr' ),
+			]
+		);
 
 		$this->add_control(
-			'height',
+			'price_button',
 			[
-				'label'         => __( 'Minimum Height in Pixel', 'wfr' ),
-				'description'   => __( 'Optional minimum height for a single review in pixels.', 'wfr' ),
-                'type'          => Controls_Manager::SLIDER,
-				'range'         => [
-					'px'        => [
-						'max'   => 1000,
-					],
-                ], 
-				'selectors' => [
-					'{{WRAPPER}} .molecule-post' => 'min-height: {{SIZE}}{{UNIT}};'
-				]                             
+				'label'     	=> __( 'Price Button Text', 'wfr' ),
+				'description'   => __( 'Button text for the button linking to first vendor of the reviewed item. Leave empty to disable this button.', 'wfr' ),
+				'type'      	=> Elementor\Controls_Manager::TEXT,
+				'default'   	=> '',
 			]
-        );
-
+		); 		
+		
+		$this->add_control(
+			'rating',
+			[
+				'label'     	=> __( 'Show Ratings', 'wfr' ),
+				'description'   => __( 'Displays the overall rating of the review within each item.', 'wfr' ),
+				'type'      	=> Elementor\Controls_Manager::SWITCHER,
+				'default'   	=> 'yes',
+				'label_on'  	=> __( 'Yes', 'wfr' ),
+				'label_off' 	=> __( 'No', 'wfr' ),
+			]
+		);
+		
+		$this->add_control(
+			'summary',
+			[
+				'label'     	=> __( 'Show Summary', 'wfr' ),
+				'description'   => __( 'Displays the review summary within each item.', 'wfr' ),
+				'type'      	=> Elementor\Controls_Manager::SWITCHER,
+				'default'   	=> 'no',
+				'label_on'  	=> __( 'Yes', 'wfr' ),
+				'label_off' 	=> __( 'No', 'wfr' ),
+			]
+        );		
+        
         $this->end_controls_section();
 
         /**
@@ -212,7 +192,7 @@ class Reviews extends Elementor\Widget_Base {
 			'image',
 			[
 				'label'     => __( 'Show Image', 'wfr' ),
-				'type'      => Controls_Manager::SWITCHER,
+				'type'      => Elementor\Controls_Manager::SWITCHER,
 				'default'   => 'yes',
 				'label_on'  => __( 'Show', 'wfr' ),
 				'label_off' => __( 'Hide', 'wfr' ),
@@ -223,7 +203,7 @@ class Reviews extends Elementor\Widget_Base {
 			'image_featured',
 			[
 				'label'     => __( 'Image Source', 'wfr' ),
-				'type'      => Controls_Manager::SELECT,
+				'type'      => Elementor\Controls_Manager::SELECT,
 				'default'   => 'standard',
 				'options'   => [
                     'standard'  => __( 'Standard Featured Image', 'wfr' ),
@@ -236,7 +216,7 @@ class Reviews extends Elementor\Widget_Base {
 			'image_enlarge',
 			[
 				'label'     => __( 'Enlarge on Hover', 'wfr' ),
-				'type'      => Controls_Manager::SWITCHER,
+				'type'      => Elementor\Controls_Manager::SWITCHER,
 				'default'   => 'yes',
 				'label_on'  => __( 'Yes', 'wfr' ),
 				'label_off' => __( 'No', 'wfr' ),
@@ -247,7 +227,7 @@ class Reviews extends Elementor\Widget_Base {
 			'image_float',
 			[
 				'label'     => __( 'Image Float', 'wfr' ),
-				'type'      => Controls_Manager::SELECT,
+				'type'      => Elementor\Controls_Manager::SELECT,
 				'default'   => 'none',
 				'options'   => wf_get_float_options()
 			]
@@ -277,7 +257,7 @@ class Reviews extends Elementor\Widget_Base {
 			'number',
 			[
 				'label'     	=> __('Number of Reviews to Display', 'wfr'),
-				'type'      	=> Controls_Manager::NUMBER,
+				'type'      	=> Elementor\Controls_Manager::NUMBER,
 				'default'   	=> 3,
 				'min'   		=> 0
 			]
@@ -288,7 +268,7 @@ class Reviews extends Elementor\Widget_Base {
 			[
 				'label'     	=> __('Reviews Offset', 'wfr'),
 				'description'   => __('The offset is the number of reviews skipped at the beginning of the list.', 'wfr'),
-				'type'      	=> Controls_Manager::NUMBER,
+				'type'      	=> Elementor\Controls_Manager::NUMBER,
 				'default'   	=> 0,
 				'min'   		=> 0
 			]
@@ -313,7 +293,7 @@ class Reviews extends Elementor\Widget_Base {
 					$key,
 					[
 						'label'     	=> sprintf( __('Reviews to %s', 'wfr'), $label ),
-						'type'      	=> Controls_Manager::SELECT2,
+						'type'      	=> Elementor\Controls_Manager::SELECT2,
 						'default'   	=> '',
 						'multiple'		=> true,
 						'options'		=> $reviews
@@ -347,13 +327,13 @@ class Reviews extends Elementor\Widget_Base {
 			'sort',
 			[
 				'label'     	=> __('Ordering of Reviews', 'wfr'),
-				'type'      	=> Controls_Manager::SELECT,
+				'type'      	=> Elementor\Controls_Manager::SELECT,
 				'default'   	=> 'date_desc',
 				'options'   	=> $sorts	
 			]
 		);
 
-    $taxonomies = [
+    	$taxonomies = [
 			'categories' => [
 				'description'	=> __('Displays reviews from the selected categories', 'wfr'),
 				'label' 		=> 'Reviews Category', 
@@ -378,7 +358,7 @@ class Reviews extends Elementor\Widget_Base {
 				[
 					'description'   => $taxonomy['description'],
 					'label'     	=> $taxonomy['label'],
-					'type'      	=> Controls_Manager::SELECT2,
+					'type'      	=> Elementor\Controls_Manager::SELECT2,
 					'default'   	=> '',
 					'multiple'   	=> true,
 					'options'   	=> $taxonomy['terms'] 
@@ -391,7 +371,7 @@ class Reviews extends Elementor\Widget_Base {
 			'pagination',
 			[
 				'label'     => __( 'Show Pagination', 'wfr' ),
-				'type'      => Controls_Manager::SWITCHER,
+				'type'      => Elementor\Controls_Manager::SWITCHER,
 				'default'   => 'no',
 				'label_on'  => __( 'Yes', 'elementor' ),
 				'label_off' => __( 'No', 'elementor' ),
@@ -399,6 +379,43 @@ class Reviews extends Elementor\Widget_Base {
         ); 		       
 
 		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_style',
+			[
+				'label' => __( 'Element Styling', 'wfr' ),
+				'tab' => Elementor\Controls_Manager::TAB_STYLE,
+			]
+		);	
+
+		$this->add_control(
+			'height',
+			[
+				'label'         => __( 'Minimum Height in Pixel', 'wfr' ),
+				'description'   => __( 'Optional minimum height for a review in pixels.', 'wfr' ),
+                'type'          => Elementor\Controls_Manager::SLIDER,
+				'range'         => [
+					'px'        => [
+						'max'   => 1000,
+					],
+                ], 
+				'selectors' => [
+					'{{WRAPPER}} .molecule-post' => 'min-height: {{SIZE}}{{UNIT}};'
+				]                             
+			]
+        );
+		
+		$this->add_group_control(
+			Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' 		=> 'title_typography',
+				'label' 	=> __( 'Title Typography', 'wfr' ),
+				'selector'	=> '{{WRAPPER}} .entry-title'
+				// 'scheme' 	=> Elementor\Core\Schemes\Typography::TYPOGRAPHY_3,
+			]
+		);		
+		
+		$this->end_controls_section();		
     }
 	
 	/**

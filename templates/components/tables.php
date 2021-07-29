@@ -102,7 +102,7 @@ if( ! $tables['fields'] && $tables['load'] ) {
                                         <h4>
                                             <a href="<?php echo $review['link']; ?>" title="<?php echo $review['title']; ?>"><?php echo $review['title']; ?></a>
                                         </h4>
-                                        <?php if($review['price']) { echo $review['price']; } ?>
+                                        <?php if(isset($review['price']) && $review['price']) { echo $review['price']; } ?>
                                     </th>
                                 <?php } ?>
                             </tr>

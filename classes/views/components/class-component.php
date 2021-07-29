@@ -2,8 +2,8 @@
 /**
  * Contains the class abstraction for our components
  */
-
 namespace Waterfall_Reviews\Views\Components;
+use ReflectionClass as ReflectionClass;
 
 defined( 'ABSPATH' ) or die( 'Go eat veggies!' );
 
@@ -93,7 +93,7 @@ abstract class Component {
      * 
      * @param boolean   $return     If we return the given template instead of rendering it
      */
-    final public function render( $render = true ) {
+    public function render( $render = true ) {
 
         if( ! $this->props ) {
             return;
