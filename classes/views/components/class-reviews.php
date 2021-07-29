@@ -40,18 +40,18 @@ class Reviews extends Component {
                 'itemtype'      => ''
             ],
             'none'              => isset($this->layout['reviews_archive_content_none']) ? $this->layout['reviews_archive_content_none'] : __('No reviews found.', 'wfr'),
-            'postProperties'    => [
+            'post_properties'   => [
                 'attributes'    => [
                     'itemprop'  => $this->options['review_scheme'] == 'BlogPosting' ? 'blogPost' : '',
                     'itemtype'  => 'http://schema.org/' . $this->options['review_scheme'],
                     'style'     => ['min-height' => isset($this->layout['reviews_archive_content_height']) && $this->layout['reviews_archive_content_height'] ? $this->layout['reviews_archive_content_height'] . 'px;' : '']
 
                 ], 
-                'blogSchema'    => $this->options['review_scheme'] == 'BlogPosting' ? true : false,
-                'contentAtoms'  => isset($this->layout['reviews_archive_content_content']) && $this->layout['reviews_archive_content_content'] == 'excerpt' ? ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]] : [],
-                'footerAtoms'   => [],
+                'blog_schema'   => $this->options['review_scheme'] == 'BlogPosting' ? true : false,
+                'content_atoms' => isset($this->layout['reviews_archive_content_content']) && $this->layout['reviews_archive_content_content'] == 'excerpt' ? ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]] : [],
+                'footer_atoms'  => [],
                 'grid'          => isset($this->layout['reviews_archive_content_columns']) && $this->layout['reviews_archive_content_columns'] ? $this->layout['reviews_archive_content_columns'] : 'third',
-                'headerAtoms'   => [
+                'header_atoms'  => [
                     'title'     => ['atom' => 'title', 'properties' => ['attributes' => ['itemprop' => 'name headline', 'class' => 'entry-title'], 'tag' => 'h2', 'link' => 'post']]     
                 ],
                 'image'         => [ 
@@ -67,17 +67,17 @@ class Reviews extends Component {
                 'logo'      => isset($this->customizer['logo']) && is_numeric( $this->customizer['logo'] ) ? wp_get_attachment_image_url( $this->customizer['logo'], 'full' ) : ''               
             ],
             'button'        => isset($this->layout['reviews_archive_content_button']) && $this->layout['reviews_archive_content_button'] ? true : false,  // Displays a button to the post
-            'buttonLabel'   => isset($this->layout['reviews_archive_content_button']) && $this->layout['reviews_archive_content_button'] ? $this->layout['reviews_archive_content_button'] : '',                 // Text for this button
+            'button_label'  => isset($this->layout['reviews_archive_content_button']) && $this->layout['reviews_archive_content_button'] ? $this->layout['reviews_archive_content_button'] : '',                 // Text for this button
             'featured'      => isset($this->layout['reviews_archive_content_featured']) && $this->layout['reviews_archive_content_featured'] ? $this->layout['reviews_archive_content_featured'] : 'standard',   // Determines were we get our featured image from, either the custom meta field for the logo or featured image. Supports 'logo' or 'standard'.
-            'gridGap'       => isset($this->layout['reviews_archive_content_gap']) && $this->layout['reviews_archive_content_gap'] ? $this->layout['reviews_archive_content_gap'] : 'default', 
+            'grid_gap'      => isset($this->layout['reviews_archive_content_gap']) && $this->layout['reviews_archive_content_gap'] ? $this->layout['reviews_archive_content_gap'] : 'default', 
             'pagination'    => ['type' => 'numbers'],                                           // Displays pagination
             'price'         => isset($this->layout['reviews_archive_content_price']) && $this->layout['reviews_archive_content_price'] ? true : false,   // Displays the price
-            'priceButton'   => isset($this->layout['reviews_archive_content_price_button']) && $this->layout['reviews_archive_content_price_button'] ? $this->layout['reviews_archive_content_price_button'] : '',           // Displays the button to one supplier
+            'price_button'  => isset($this->layout['reviews_archive_content_price_button']) && $this->layout['reviews_archive_content_price_button'] ? $this->layout['reviews_archive_content_price_button'] : '',           // Displays the button to one supplier
             'rating'        => isset($this->layout['reviews_archive_content_rating']) && $this->layout['reviews_archive_content_rating'] ? true : false,                                                  // Displays the rating within a review
             'schema'        => in_array( 'reviews', $noSchema ) ? false : true,
             'summary'       => isset($this->layout['reviews_archive_content_summary']) && $this->layout['reviews_archive_content_summary'] ? true : false,                                                 // Adds the summary of our review
             'query'         => '',
-            'queryArgs'     => [
+            'query_args'     => [
                 'post_status'   => 'publish',
                 'post_type'     => 'reviews', 
                 'fields'        => 'ids'
@@ -97,12 +97,12 @@ class Reviews extends Component {
 
         // Custom image
         if( $this->params['featured'] == 'logo' ) {
-            $this->params['postProperties']['image']['image'] = 'logo'; // Looks for the image under the media meta key
+            $this->params['post_properties']['image']['image'] = 'logo'; // Looks for the image under the media meta key
         }
 
         // Adds the price
         if( $this->params['price'] ) {
-            $this->params['postProperties']['footerAtoms']['price'] = [
+            $this->params['post_properties']['footer_atoms']['price'] = [
                 'atom'          => 'callback', 
                 'properties'    => ['callback' => [$this, 'price']]                
             ];  
@@ -111,12 +111,12 @@ class Reviews extends Component {
         // Adds our button, linking to the review
         if( $this->params['button'] ) {
           
-            $this->params['postProperties']['footerAtoms']['button'] = [
+            $this->params['post_properties']['footer_atoms']['button'] = [
                 'atom'          => 'button', 
                 'properties'    => [
                     'background'    => 'light',
-                    'iconAfter'     => 'angle-right',
-                    'label'         => $this->params['buttonLabel'],
+                    'icon_after'    => 'angle-right',
+                    'label'         => $this->params['button_label'],
                     'size'          => 'small'                   
                 ]
             ];
@@ -125,7 +125,7 @@ class Reviews extends Component {
             
         // Adds the rating component
         if( $this->params['rating'] ) {
-            $this->params['postProperties']['headerAtoms']['rating'] = [
+            $this->params['post_properties']['header_atoms']['rating'] = [
                 'atom'          => 'callback', 
                 'properties'    => ['callback' => [$this, 'rating']]                
             ];
@@ -133,7 +133,7 @@ class Reviews extends Component {
 
         // Adds our summary
         if( $this->params['summary'] ) {
-            $this->params['postProperties']['contentAtoms']['summary'] = [
+            $this->params['post_properties']['content_atoms']['summary'] = [
                 'atom'          => 'meta', 
                 'properties'    => [
                     'attributes'  => ['itemprop' => 'description', 'class' => 'wfr-item-summary'],
@@ -163,7 +163,12 @@ class Reviews extends Component {
      * Renders our prices
      */
     public function price() {
-        $prices = new Prices(['button' => $this->params['priceButton'] ? true : false, 'buttonLabel' => $this->params['priceButton'], 'names' => false, 'single' => true]);
+        $prices = new Prices([
+            'button'        => $this->params['price_button'] ? true : false, 
+            'button_label'  => $this->params['price_button'], 
+            'names'         => false, 
+            'single'        => true
+        ]);
         $prices->render();       
     }    
 

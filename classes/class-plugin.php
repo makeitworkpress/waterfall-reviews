@@ -103,16 +103,16 @@ class Plugin {
             require_once( WFR_PATH . '/config/meta.php' );
             require_once( WFR_PATH . '/config/options.php' );
 
-            $configurations['options']['reviewMeta']    = $reviewMeta;
+            $configurations['options']['review_meta']   = $review_meta;
             $configurations['options']['options']       = $options;
         }
 
         if( is_customize_preview() ) {
 
             require_once( WFR_PATH . '/config/customizer.php' );
-            $configurations['options']['colorsPanel']       = $colorsPanel;
-            $configurations['options']['layoutPanel']       = $layoutPanel;
-            $configurations['options']['typographyPanel']   = $typographyPanel;
+            $configurations['options']['colors_panel']      = $colors_panel;
+            $configurations['options']['layout_panel']      = $layout_panel;
+            $configurations['options']['typography_panel']  = $typography_panel;
 
         }
 

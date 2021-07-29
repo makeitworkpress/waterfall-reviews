@@ -55,8 +55,6 @@ var Tables = {
             self = this,
             view = jQuery(form).next('.wfr-tables-view');
 
-        console.log(view);
-
         utils.ajax({
             beforeSend: function() {
                 jQuery(view).addClass('components-loading');
@@ -65,7 +63,7 @@ var Tables = {
                 jQuery(view).removeClass('components-loading');
             },
             data: {
-                action: 'loadTables', 
+                action: 'load_tables', 
                 attributes: jQuery(form).data('attributes'),
                 categories: jQuery(form).data('categories'),
                 groups: jQuery(form).data('groups'),

@@ -9,7 +9,7 @@
             <label><?php echo $charts['label']; ?></label>
             <select name="wfr_chart_data_source">
                 <option value=""><?php echo $charts['select']; ?></option>
-                <?php foreach( $charts['selectorGroups'] as $group ) { ?> 
+                <?php foreach( $charts['selector_groups'] as $group ) { ?> 
                     <optgroup label="<?php echo $group['label']; ?>">
                         <?php foreach( $group['options'] as $value => $label ) { ?>
                             <option value="<?php echo $value; ?>"><?php echo $label; ?></option>

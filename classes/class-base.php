@@ -52,15 +52,15 @@ abstract class Base {
             }
         }
         
-        $this->applyHooks( $this->actions );
-        $this->applyHooks( $this->filters, 'filter' );
+        $this->apply_hooks( $this->actions );
+        $this->apply_hooks( $this->filters, 'filter' );
 
     }
 
     /**
      * Applies filters and actions
      */
-    private function applyHooks( Array $array, $type = 'action' ) {
+    private function apply_hooks( Array $array, $type = 'action' ) {
 
         foreach( $array as $action ) {
 

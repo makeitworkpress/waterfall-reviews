@@ -16,8 +16,8 @@ class Score extends Base {
     protected function register() {
 
         $this->actions = [
-            ['comment_post', 'saveComment', 20, 2],
-            ['transition_comment_status', 'processCommentRating', 10, 3],
+            ['comment_post', 'save_comment', 20, 2],
+            ['transition_comment_status', 'process_comment_rating', 10, 3],
             ['save_post', 'score', 20, 1]
         ];
 
@@ -28,7 +28,7 @@ class Score extends Base {
      *
      * @param int $id The comment id that is saved
      */
-    public function saveComment( $id, $approved ) {
+    public function save_comment( $id, $approved ) {
 
         // Ratings should be enabled
         if( ! isset($this->options['rating_visitors']) || ! $this->options['rating_visitors'] ) {
@@ -67,7 +67,7 @@ class Score extends Base {
         // Process the comment ratings to calculate other scores if it is immediately approved such as in logged in accounts
         if( $approved === 1 ) {
             $comment = get_comment($id);
-            $this->processCommentRating( 'approved', 'unapproved', $comment );
+            $this->process_comment_rating( 'approved', 'unapproved', $comment );
         }
 
     }        
@@ -82,7 +82,7 @@ class Score extends Base {
      * 
      * @return Void
      */
-    public function processCommentRating( $new, $old, $comment ) {
+    public function process_comment_rating( $new, $old, $comment ) {
 
         // Only process a rating if we are approving new comments or disapproving old ones
         $rate = false;
@@ -174,11 +174,11 @@ class Score extends Base {
         }            
 
         // Update the general rating if visitors may influence this.
-        $this->weightVisitors( $comment->comment_post_ID );
+        $this->weight_visitors( $comment->comment_post_ID );
         
         // Update the rating based on criteria if users influence as a criteria.
         if( $this->options['rating_visitors_influence'] == 'criteria' ) {
-            $this->weightCriteria( $comment->comment_post_ID, false );
+            $this->weight_criteria( $comment->comment_post_ID, false );
         }
 
     }
@@ -200,12 +200,12 @@ class Score extends Base {
         /**
          * Automatically calculates our scores when these are set to automatic. Criteria and ratings are required.
          */
-        $this->weightCriteria( $id );        
+        $this->weight_criteria( $id );        
 
         /** 
          * Influence the rating if visitors may have influence on the overall rating
          */
-        $this->weightVisitors( $id );     
+        $this->weight_visitors( $id );     
 
         /**
          * Calculate and set the highest values
@@ -277,7 +277,7 @@ class Score extends Base {
      * 
      * @param Int $id The post id
      */
-    private function weightVisitors( $id ) {
+    private function weight_visitors( $id ) {
 
         // The theme settings should allow for the influence of visitors as a part of the overall rating. If only visitors rate, we return.
         if( $this->options['rating_visitors_influence'] != 'overall' || $this->options['rating_calculation'] == 'visitors' ) {
@@ -310,7 +310,7 @@ class Score extends Base {
      * @param Boolean $post Whether we are weighting criteria at post level or at comment level
      * @return void
      */
-    private function weightCriteria( $id, $post = true ) {
+    private function weight_criteria( $id, $post = true ) {
 
         // Rating criteria should be defined
         if( ! $this->options['rating_criteria'] || ! is_array($this->options['rating_criteria']) ) {

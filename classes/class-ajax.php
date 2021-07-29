@@ -17,12 +17,12 @@ class Ajax extends Base {
     protected function register() {
 
         $this->actions = [
-            ['wp_ajax_getChartData', 'getChartData'],
-            ['wp_ajax_nopriv_getChartData', 'getChartData'],
-            ['wp_ajax_loadTables', 'loadTables'],
-            ['wp_ajax_nopriv_loadTables', 'loadTables'],            
-            ['wp_ajax_filterReviews', 'filterReviews'],
-            ['wp_ajax_nopriv_filterReviews', 'filterReviews']
+            ['wp_ajax_get_chart_data', 'get_chart_data'],
+            ['wp_ajax_nopriv_get_chart_data', 'get_chart_data'],
+            ['wp_ajax_load_tables', 'load_tables'],
+            ['wp_ajax_nopriv_load_tables', 'load_tables'],            
+            ['wp_ajax_filter_reviews', 'filter_reviews'],
+            ['wp_ajax_nopriv_filter_reviews', 'filter_reviews']
         ];
 
     }
@@ -30,7 +30,7 @@ class Ajax extends Base {
     /**
      * Retrieves the chart data for a certain meta key
      */
-    public function getChartData() {
+    public function get_chart_data() {
 
         wp_verify_nonce( 'we-love-good-reviews', $_POST['action'] );
         
@@ -43,7 +43,7 @@ class Ajax extends Base {
         ];
 
         $chart      = new Views\Components\Charts( $args );
-        $data       = $chart->getChartData();
+        $data       = $chart->get_chart_data();
 
         wp_send_json_success( $data );
 
@@ -52,7 +52,7 @@ class Ajax extends Base {
     /**
      * Loads comparison tables for the selected reviews
      */
-    public function loadTables() {
+    public function load_tables() {
 
         wp_verify_nonce( 'we-love-good-reviews', $_POST['action'] );
         
@@ -79,7 +79,7 @@ class Ajax extends Base {
     /**
      * Executes a filter action for use in filters
      */
-    public function filterReviews() {
+    public function filter_reviews() {
 
         wp_verify_nonce( 'we-love-good-reviews', $_POST['action'] );
 
@@ -190,7 +190,7 @@ class Ajax extends Base {
 
         // Do our query
         $posts   = get_posts( wp_parse_args(['posts_per_page' => -1], $args) );
-        $reviews = new Views\Components\Reviews(['attributes' => ['class' => 'archive-posts wfr-reviews-component'], 'queryArgs' => $args]);
+        $reviews = new Views\Components\Reviews(['attributes' => ['class' => 'archive-posts wfr-reviews-component'], 'query_args' => $args]);
 
         // Send our filtered results
         wp_send_json_success( ['html' => $reviews->render(false), 'posts' => $posts] );

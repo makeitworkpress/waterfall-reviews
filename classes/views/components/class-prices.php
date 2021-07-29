@@ -18,7 +18,7 @@ class Prices extends Component {
         $this->params   = wp_parse_args( $this->params, [
             'best'          => false,   // Examines the best price and set this on top
             'button'        => true,    // If we want to display a button to our suppliers
-            'buttonLabel'   => isset($this->layout['reviews_price_button']) ? $this->layout['reviews_price_button'] : '', // The default label for our button
+            'button_label'  => isset($this->layout['reviews_price_button']) ? $this->layout['reviews_price_button'] : '', // The default label for our button
             'currency'      => isset($this->options['review_currency']) ? $this->options['review_currency'] : '',
             'id'            => 0,       // The id of our post were we are retrieving the prices for
             'names'         => true,    // If we display supplier names
@@ -104,7 +104,7 @@ class Prices extends Component {
                     [
                         'attributes'    => ['class' => 'wfr-price-button', 'href' => $price['url'], 'itemprop' => $this->params['schema'] ? 'url' : '', 'rel' => 'nofollow', 'target' => '_blank'], 
                         'background'    => 'default', 
-                        'label'         => isset($price['button']) && $price['button'] ? $price['button'] : $this->params['buttonLabel'],
+                        'label'         => isset($price['button']) && $price['button'] ? $price['button'] : $this->params['button_label'],
                         'size'          => 'small'
                     ],
                     false

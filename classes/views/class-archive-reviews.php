@@ -26,7 +26,7 @@ class Archive_Reviews extends Base {
         ];
 
         $this->filters = [
-            ['waterfall_blog_schema_post_types', 'blogSchema'],
+            ['waterfall_blog_schema_post_types', 'blog_schema'],
             ['waterfall_archive_posts_args', 'reviews']
         ];
         
@@ -35,16 +35,16 @@ class Archive_Reviews extends Base {
     /**
      * Enables BlogPosting schema for archives
      */
-    public function blogSchema($types) {
+    public function blog_schema($types) {
         
         if( wf_get_archive_post_type() != 'reviews' ) {
             return $types;
         }
 
-        $noSchema = isset($this->options['scheme_post_types_disable']) && $this->options['scheme_post_types_disable'] ? $this->options['scheme_post_types_disable'] : [];
+        $no_schema = isset($this->options['scheme_post_types_disable']) && $this->options['scheme_post_types_disable'] ? $this->options['scheme_post_types_disable'] : [];
 
         // Schemas should not be disabled
-        if( in_array('reviews', $noSchema) ) {
+        if( in_array('reviews', $no_schema) ) {
             return $types;     
         }  
         
@@ -73,7 +73,7 @@ class Archive_Reviews extends Base {
         echo '<div class="content">';
 
         // Only allow comparison tables within categorie pages, if set-up.
-        if( $this->layout['reviews_archive_content_compare_category'] && ! $this->checkTermQuery('reviews_category') ) {
+        if( $this->layout['reviews_archive_content_compare_category'] && ! $this->check_term_query('reviews_category') ) {
             return;
         }
 
@@ -114,7 +114,7 @@ class Archive_Reviews extends Base {
         $args                           = $reviews->params;
         $args['attributes']['class']    = 'archive-posts wfr-reviews-component';
         $args['query']                  = $wp_query;
-        $args['queryArgs']              = [];
+        $args['query_args']             = [];
 
         return $args;
 
@@ -130,7 +130,7 @@ class Archive_Reviews extends Base {
         }
 
         // Only allow comparison tables within categorie pages, if set-up.
-        if( $this->layout['reviews_archive_content_compare_category'] && ! $this->checkTermQuery('reviews_category') ) {
+        if( $this->layout['reviews_archive_content_compare_category'] && ! $this->check_term_query('reviews_category') ) {
 
             // Close our content wrapper
             echo '</div><!-- .content -->';
@@ -152,13 +152,13 @@ class Archive_Reviews extends Base {
             ];
 
             // Filter for certain categories
-            if( $this->checkTermQuery('reviews_category') ) {
-                $args['categories'] = [$this->checkTermQuery('reviews_category')];
+            if( $this->check_term_query('reviews_category') ) {
+                $args['categories'] = [$this->check_term_query('reviews_category')];
             }  
 
             // Filter for certain tags
-            if( $this->checkTermQuery('reviews_tag') ) {
-                $args['tags']       = [$this->checkTermQuery('reviews_tag')];
+            if( $this->check_term_query('reviews_tag') ) {
+                $args['tags']       = [$this->check_term_query('reviews_tag')];
             }              
 
             // Show our charts
@@ -194,7 +194,7 @@ class Archive_Reviews extends Base {
      * @param   String  $taxonomy   The taxonomy that needs to be checked
      * @return  Int     @term       The queried term id
      */
-    private function checkTermQuery( $taxonomy = '') {
+    private function check_term_query( $taxonomy = '') {
 
         $term = '';
 

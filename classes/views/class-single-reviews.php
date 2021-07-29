@@ -61,7 +61,7 @@ class Single_Reviews extends Base {
         ];
 
         $this->actions = [  
-            ['comment_form_top', 'commentFields'],
+            ['comment_form_top', 'comment_fields'],
             ['components_post_header_container_end', 'header'],   
             ['waterfall_before_reviews_content', 'before'],   
             ['waterfall_after_reviews_content', 'after'],   
@@ -69,12 +69,12 @@ class Single_Reviews extends Base {
         ];
 
         $this->filters = [
-            ['comment_text', 'commentText'],
-            ['waterfall_blog_schema_post_types', 'blogSchema'],
-            ['waterfall_singular_schema', 'articleSchema'],
+            ['comment_text', 'comment_text'],
+            ['waterfall_blog_schema_post_types', 'blog_schema'],
+            ['waterfall_singular_schema', 'article_schema'],
             ['waterfall_related_args', 'related'], 
             ['waterfall_content_content_args', 'content'],
-            ['waterfall_content_footer_args', 'commentRating'], 
+            ['waterfall_content_footer_args', 'comment_rating'], 
         ];
 
         $this->noSchema = isset($this->options['scheme_post_types_disable']) && is_array($this->options['scheme_post_types_disable']) ? $this->options['scheme_post_types_disable'] : [];
@@ -86,7 +86,7 @@ class Single_Reviews extends Base {
      * @param   string      $types The post types that retrieve the blog schema
      * @return  string      $types The added types
      */
-    public function blogSchema($types) {
+    public function blog_schema($types) {
 
         // We should be looking at reviews
         if( ! is_singular('reviews') ) {
@@ -111,7 +111,7 @@ class Single_Reviews extends Base {
      * @param   string  $schema The scheme
      * @return  string  $schema The altered scheme
      */
-    public function articleScheme($schema) {
+    public function article_schema($schema) {
 
         // Only applies to reviews
         if( ! is_singular('reviews') ) {
@@ -261,7 +261,7 @@ class Single_Reviews extends Base {
         if( $this->layout['reviews_content_properties_before'] ) {
 
             $properties = new Components\Tables( [
-                'groups'        => $this->propertyGroups(),
+                'groups'        => $this->property_groups(),
                 'reviews'       => [$post->ID],
                 'weight'        => true
             ] );
@@ -340,7 +340,7 @@ class Single_Reviews extends Base {
         // Loads our custom properties
         if( $this->layout['reviews_content_properties_after'] ) {
             $properties = new Components\Tables( [
-                'groups'        => $this->propertyGroups(),
+                'groups'        => $this->property_groups(),
                 'reviews'       => [$post->ID],
                 'weight'        => true
             ] );
@@ -368,28 +368,28 @@ class Single_Reviews extends Base {
         $reviews = new Components\Reviews( [
             'featured'      => $this->layout['reviews_related_featured'],
             'price'         => $this->layout['reviews_related_price'],
-            'priceButton'   => $this->layout['reviews_related_price_button'],
+            'price_button'  => $this->layout['reviews_related_price_button'],
             'rating'        => $this->layout['reviews_related_rating'],
             'summary'       => $this->layout['reviews_related_summary']
         ] );
 
         if( $reviews->params['featured'] == 'logo' ) {
-            $args['postProperties']['image']['image']           = 'logo'; // Looks for the image under the media meta key
+            $args['post_properties']['image']['image']           = 'logo'; // Looks for the image under the media meta key
         }
 
         // Adds the price
         if( $reviews->params['price'] ) {
-            $args['postProperties']['footerAtoms']['price']     = $reviews->params['postProperties']['footerAtoms']['price'];  
+            $args['post_properties']['footer_atoms']['price']    = $reviews->params['post_properties']['footer_atoms']['price'];  
         } 
             
         // Adds the rating component
         if( $reviews->params['rating'] ) {
-            $args['postProperties']['headerAtoms']['rating']    = $reviews->params['postProperties']['headerAtoms']['rating'];
+            $args['post_properties']['header_atoms']['rating']   = $reviews->params['post_properties']['header_atoms']['rating'];
         }
 
         // Adds our summary
         if( $reviews->params['summary'] ) {
-            $args['postProperties']['contentAtoms']['summary']  = $reviews->params['postProperties']['contentAtoms']['summary'];
+            $args['post_properties']['content_atoms']['summary'] = $reviews->params['post_properties']['content_atoms']['summary'];
         }        
 
         return $args;
@@ -424,13 +424,13 @@ class Single_Reviews extends Base {
                 'style'         => ['min-height' => $this->layout['reviews_similar_height'] ? $this->layout['reviews_similar_height'] . 'px' : '']
             ],
             'button'            => $this->layout['reviews_similar_button'] ? true : false,
-            'buttonLabel'       => $this->layout['reviews_similar_button'],
+            'button_label'       => $this->layout['reviews_similar_button'],
             'featured'          => $this->layout['reviews_similar_featured'],
             'pagination'        => false,
-            'postProperties'    => [
-                'contentAtoms'  => [],
+            'post_properties'    => [
+                'content_atoms'  => [],
                 'grid'          => $this->layout['reviews_similar_grid'],
-                'headerAtoms'   => [
+                'header_atoms'   => [
                     'title'     => ['atom' => 'title', 'properties' => ['attributes' => ['itemprop' => 'name headline', 'class' => 'entry-title'], 'tag' => 'h3', 'link' => 'post']]     
                 ],                
                 'image'         => [ 
@@ -442,10 +442,10 @@ class Single_Reviews extends Base {
                 ]                 
             ],
             'price'             => $this->layout['reviews_similar_price'],
-            'priceButton'       => $this->layout['reviews_similar_price_button'],
+            'price_button'      => $this->layout['reviews_similar_price_button'],
             'rating'            => $this->layout['reviews_similar_rating'],
             'summary'           => $this->layout['reviews_similar_summary'],            
-            'queryArgs'         => [
+            'query_args'        => [
                 'post_type'         => 'reviews', 
                 'posts_per_page'    => $this->layout['reviews_similar_number'],
                 'post__in'          => $similar
@@ -462,7 +462,7 @@ class Single_Reviews extends Base {
     /**
      * Adds additional fields to our comments field
      */
-    public function commentFields() {
+    public function comment_fields() {
 
         if( ! is_singular('reviews') ) {
             return;
@@ -514,7 +514,7 @@ class Single_Reviews extends Base {
      * 
      * @param string $text The text from the comment
      */
-    public function commentText( $text ) {
+    public function comment_text( $text ) {
 
         if( ! is_singular('reviews') ) {
             return $text;
@@ -583,7 +583,7 @@ class Single_Reviews extends Base {
      * 
      * @param Array $args The arguments for the Footer Molecule
      */
-    public function commentRating( $args ) {
+    public function comment_rating( $args ) {
 
         // The element should be enabled
         if( ! is_singular('reviews') || ! $this->layout['reviews_visitors_rating_component'] ) {
@@ -643,7 +643,7 @@ class Single_Reviews extends Base {
      * 
      * @return Array $groups The array with property groups
      */
-    private function propertyGroups() {
+    private function property_groups() {
 
         $groups = ['properties'];
 

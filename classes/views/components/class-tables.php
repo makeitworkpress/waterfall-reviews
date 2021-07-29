@@ -111,7 +111,7 @@ class Tables extends Component {
         /**
          * Load the reviews for which we want to load the fields
          */
-        $this->setReviews();
+        $this->set_reviews();
         $this->props['reviews'] = $this->params['reviews'];
 
         if( ! $this->params['load'] ) {
@@ -122,7 +122,7 @@ class Tables extends Component {
          * Set our fields, function inherited from the parent
          */
         foreach( $this->params['reviews'] as $review => $properties ) {
-            $this->setCustomFields( $review );  
+            $this->set_custom_fields( $review );  
         }
 
         $this->props['fields'] = $this->fields;
@@ -139,7 +139,7 @@ class Tables extends Component {
     /**
      * Gets our reviews based upon table parameters
      */
-    private function setReviews() {
+    private function set_reviews() {
 
         if( ! $this->params['query'] ) {
             $this->params['query'] = ['fields' => 'ids', 'post_type' => 'reviews', 'posts_per_page' => -1, 'status' => 'publish']; 
@@ -183,7 +183,7 @@ class Tables extends Component {
 
                 $prices = new Prices([
                     'button'        => true, 
-                    'buttonLabel'   => $this->params['price'], 
+                    'button_label'   => $this->params['price'], 
                     'id'            => $review,
                     'names'         => false,
                     'schema'        => false, 
@@ -207,7 +207,7 @@ class Tables extends Component {
      * 
      * @return void
      */
-    protected function setCustomFields( $post ) {
+    protected function set_custom_fields( $post ) {
 
         // $post Should be set and an integer
         if( ! is_int($post) ) {
@@ -283,7 +283,7 @@ class Tables extends Component {
 
                         $prices = new Prices([
                             'button'        => true, 
-                            'buttonLabel'   => $this->params['price'], 
+                            'button_label'   => $this->params['price'], 
                             'id'            => $post,
                             'names'         => false, 
                             'schema'        => false,
@@ -357,7 +357,7 @@ class Tables extends Component {
                                 }
                             }
 
-                            $planValues = $this->getFieldValues( $field, $planValueSet['value'], $planPrice );
+                            $planValues = $this->get_field_values( $field, $planValueSet['value'], $planPrice );
     
                             // Only add plans if there is a value
                             if( $planValues ) {
@@ -368,7 +368,7 @@ class Tables extends Component {
     
                         }                        
                     } else {
-                        $value = $this->getFieldValues( $field, $meta, $price );
+                        $value = $this->get_field_values( $field, $meta, $price );
                     }
 
                     // Repreatable fields are an array, and are seperated by a line break
@@ -414,7 +414,7 @@ class Tables extends Component {
      * 
      * @return string   $value      The formatted value
      */
-    private function getFieldValues( $field, $meta, $price = false ) {
+    private function get_field_values( $field, $meta, $price = false ) {
         
         switch( $field['type'] ) {
             case 'input':

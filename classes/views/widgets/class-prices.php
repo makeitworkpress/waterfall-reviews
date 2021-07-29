@@ -56,7 +56,7 @@ class Prices extends WP_Widget {
 			],
 			[
 				'label' => __('Label for Button', 'wfr'),
-				'id' 	=> 'buttonLabel',
+				'id' 	=> 'button_label',
 				'type' 	=> 'input'
 			],
 			[
@@ -88,7 +88,7 @@ class Prices extends WP_Widget {
         
 		echo $args['before_widget'];
         
-		$this->titleDisplay( $args, $instance);
+		$this->title_display( $args, $instance);
 
 		if( isset($instance['rating']) && $instance['rating'] ) {
 			$rating = new Components\Rating(['schema' => false]);
@@ -116,7 +116,7 @@ class Prices extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
-		$this->formFields( $instance, $this->fields );
+		$this->form_fields( $instance, $this->fields );
     } 
     
 	/**
@@ -131,7 +131,7 @@ class Prices extends WP_Widget {
 	 */
 	public function update( $new, $old ) {
 
-		return $this->sanitizeFields( $new, $this->fields );
+		return $this->sanitize_fields( $new, $this->fields );
 
 	}    
 

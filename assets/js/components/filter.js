@@ -32,7 +32,7 @@ var Filter = {
 
         this.arguments = new FormData( jQuery(object).get(0) );
         this.arguments.append('nonce', wfr.nonce); // The object wfr is available in global scope, being localized on waterfall-reviews.js
-        this.arguments.append('action', 'filterReviews');
+        this.arguments.append('action', 'filter_reviews');
 
         var target = jQuery(object).data('target');
 

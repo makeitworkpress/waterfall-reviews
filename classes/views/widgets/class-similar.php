@@ -48,7 +48,7 @@ class Similar extends WP_Widget {
 			],
 			[
 				'label' => __('Label for this Button', 'wfr'),
-				'id' 	=> 'buttonLabel',
+				'id' 	=> 'button_label',
 				'type' 	=> 'input'
 			],
 			[
@@ -77,7 +77,7 @@ class Similar extends WP_Widget {
 			],
 			[
 				'label' => __('Text for Price Button', 'wfr'),
-				'id' 	=> 'priceButton',
+				'id' 	=> 'price_button',
 				'type' 	=> 'input'
 			],
 			[
@@ -117,21 +117,24 @@ class Similar extends WP_Widget {
 		}
 
 		// Default properties
-		$instance['postProperties']['contentAtoms'] = $instance['excerpt'] ? ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]] : [];
-		$instance['postProperties']['headerAtoms']  = ['title' => ['atom' => 'title', 'properties' => ['attributes' => ['itemprop' => 'name headline', 'class' => 'entry-title'], 'tag' => 'h4', 'link' => 'post']]];
-		$instance['postProperties']['image'] 	= [
+		$instance['post_properties']['content_atoms'] = $instance['excerpt'] ? ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]] : [];
+		$instance['post_properties']['header_atoms']  = [
+			'title' 		=> ['atom' => 'title', 
+			'properties' 	=> ['attributes' => ['itemprop' => 'name headline', 'class' => 'entry-title'], 'tag' => 'h4', 'link' => 'post']]
+		];
+		$instance['post_properties']['image'] 				= [
 			'enlarge' 	=> $instance['enlarge'],
 			'float'		=> 'none',
 			'lazyload'  => isset($this->options['optimize']['lazyLoad']) && $this->options['optimize']['lazyLoad'] ? true : false,
 			'link'		=> 'post',
 			'size'		=> 'medium'
 		];
-		$instance['postProperties']['grid'] 			= 'full';
-		$instance['postProperties']['grid'] 			= 'full';
+		$instance['post_properties']['grid'] 			= 'full';
+		$instance['post_properties']['grid'] 			= 'full';
 		
 		// Query Properties
-		$instance['queryArgs']['post__not_in']  		= [$post->ID];
-		$instance['queryArgs']['posts_per_page'] 		= $instance['number'];	
+		$instance['query_args']['post__not_in']  		= [$post->ID];
+		$instance['query_args']['posts_per_page'] 		= $instance['number'];	
 
 		// Widgets do not use schema
 		$instance['schema']								= false;
@@ -140,11 +143,11 @@ class Similar extends WP_Widget {
 		if( $instance['related'] ) {
 
 			if( function_exists('ep_find_related') ) {
-				$instance['queryArgs']['post__in']      = ep_find_related( $post->ID, $instance['number'] );
-				$instance['queryArgs']['ep_integrate']  = true;
+				$instance['query_args']['post__in']      = ep_find_related( $post->ID, $instance['number'] );
+				$instance['query_args']['ep_integrate']  = true;
 			} else {
 				$taxonomies 							= get_post_taxonomies( $post );
-				$instance['queryArgs']['post__in'] 		= [];
+				$instance['query_args']['post__in'] 		= [];
 
 				if( $taxonomies ) {
 					foreach( $taxonomies as $taxonomy ) {
@@ -167,22 +170,22 @@ class Similar extends WP_Widget {
 		} else {
 			$similar = get_post_meta($post->ID, 'similar', true);
 			if( $similar  ) {
-				$instance['queryArgs']['post__in']		= $similar;
+				$instance['query_args']['post__in']		= $similar;
 			} else {
 				return;
 			}
 		}
 		
-        echo $args['before_widget'];
+    echo $args['before_widget'];
         
-		$this->titleDisplay( $args, $instance );
+	$this->title_display( $args, $instance );
 
-        $reviews = new Components\Reviews( $instance );
-        $reviews->render();
+    $reviews = new Components\Reviews( $instance );
+    $reviews->render();
         
-        echo $args['after_widget'];
+    echo $args['after_widget'];
         
-    } 	
+  } 	
 	
     /**
 	 * Back-end widget form.
@@ -192,8 +195,8 @@ class Similar extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
-		$this->formFields( $instance, $this->fields );
-    } 
+		$this->form_fields( $instance, $this->fields );
+  } 
     
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -206,7 +209,7 @@ class Similar extends WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new, $old ) {
-		return $this->sanitizeFields( $new, $this->fields );
+		return $this->sanitize_fields( $new, $this->fields );
 	} 	
 
 }

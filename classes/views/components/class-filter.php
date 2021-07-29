@@ -14,18 +14,17 @@ class Filter extends Component {
             'label'             => __('Filter', 'wfr'),     // The label for the filter button
             'instant'           => true,                    // If the filter is instant (without a button)
             'price'             => true,                    // If a price filter field should be added
-            'priceLabel'        => __('Price', 'wfr'),                    
-            'pricePlaceholder'  => __('Price', 'wfr'),                    
+            'price_label'       => __('Price', 'wfr'),                                   
             'rating'            => true,                    // If a rating filter field should be added
-            'ratingLabel'       => __('Rating', 'wfr'), 
-            'ratingMin'         => 1, 
+            'rating_label'      => __('Rating', 'wfr'), 
+            'rating_min'        => 1, 
             'search'            => true,                    // If a sort field should be added
-            'searchLabel'       => __('Search for', 'wfr'),                            
+            'search_label'      => __('Search for', 'wfr'),                            
             'sort'              => true,                    // If a sort field should be added
-            'sortLabel'         => __('Sort by', 'wfr'),
+            'sort_label'        => __('Sort by', 'wfr'),
             'target'            => 'wfr-reviews-component', // Default target data-id   
             'taxonomy'          => true,                    // If a taxonomy (reviews_category) filter field should be added
-            'taxonomyLabel'     => __('Category', 'wfr') 
+            'taxonomy_label'    => __('Category', 'wfr') 
         ] );
 
         $this->template = 'filter'; 

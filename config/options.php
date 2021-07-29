@@ -247,15 +247,15 @@ $options = [
 /**
  * We initialize our initial ratingsfields here, and add it later once we have completed adding all fields
  */
-$themeOptions = wf_get_data(); 
+$theme_options = wf_get_data(); 
 
 /**
  * Based upon what top level review criteria are added, we add additional settings. Hence, we can add dynamic fields
  */
-if( isset($themeOptions['rating_criteria']) && $themeOptions['rating_criteria'] ) {
+if( isset($theme_options['rating_criteria']) && $theme_options['rating_criteria'] ) {
 
     // Add our fields for adding
-    foreach( $themeOptions['rating_criteria'] as $key => $criteria ) {
+    foreach( $theme_options['rating_criteria'] as $key => $criteria ) {
 
         // Bail out if there is no name
         if( ! isset($criteria['name']) || ! $criteria['name'] ) {

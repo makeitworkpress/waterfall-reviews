@@ -14,7 +14,7 @@ trait Widget {
      * @param array     $instance   Previously saved values from database.
      * @param string    $fields     The fields data to look tino. At least has 'id', 'type', 'label'. Optionally, has 'options'
      */ 
-    public function formFields( $instance, Array $fields ) {
+    public function form_fields( $instance, Array $fields ) {
 
         foreach( $fields as $field ) {
 
@@ -70,7 +70,7 @@ trait Widget {
      * 
      * @return  array   $values     The sanitized values
      */ 
-    public function sanitizeFields( $input, Array $fields ) {
+    public function sanitize_fields( $input, Array $fields ) {
 
         $values = [];
 
@@ -115,7 +115,7 @@ trait Widget {
      * @param array $args     Widget arguments.
      * @param array $instance Saved values from database.   
      */ 
-    public function titleDisplay( $args, $instance ) {
+    public function title_display( $args, $instance ) {
 
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];

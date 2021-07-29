@@ -7,7 +7,13 @@ namespace Waterfall_Reviews\Views\Components;
 
 defined( 'ABSPATH' ) or die( 'Go eat veggies!' );
 
-abstract class Component {  
+abstract class Component {
+
+    /**
+     * Contains the called class
+     * @access private
+     */
+    private $class;
     
     /**
      * Contains our customizer layout options
@@ -37,7 +43,7 @@ abstract class Component {
      * Contains the template
      * @access protected
      */
-    protected $template = '';    
+    private $template = '';
     
     /**
      * Set up our parameters and component
@@ -46,7 +52,7 @@ abstract class Component {
      * @param boolean   $format     If we want to query and format by default
      * @param boolean   $render     If we want to render by default
      */
-    public function __construct( $params = [], $format = true, $render = false ) {  
+    final public function __construct( $params = [], $format = true, $render = false ) {  
         
         $this->customizer   = wf_get_data('customizer');
         $this->layout       = wf_get_data('layout');
@@ -59,6 +65,10 @@ abstract class Component {
         if( $format ) {
             $this->query();
         }
+
+        $this->class    = strtolower( (new ReflectionClass($this))->getShortName() );
+        $this->template = apply_filters( 'wfr_components_template_' . $this->class, WFR_PATH . '/templates/components/' . $this->class  . '.php');
+        $this->props    = apply_filters( 'wfr_components_props_' . $this->class, $this->props);        
 
         // If render is true, we render by default
         if( $render && $this->props ) {
@@ -83,33 +93,24 @@ abstract class Component {
      * 
      * @param boolean   $return     If we return the given template instead of rendering it
      */
-    public function render( $render = true ) {
+    final public function render( $render = true ) {
 
-        // We should have a template defined in our child class. Otherwise, we do not know what to render.
-        if( ! $this->template ) {
+        if( ! $this->props ) {
+            return;
+        }        
+
+        if( ! file_exists($this->template) ) {
             return;
         }
 
-        // Developers can hook into the template and use their own
-        $file = apply_filters( 'wfr_components_template_' . $this->template, WFR_PATH . '/templates/components/' . $this->template . '.php' );
-
-        if( ! file_exists($file) ) {
-            return;
-        }
-
-        // Cast our object properties into the template variable, so they are accessible by the template file. Developers can hook into our properties
-        ${$this->template} = apply_filters( 'wfr_components_props_' . $this->template, $this->props );
-
-        // Return if we have empty props
-        if( ! ${$this->template} ) {
-            return;
-        }
+        // Cast our object properties into the class variable, so they are accessible by the template file under the class name 
+        ${$this->class} = $this->props;
         
         if( ! $render ) {
             ob_start();
         }
         
-        require( $file );
+        require( $this->template );
 
         if( ! $render ) {
             return ob_get_clean();

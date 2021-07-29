@@ -110,10 +110,10 @@ class Shortcodes {
 		$args		= [
 			'attributes'		=> ['class' => 'wfr-reviews-component wfr-shortcode'],
 			'button'			=> $atts['button'] ? true : false,
-			'buttonLabel'		=> $atts['button'],
-			'postProperties' 	=> [
+			'button_label'		=> $atts['button'],
+			'post_properties' 	=> [
 				'grid' 			=> $atts['grid'],
-                'headerAtoms'   => [
+                'header_atoms'   => [
                     'title'     => [
                         'atom' => 'title', 
                         'properties' => ['attributes' => ['itemprop' => 'name headline', 'class' => 'entry-title'], 'tag' => $atts['title'], 'link' => 'post']
@@ -129,10 +129,10 @@ class Shortcodes {
 			],
 			'featured'			=> $atts['featured'],
 			'price'				=> $atts['price'],
-			'priceButton'		=> $atts['price_button'],
+			'price_button'		=> $atts['price_button'],
 			'rating'			=> $atts['rating'],
 			'summary'			=> $atts['summary'],
-			'queryArgs'			=> [
+			'query_args'			=> [
 				'offset' 			=> $atts['offset'],	
 				'posts_per_page' 	=> $atts['number']	
 			],
@@ -143,16 +143,16 @@ class Shortcodes {
 		 * Element Settings
 		 */
 		if( $atts['excerpt'] ) {
-			$args['postProperties']['contentAtoms'] = ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]];
+			$args['post_properties']['content_atoms'] = ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]];
 		} else {
-			$args['postProperties']['contentAtoms'] = [];	
+			$args['post_properties']['content_atoms'] = [];	
 		}	
 		
 		/**
 		 * Image Settings
 		 */
 		if( ! $atts['image'] ) {
-			$args['postProperties']['image'] 	= [];
+			$args['post_properties']['image'] 	= [];
 		}
 
 		/**
@@ -160,24 +160,24 @@ class Shortcodes {
 		 */
 		if( $atts['categories'] ) {
             $atts['categories'] = explode(',', $atts['categories']);
-			$args['queryArgs']['tax_query'][] 	= ['taxonomy' => 'reviews_category', 'terms' => $atts['categories']];
+			$args['query_args']['tax_query'][] 	= ['taxonomy' => 'reviews_category', 'terms' => $atts['categories']];
 		}
 
 		if( $atts['exclude'] ) {
-			$args['queryArgs']['post__not_in']	= [$atts['exclude']];
+			$args['query_args']['post__not_in']	= [$atts['exclude']];
 		}
 		
 		if( $atts['include'] ) {
-			$args['queryArgs']['post__in']		= [$atts['include']];
+			$args['query_args']['post__in']		= [$atts['include']];
 		}
 		
 		if( $atts['sort'] ) {
-			$args['queryArgs']					= sortingArguments($args['queryArgs'], $atts['sort']);
+			$args['query_args']					= sorting_arguments($args['query_args'], $atts['sort']);
 		}		
 
 		if( $atts['tags'] ) {
             $atts['tags'] = explode(',', $atts['tags']);
-			$args['queryArgs']['tax_query'][] 	= ['taxonomy' => 'reviews_tag', 'terms' => $atts['tags']];
+			$args['query_args']['tax_query'][] 	= ['taxonomy' => 'reviews_tag', 'terms' => $atts['tags']];
 		}
 		
 		if( $atts['pagination'] ) {

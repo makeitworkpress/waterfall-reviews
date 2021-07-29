@@ -261,16 +261,16 @@ class Reviews extends Elementor\Widget_Base {
 			]
 		);        
         
-        $this->end_controls_section();        
-        
-        /**
-         * Our query
-         */
-        $this->start_controls_section( 
-            'section_query',
-            [
-                'label' => esc_html__( 'Query', 'wfr' ),
-            ]
+		$this->end_controls_section();        
+		
+		/**
+		 * Our query
+		 */
+		$this->start_controls_section( 
+			'section_query',
+			[
+				'label' => esc_html__( 'Query', 'wfr' ),
+			]
 		);
 		
 		$this->add_control(
@@ -353,7 +353,7 @@ class Reviews extends Elementor\Widget_Base {
 			]
 		);
 
-        $taxonomies = [
+    $taxonomies = [
 			'categories' => [
 				'description'	=> __('Displays reviews from the selected categories', 'wfr'),
 				'label' 		=> 'Reviews Category', 
@@ -413,28 +413,26 @@ class Reviews extends Elementor\Widget_Base {
 		 */
 		$args		= [
 			'button'			=> $settings['button'] ? true : false,
-			'buttonLabel'		=> $settings['button'],
-			'postProperties' 	=> [
+			'button_label'		=> $settings['button'],
+			'post_properties' 	=> [
 				'grid' 			=> $settings['grid'],
-                'headerAtoms'   => [
-                    'title'     => ['atom' => 'title', 'properties' => ['attributes' => ['itemprop' => 'name headline', 'class' => 'entry-title'], 'tag' => $settings['title_tag'] ? $settings['title_tag'] : 'h2', 'link' => 'post']]     
-                ],				
-				'image'			=> [
-					'attributes' 	=> [
-						'class' 	=> 'entry-image',
-					],
+				'header_atoms'  => [
+					'title'     => ['atom' => 'title', 'properties' => ['attributes' => ['itemprop' => 'name headline', 'class' => 'entry-title'], 'tag' => $settings['title_tag'] ? $settings['title_tag'] : 'h2', 'link' => 'post']]     
+				],				
+				'image'					=> [
+					'attributes' 	=> ['class'=> 'entry-image',],
 					'enlarge' 		=> $settings['image_enlarge'], 
-					'float' 		=> $settings['image_float'], 
+					'float' 			=> $settings['image_float'], 
 					'link'      	=> 'post',
-					'size' 			=> isset($settings['image_size']) && $settings['image_size'] ? $settings['image_size'] : 'ld-square'
+					'size' 				=> isset($settings['image_size']) && $settings['image_size'] ? $settings['image_size'] : 'ld-square'
 				]
 			],
 			'featured'			=> $settings['image_featured'],
-			'price'				=> $settings['price'],
-			'priceButton'		=> $settings['price_button'],
-			'rating'			=> $settings['rating'],
-			'summary'			=> $settings['summary'],
-			'queryArgs'			=> [
+			'price'					=> $settings['price'],
+			'price_button'	=> $settings['price_button'],
+			'rating'				=> $settings['rating'],
+			'summary'				=> $settings['summary'],
+			'query_args'		=> [
 				'offset' 			=> $settings['offset'],	
 				'posts_per_page' 	=> $settings['number']	
 			],
@@ -445,46 +443,46 @@ class Reviews extends Elementor\Widget_Base {
 		 * Element Settings
 		 */
 		if( $settings['excerpt'] ) {
-			$args['postProperties']['contentAtoms'] = ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]];
+			$args['post_properties']['content_atoms'] = ['content' => ['atom' => 'content', 'properties' => ['type' => 'excerpt']]];
 		} else {
-			$args['postProperties']['contentAtoms'] = [];	
+			$args['post_properties']['content_atoms'] = [];	
 		}
 
 		/**
 		 * General Settings
 		 */
 		if( $settings['height']['size'] ) {
-			$args['postProperties']['attributes'] = ['style' => ['min-height' =>  $settings['height']['size'] .  $settings['height']['unit']]];
+			$args['post_properties']['attributes'] = ['style' => ['min-height' =>  $settings['height']['size'] .  $settings['height']['unit']]];
 		}	
 		
 		/**
 		 * Image Settings
 		 */
 		if( ! $settings['image'] ) {
-			$args['postProperties']['image'] 	= [];
+			$args['post_properties']['image'] 	= [];
 		}
 
 		/**
 		 * Query Settings
 		 */
 		if( isset($settings['categories']) && $settings['categories'] ) {
-			$args['queryArgs']['tax_query'][] 	= ['taxonomy' => 'reviews_category', 'terms' => $settings['categories']];
+			$args['query_args']['tax_query'][] 	= ['taxonomy' => 'reviews_category', 'terms' => $settings['categories']];
 		}
 
 		if( $settings['exclude'] ) {
-			$args['queryArgs']['post__not_in']	= $settings['exclude'];
+			$args['query_args']['post__not_in']	= $settings['exclude'];
 		}
 		
 		if( $settings['include'] ) {
-			$args['queryArgs']['post__in']		= $settings['include'];
+			$args['query_args']['post__in']		= $settings['include'];
 		}
 		
 		if( $settings['sort'] ) {
-			$args['queryArgs']					= sortingArguments($args['queryArgs'], $settings['sort']);
+			$args['query_args']					= sorting_arguments($args['query_args'], $settings['sort']);
 		}		
 
 		if( isset($settings['tags']) && $settings['tags'] ) {
-			$args['queryArgs']['tax_query'][] 	= ['taxonomy' => 'reviews_tag', 'terms' => $settings['tags']];
+			$args['query_args']['tax_query'][] 	= ['taxonomy' => 'reviews_tag', 'terms' => $settings['tags']];
 		}
 		
 		if( $settings['pagination'] == 'yes' ) {

@@ -146,7 +146,7 @@ var Charts = {
                 jQuery(canvas).closest('.wfr-charts-wrapper').removeClass('components-loading');
             },
             data: {
-                action: 'getChartData', 
+                action: 'get_chart_data', 
                 categories: jQuery(selector).closest('.wfr-chart-selector').data('categories'),
                 key: jQuery(selector).val(),
                 include: jQuery(selector).closest('.wfr-chart-selector').data('include'),
@@ -345,7 +345,7 @@ var Filter = {
 
         this.arguments = new FormData( jQuery(object).get(0) );
         this.arguments.append('nonce', wfr.nonce); // The object wfr is available in global scope, being localized on waterfall-reviews.js
-        this.arguments.append('action', 'filterReviews');
+        this.arguments.append('action', 'filter_reviews');
 
         var target = jQuery(object).data('target');
 
@@ -506,8 +506,6 @@ var Tables = {
             self = this,
             view = jQuery(form).next('.wfr-tables-view');
 
-        console.log(view);
-
         utils.ajax({
             beforeSend: function() {
                 jQuery(view).addClass('components-loading');
@@ -516,7 +514,7 @@ var Tables = {
                 jQuery(view).removeClass('components-loading');
             },
             data: {
-                action: 'loadTables', 
+                action: 'load_tables', 
                 attributes: jQuery(form).data('attributes'),
                 categories: jQuery(form).data('categories'),
                 groups: jQuery(form).data('groups'),

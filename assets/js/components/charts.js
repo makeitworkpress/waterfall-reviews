@@ -112,7 +112,7 @@ var Charts = {
                 jQuery(canvas).closest('.wfr-charts-wrapper').removeClass('components-loading');
             },
             data: {
-                action: 'getChartData', 
+                action: 'get_chart_data', 
                 categories: jQuery(selector).closest('.wfr-chart-selector').data('categories'),
                 key: jQuery(selector).val(),
                 include: jQuery(selector).closest('.wfr-chart-selector').data('include'),

@@ -6,10 +6,11 @@
 /**
  * Retrieves the correct sorting arguments
  * 
- * @param $args The current query arguments
- * @param $sort The current sorter preference
+ * @param   Array   $args The current query arguments
+ * @param   String  $sort The current sorter preference
+ * @return  Array   $args The sorting arguments
  */
-function sortingArguments( $args = ['post_type' => 'reviews'], $sort = 'date_asc' ) {
+function sorting_arguments( $args = ['post_type' => 'reviews'], $sort = 'date_asc' ) {
     
     $sorts = [
         'date_asc'		=> ['order' => 'ASC', 'orderby' => 'date'],

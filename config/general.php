@@ -24,7 +24,7 @@ $configurations = [
         ]
     ],
     'register' => [
-        'postTypes' => [
+        'post_types' => [
             [
                 'name'      => 'reviews',
                 'plural'    => __( 'Reviews', 'wfr' ),

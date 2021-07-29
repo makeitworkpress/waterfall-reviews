@@ -22,72 +22,72 @@ class Filter extends WP_Widget {
 		$this->fields = [
 			[
 				'label' => __('Title', 'wfr'),
-				'id' 	=> 'title',
+				'id' 		=> 'title',
 				'type' 	=> 'input'
 			],
 			[
 				'label' => __('Show Search Filter', 'wfr'),
-				'id' 	=> 'search',
+				'id' 		=> 'search',
 				'type' 	=> 'checkbox'
 			],
 			[
 				'label' => __('Label for Search Filter', 'wfr'),
-				'id' 	=> 'searchLabel',
+				'id' 		=> 'search_label',
 				'type' 	=> 'input',
 			],
 			[
 				'label' => __('Placeholder for Search Filter', 'wfr'),
-				'id' 	=> 'searchPlaceholder',
+				'id' 		=> 'searchPlaceholder',
 				'type' 	=> 'input',
 			],						
 			[
 				'label' => __('Show Sorting Filter', 'wfr'),
-				'id' 	=> 'sort',
+				'id' 		=> 'sort',
 				'type' 	=> 'checkbox'
 			],
 			[
 				'label' => __('Label for Sorting Filter', 'wfr'),
-				'id' 	=> 'sortLabel',
+				'id' 		=> 'sort_label',
 				'type' 	=> 'input',
 			],						
 			[
 				'label' => __('Show Price Filter', 'wfr'),
-				'id' 	=> 'price',
+				'id' 		=> 'price',
 				'type' 	=> 'checkbox'
 			],
 			[
 				'label' => __('Label for Price Filter', 'wfr'),
-				'id' 	=> 'priceyLabel',
+				'id' 		=> 'price_label',
 				'type' 	=> 'input',
 			],			
 			[
 				'label' => __('Show Rating Filter', 'wfr'),
-				'id' 	=> 'rating',
+				'id' 		=> 'rating',
 				'type' 	=> 'checkbox'
 			],
 			[
 				'label' => __('Label for Rating Filter', 'wfr'),
-				'id' 	=> 'ratingLabel',
+				'id' 		=> 'rating_label',
 				'type' 	=> 'input',
 			],						
 			[
 				'label' => __('Show Category Filter', 'wfr'),
-				'id' 	=> 'taxonomy',
+				'id' 		=> 'taxonomy',
 				'type' 	=> 'checkbox',
 			],
 			[
 				'label' => __('Label for Category Filter', 'wfr'),
-				'id' 	=> 'taxonomyLabel',
+				'id' 		=> 'taxonomy_label',
 				'type' 	=> 'input',
 			],			
 			[
 				'label' => __('Instant Filter', 'wfr'),
-				'id' 	=> 'instant',
+				'id' 		=> 'instant',
 				'type' 	=> 'checkbox'
 			],			
 			[
 				'label' => __('Label for Filter Button', 'wfr'),
-				'id' 	=> 'label',
+				'id' 		=> 'label',
 				'type' 	=> 'input'
 			]														
 		];		
@@ -110,7 +110,7 @@ class Filter extends WP_Widget {
         
 		echo $args['before_widget'];
         
-		$this->titleDisplay( $args, $instance);
+		$this->title_display( $args, $instance);
 
 		if( isset(get_queried_object()->term_id) ) {
 			$instance['category'] = get_queried_object()->term_id;
@@ -151,8 +151,8 @@ class Filter extends WP_Widget {
 			'type' 		=> 'select'
 		];
 
-		$this->formFields( $instance, $this->fields );
-    } 
+		$this->form_fields( $instance, $this->fields );
+  } 
     
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -171,7 +171,7 @@ class Filter extends WP_Widget {
 			'type' 		=> 'select'
 		];
 		
-		return $this->sanitizeFields( $new, $this->fields );
+		return $this->sanitize_fields( $new, $this->fields );
 	} 	
 
 }

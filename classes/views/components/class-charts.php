@@ -43,11 +43,10 @@ class Charts extends Component {
             'weight'     => false                                            // Allows to load weighted charts for the given attribute by showing the weighted button
         ] );
 
-        $this->template = 'charts'; 
-
         if( ! wp_script_is('wfr-chart') ) {
             wp_enqueue_script('wfr-chart');
         }
+
     }
 
     /**
@@ -72,7 +71,7 @@ class Charts extends Component {
          */
 
         // General information
-        $this->props['selectorGroups']['general'] = [
+        $this->props['selector_groups']['general'] = [
             'label'     => __('General', 'wfr'),
             'options'   => [
                 'price'         => __('Price', 'wfr'),
@@ -83,7 +82,7 @@ class Charts extends Component {
         $this->meta['price']        = __('Price', 'wfr');
 
         // Rating
-        $this->props['selectorGroups']['rating'] = [
+        $this->props['selector_groups']['rating'] = [
             'label'     => __('Rating', 'wfr'),
             'options'   => [
                 'rating' => __('Overall Rating', 'wfr')
@@ -96,7 +95,7 @@ class Charts extends Component {
         // Properties
         if( isset($this->options['properties']) && $this->options['properties'] && isset($this->options['properties'][0]['name']) && $this->options['properties'][0]['name'] ) {
 
-            $this->props['selectorGroups']['properties'] = [
+            $this->props['selector_groups']['properties'] = [
                 'label'     => __('Properties', 'wfr'),
                 'options'   => []
             ];            
@@ -114,7 +113,7 @@ class Charts extends Component {
                 }
 
                 $key = isset($property['key']) && $property['key'] ? sanitize_key($property['key']) : sanitize_key($property['name']) . '_property';
-                $this->props['selectorGroups']['properties']['options'][$key]   = esc_html($property['name']);
+                $this->props['selector_groups']['properties']['options'][$key]   = esc_html($property['name']);
                 $this->meta[$key]                                               = $property['name'];
 
                 if( $property['weighted'] ) {
@@ -124,8 +123,8 @@ class Charts extends Component {
             }
 
             // Remove if we don't have any numerical properties
-            if( ! $this->props['selectorGroups']['properties']['options'] ) {
-                unset($this->props['selectorGroups']['properties']);    
+            if( ! $this->props['selector_groups']['properties']['options'] ) {
+                unset($this->props['selector_groups']['properties']);    
             }
 
         }
@@ -142,13 +141,13 @@ class Charts extends Component {
                 $key = isset($criteria['key'] ) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
                 
                 // Criteria Rating
-                $this->props['selectorGroups']['rating']['options'][$key . '_rating'] = esc_html($criteria['name']);
+                $this->props['selector_groups']['rating']['options'][$key . '_rating'] = esc_html($criteria['name']);
                 $this->meta[$key . '_rating']                                         = $criteria['name'];
 
                 // Rating attributes
                 if( $this->options[$key . '_attributes']  && isset($this->options[$key . '_attributes'][0]['name']) && $this->options[$key . '_attributes'][0]['name']) {
                     
-                    $this->props['selectorGroups'][$key . '_attributes'] = [
+                    $this->props['selector_groups'][$key . '_attributes'] = [
                         'label'     => esc_html($criteria['name']),
                         'options'   => []
                     ]; 
@@ -166,7 +165,7 @@ class Charts extends Component {
                         }
 
                         $unique = $attribute['key'] ? sanitize_key($attribute['key']) : sanitize_key($attribute['name']) . '_' . $key . '_attribute';
-                        $this->props['selectorGroups'][$key . '_attributes']['options'][$unique]    = esc_html($attribute['name']);
+                        $this->props['selector_groups'][$key . '_attributes']['options'][$unique]    = esc_html($attribute['name']);
                         $this->meta[$unique]                                                        = $attribute['name'];
 
                         if( $attribute['weighted'] ) {
@@ -176,8 +175,8 @@ class Charts extends Component {
                     }
 
                     // Remove if we don't have any numerical properties
-                    if( ! $this->props['selectorGroups'][$key . '_attributes']['options'] ) {
-                        unset($this->props['selectorGroups'][$key . '_attributes']);    
+                    if( ! $this->props['selector_groups'][$key . '_attributes']['options'] ) {
+                        unset($this->props['selector_groups'][$key . '_attributes']);    
                     }                    
 
                 }
@@ -190,10 +189,10 @@ class Charts extends Component {
          * Only allow certain groups from the selector
          */
         if( $this->params['groups'] ) {
-            foreach( $this->props['selectorGroups'] as $key => $group ) {
+            foreach( $this->props['selector_groups'] as $key => $group ) {
                 $group = str_replace('_attributes', '', $key);
                 if( ! in_array($group, $this->params['groups']) ) {
-                    unset($this->props['selectorGroups'][$key]);
+                    unset($this->props['selector_groups'][$key]);
                 }
             }
         }
@@ -202,7 +201,7 @@ class Charts extends Component {
          * Directly loads all chart data
          */
         if( $this->params['load'] == true ) {
-            $this->getChartData();
+            $this->get_chart_data();
         }
     
     }
@@ -212,7 +211,7 @@ class Charts extends Component {
      * 
      * @return array $data The data for displaying charts
      */
-    public function getChartData() {
+    public function get_chart_data() {
 
         $metakey = sanitize_key($this->params['meta']);
 
@@ -339,7 +338,7 @@ class Charts extends Component {
                         }    
                     }               
 
-                    $values = $this->formatData( $planValueSet['value'], $planName, $planPrice, $priceCurrency, $priceUnit ); 
+                    $values = $this->format_data( $planValueSet['value'], $planName, $planPrice, $priceCurrency, $priceUnit ); 
                    
                     if( $values['normal'] ) {
                         $metrics['normal'][] = $values['normal'];
@@ -354,7 +353,7 @@ class Charts extends Component {
             } else {
 
                 $price          = $this->params['meta'] === 'price' ? $meta : get_post_meta($review, 'price', true); 
-                $values         = $this->formatData( $meta, get_the_title($review), $price, $priceCurrency, $priceUnit ); 
+                $values         = $this->format_data( $meta, get_the_title($review), $price, $priceCurrency, $priceUnit ); 
 
                 if( $values['normal'] ) {
                     $metrics['normal'][] = $values['normal'];
@@ -409,7 +408,7 @@ class Charts extends Component {
      * 
      * @return  Array       $data The formatted values
      */
-    private function formatData( $value, $label, $price, $currency, $unit = '' ) {
+    private function format_data( $value, $label, $price, $currency, $unit = '' ) {
 
         $currency   = $currency ? $currency : $this->options['review_currency'];
         $unit       = $unit ? ' ' . $unit : '';
