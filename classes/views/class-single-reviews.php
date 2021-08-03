@@ -62,7 +62,7 @@ class Single_Reviews extends Base {
 
         $this->actions = [  
             ['comment_form_top', 'comment_fields'],
-            ['components_post_header_container_end', 'header'],   
+            ['components_post_header_container_end', 'modify_header'],   
             ['waterfall_before_reviews_content', 'before_content'],   
             ['waterfall_after_reviews_content', 'after_content'],   
             ['waterfall_before_reviews_related', 'similar_reviews']   
@@ -136,7 +136,7 @@ class Single_Reviews extends Base {
      * 
      * @return void
      */
-    public function reviews_header() {
+    public function modify_header() {
 
         if( ! is_singular('reviews') ) {
             return;
