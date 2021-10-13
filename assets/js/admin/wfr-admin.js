@@ -57,4 +57,35 @@ jQuery(document).ready( function() {
         
     });
 
+    /**
+     * Insert the calculated rating into the general rating
+     */
+    if( jQuery('.wfr-review-meta').length > 0 && jQuery('.wfr-review-meta').hasClass('wfr-rating-calculation-automatic') ) {
+
+        var wasSaving = false;
+        var wpEditor = wp.data.select('core/editor');
+
+        // After saving, insert our updated rating
+        wp.data.subscribe( () => {
+            if( wpEditor.isSavingPost() ) {
+                wasSaving = true;
+                return;
+            }
+
+            if( wasSaving ) {
+                // Recalculate our rating
+
+                // Add our dynamic plans
+                console.log(wpEditor);
+            }
+
+            wasSaving = false;
+        });
+        
+    }
+
+    /**
+     * Insert
+     */
+
 } );

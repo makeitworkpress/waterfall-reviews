@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die('Go eat veggies!');
 /**
  * Set-up our plans for dynamic display
  */
-$options = [];
+$plan_options = [];
 
 // Get's the plans
 if( isset($_GET['post']) && is_numeric($_GET['post']) ) {
@@ -20,30 +20,44 @@ if( isset($_GET['post']) && is_numeric($_GET['post']) ) {
 
         foreach( $plans as $plan ) {
             $key = sanitize_key($plan['name']);
-            $options[$key] = $plan['name'];
+            $plan_options[$key] = $plan['name'];
         }
 
     }
 
 }
 
+/**
+ * Flexible settings depending on some general options
+ */
+$theme_options = wf_get_data('options', ['rating_calculation', 'rating_visitors', 'rating_calculation', 'rating_maximum', 'rating_criteria', 'properties']);
 
-$theme_options = wf_get_data();
-
-if( isset($theme_options['rating_calculation']) && $theme_options['rating_calculation'] == 'automatic' && isset($theme_options['rating_visitors']) && $theme_options['rating_visitors'] ) {
+// Dynamic columns
+if( $theme_options['rating_calculation'] === 'automatic' && $theme_options['rating_visitors'] ) {
     $columns = 'third'; 
-} elseif( isset($theme_options['rating_visitors']) && $theme_options['rating_visitors'] ) {
+} elseif( $theme_options['rating_visitors'] ) {
     $columns = 'half';
-} elseif( isset($theme_options['rating_calculation']) && $theme_options['rating_calculation'] == 'automatic' ) {
+} elseif( $theme_options['rating_calculation'] == 'automatic' ) {
     $columns = 'half'; 
 } else {
     $columns = 'full';
 } 
 
+// Flexible criteria properties
+foreach( $theme_options['rating_criteria'] as $key => $criteria ) {
+    $key                = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
+    $criteria_keys[]    = $key . '_attributes';
+}
+
+$criteria_attributes = wf_get_data('options', $criteria_keys);
+
+/**
+ * Our dynamic review meta
+ */
 $review_meta  = [
     'frame'     => 'meta',
     'fields'    => [
-        'class'     => 'tabs-left',
+        'class'     => 'tabs-left wfr-review-meta wfr-rating-calculation-' . $theme_options['rating_calculation'],
         'context'   => 'normal',
         'id'        => 'wfr_review_meta',
         'priority'  => 'high',
@@ -61,11 +75,11 @@ $review_meta  = [
                         'columns'       => $columns,
                         'id'            => 'rating',
                         'title'         => __('Overall Rating', 'wfr'),
-                        'description'   => isset($theme_options['rating_calculation']) && $theme_options['rating_calculation'] == 'visitors' 
+                        'description'   => $theme_options['rating_calculation'] == 'visitors' 
                             ? __('The overall rating. Automatically calculated when visitors leave a rating as defined in the Theme Settings, ', 'wfr') 
                             : __('The overall rating. Automatically calculated if automatic calculation is turned on in the Theme Settings.', 'wfr'),
                         'min'           => 0,
-                        'max'           => isset($theme_options['rating_maximum']) && $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
+                        'max'           => $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
                         'step'          => 0.1,
                         'type'          => 'input',                                        
                         'subtype'       => 'number'                                        
@@ -76,7 +90,7 @@ $review_meta  = [
                             'title'         => __('Visitor Rating', 'wfr'),
                             'description'   => __('The average rating from visitors. This is calculated when visitors leave ratings at this review.', 'wfr'),
                             'min'           => 0,
-                            'max'           => isset($theme_options['rating_maximum']) && $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
+                            'max'           => $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
                             'step'          => 0.1,
                             'readonly'      => true,
                             'type'          => 'input',                                        
@@ -85,12 +99,14 @@ $review_meta  = [
                     'disable_calculation' => [
                             'columns'       => $columns,
                             'id'            => 'disable_calculation',
-                            'title'         => __('Disable Automatic Calculation', 'wfr'), 
+                            'title'         => __('Overall Rating Calculation', 'wfr'), 
                             'description'   => __('In some cases you want to disable the automatic rating for this review specifically and add a manual rating.', 'wfr'), 
                             'type'          => 'checkbox', 
                             'single'        => true,          
                             'style'         => 'switcher switcher-disable',
-                            'options'       => ['disable' => ['label' => __('Disable automatic calculation for the Overall Rating.')]]           
+                            'options'       => [
+                                'disable' => ['label' => __('Disable automatic calculation.')]
+                            ]           
                     ],                                                                  
                     'summary' => [
                         'columns'       => 'half',
@@ -340,22 +356,18 @@ $review_meta  = [
 /**
  * These fields are removed depending on our settings
  */
-if( ! isset($theme_options['rating_visitors']) || ! $theme_options['rating_visitors'] ) {
+if( ! $theme_options['rating_visitors'] ) {
     unset($review_meta['fields']['sections']['general']['fields']['visitors_rating']);
 }
 
-if( ! isset($theme_options['rating_calculation']) || ! $theme_options['rating_calculation'] == 'automatic' ) {
+if( ! $theme_options['rating_calculation'] === 'automatic' ) {
     unset($review_meta['fields']['sections']['general']['fields']['disable_calculation']);   
 }
 
 /**
- * Fields that are added dynamically through our options
- */
-
-/**
  * Based upon what top level review criteria are added, we add additional settings. Hence, we can add dynamic fields
  */
-if( isset($theme_options['rating_criteria']) && $theme_options['rating_criteria'] ) {
+if( $theme_options['rating_criteria'] ) {
 
     // Add our fields for adding
     foreach( $theme_options['rating_criteria'] as $key => $criteria ) {
@@ -365,32 +377,32 @@ if( isset($theme_options['rating_criteria']) && $theme_options['rating_criteria'
             continue;
         }
 
-        $key = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
-        $ratingFields = [];
+        $key            = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
+        $ratingFields   = [];
 
         /**
          * This adds extra meta fields for our rating
          */
         $ratingFields[] = [
-            'columns'       => isset($theme_options['rating_visitors']) && $theme_options['rating_visitors'] ? 'half' : 'full',
+            'columns'       => $theme_options['rating_visitors'] ? 'half' : 'full',
             'id'            => $key . '_rating',
             'title'         => sprintf( __('Rating for %s', 'wfr'), $criteria['name']),
-            'description'   => isset($theme_options['rating_calculation']) && $theme_options['rating_calculation'] == 'visitors' ? __('The rating for this criteria. This will be automatically filled when visitors leave a rating, because Rating Calculation is set to Visitors in the Theme Settings, ', 'wfr') : __('The rating for this criteria.', 'wfr'),
+            'description'   => $theme_options['rating_calculation'] === 'visitors' ? __('The rating for this criteria. This will be automatically filled when visitors leave a rating, because Rating Calculation is set to Visitors in the Theme Settings, ', 'wfr') : __('The rating for this criteria.', 'wfr'),
             'min'           => 0,
-            'max'           => isset($theme_options['rating_maximum']) && $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
+            'max'           => $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
             'step'          => 0.1,
             'type'          => 'input',                                        
             'subtype'       => 'number'                                        
         ]; 
 
-        if( isset($theme_options['rating_visitors']) && $theme_options['rating_visitors'] ) {
+        if( $theme_options['rating_visitors'] ) {
             $ratingFields[] = [
                 'columns'       => 'half',
                 'id'            => 'visitors_rating_' . $key,
                 'title'         => sprintf( __('Average Visitor Rating for %s', 'wfr'), $criteria['name']),
                 'description'   => __('The average rating from visitors for this Criteria. This is calculated when visitors leave ratings at this review.', 'wfr'),
                 'min'           => 0,
-                'max'           => isset($theme_options['rating_maximum']) && $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
+                'max'           => $theme_options['rating_maximum'] ? $theme_options['rating_maximum'] : 5,
                 'step'          => 0.1,
                 'readonly'      => true,
                 'type'          => 'input',                                        
@@ -399,8 +411,10 @@ if( isset($theme_options['rating_criteria']) && $theme_options['rating_criteria'
         }        
 
         // Now, add the different fields according to our settings
-        if( isset($theme_options[$key . '_attributes']) && $theme_options[$key . '_attributes'] ) {
-            foreach( $theme_options[$key . '_attributes'] as $attribute ) {
+        // @todo
+        if( $criteria_attributes[$key . '_attributes'] ) {
+
+            foreach( $criteria_attributes[$key . '_attributes'] as $attribute ) {
 
                 // Name and type should be defined
                 if( ! $attribute['name'] ) {
@@ -452,13 +466,14 @@ if( isset($theme_options['rating_criteria']) && $theme_options['rating_criteria'
                                 'options'       => $choices
                             ],                              
                             'plan' => [
+                                'class'         => 'wfr-meta-linked-plan',
                                 'title'         => __('Associated Plan', 'wfr'),
                                 'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
                                 'id'            => 'plan',
                                 'columns'       => 'fourth',
                                 'placeholder'   => __('Select a plan', 'wfr'),
                                 'type'          => 'select',
-                                'options'       => $options
+                                'options'       => $plan_options
                             ], 
                             'name' => [
                                 'title'         => __('Custom Name', 'wfr'),
@@ -511,7 +526,10 @@ if( isset($theme_options['rating_criteria']) && $theme_options['rating_criteria'
 
 }
 
-if( isset($theme_options['properties']) && $theme_options['properties'] ) {
+/**
+ * Dynamic property fields for a review
+ */
+if( $theme_options['properties'] ) {
 
     $propertyFields = [];
 
@@ -560,13 +578,14 @@ if( isset($theme_options['properties']) && $theme_options['properties'] ) {
                         'options'   => $choices
                     ],                    
                     'plan' => [
+                        'class'         => 'wfr-meta-linked-plan',
                         'title'         => __('Associated Plan', 'wfr'),
                         'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
                         'id'            => 'plan',
                         'columns'       => 'fourth',
                         'placeholder'   => __('Select a plan', 'wfr'),
                         'type'          => 'select',
-                        'options'       => $options
+                        'options'       => $plan_options
                     ],                             
                     'name' => [
                         'title'         => __('Custom Name', 'wfr'),

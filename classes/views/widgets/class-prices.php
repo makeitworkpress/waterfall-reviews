@@ -101,10 +101,10 @@ class Prices extends WP_Widget {
 			$summary->render();
 		}
 
-        $prices = new Components\Prices( $instance );
-		$prices->render();			
+      $prices = new Components\Prices( $instance );
+			$prices->render();			
         
-        echo $args['after_widget'];
+      echo $args['after_widget'];
         
     } 
     
