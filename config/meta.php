@@ -433,7 +433,7 @@ if( $theme_options['rating_criteria'] ) {
 
                     // Placeholder
                     if( $attribute['type'] == 'select' ) {
-                        $choices[''] = __('Select', 'wfr');    
+                        $choices[''] = '';    
                     }
                     
                     foreach( $values as $choice ) {
@@ -463,6 +463,7 @@ if( $theme_options['rating_criteria'] ) {
                                 'columns'       => 'fourth',
                                 'type'          => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
                                 'subtype'       => $attribute['type'] == 'number' ? 'number' : NULL,
+                                'mode'          => 'plain',
                                 'options'       => $choices
                             ],                              
                             'plan' => [
@@ -472,6 +473,7 @@ if( $theme_options['rating_criteria'] ) {
                                 'id'            => 'plan',
                                 'columns'       => 'fourth',
                                 'placeholder'   => __('Select a plan', 'wfr'),
+                                'mode'          => 'plain',
                                 'type'          => 'select',
                                 'options'       => $plan_options
                             ], 
@@ -553,7 +555,7 @@ if( $theme_options['properties'] ) {
 
             // Placeholder
             if( $attribute['type'] == 'select' ) {
-                $choices[''] = __('Select', 'wfr');    
+                $choices[''] = '';    
             }            
             
             foreach( $values as $key => $choice ) {
@@ -574,6 +576,7 @@ if( $theme_options['properties'] ) {
                         'columns'   => 'fourth',
                         'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
                         'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
+                        'mode'      => 'plain',
                         'rows'      => 3,
                         'options'   => $choices
                     ],                    
@@ -585,6 +588,7 @@ if( $theme_options['properties'] ) {
                         'columns'       => 'fourth',
                         'placeholder'   => __('Select a plan', 'wfr'),
                         'type'          => 'select',
+                        'mode'          => 'plain',
                         'options'       => $plan_options
                     ],                             
                     'name' => [
