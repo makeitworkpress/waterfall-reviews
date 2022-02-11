@@ -134,9 +134,9 @@ $review_meta  = [
                         'fields'        => [
                             [
                                 'id'            => 'name',
-                                'title'         => __('Advantage', 'wfr'),
+                                'placeholder'   => __('Enter an advantage', 'wfr'),
                                 'type'          => 'input',                                         
-                            ],
+                            ]
                         ]
                     ], 
                     'disadvantages' => [
@@ -150,9 +150,9 @@ $review_meta  = [
                         'fields'        => [
                             [
                                 'id'            => 'name',
-                                'title'         => __('Disadvantage', 'wfr'),
+                                'placeholder'   => __('Enter a disadvantage', 'wfr'),
                                 'type'          => 'input',                                         
-                            ],
+                            ]
                         ]
                     ],
                     'manual_editing' => [
@@ -207,15 +207,15 @@ $review_meta  = [
                     ],                                                                                                                                                       
                     [
                         'id'            => 'prices',
-                        'title'         => __('Item Vendors', 'wfr'),
-                        'description'   => __('Adds one or more prices and possible affiliated links to their suppliers. These prices are shown in the review.', 'wfr'),
+                        'title'         => __('Review Item Prices', 'wfr'),
+                        'description'   => __('Add one or more prices and possible affiliated links to their suppliers. These prices are shown in the review.', 'wfr'),
                         'type'          => 'repeatable',
                         'fields'        => [                                   
                             [
                                 'columns'       => 'fifth',
                                 'id'            => 'price',
                                 'title'         => __('Price', 'wfr'),
-                                'description'   => __('The default price from this supplier.', 'wfr'), 
+                                'description'   => __('The default price.', 'wfr'), 
                                 'min'           => 0,
                                 'step'          => 0.01,                   
                                 'subtype'       => 'number', 
@@ -225,7 +225,7 @@ $review_meta  = [
                                 'columns'       => 'fifth',
                                 'id'            => 'url',
                                 'title'         => __('Affiliate Url', 'wfr'),
-                                'description'   => __('The optional supplier or affiliate url.', 'wfr'),
+                                'description'   => __('The optional external url.', 'wfr'),
                                 'type'          => 'input',                     
                                 'subtype'       => 'url'                     
                             ],
@@ -240,15 +240,16 @@ $review_meta  = [
                                 'columns'       => 'fifth',
                                 'id'            => 'button',
                                 'title'         => __('Button', 'wfr'),
-                                'description'   => __('The optional button text. Overwrites the general button text set in the customizer settings.', 'wfr'),
+                                'description'   => __('The optional button text.', 'wfr'),
                                 'type'          => 'input'                    
                             ],
                             [
                                 'columns'       => 'fifth',
                                 'id'            => 'best',
                                 'title'         => __('Best Price', 'wfr'),
-                                'description'   => __('Enable this to make this price the best price from the list, also shown in overviews.', 'wfr'),
-                                'options'       => ['enable' => ['label' => __('Enable', 'wfr')]],
+                                'options'       => [
+                                    'enable' => ['label' => __('Make best price', 'wfr')]
+                                ],
                                 'type'          => 'checkbox',
                                 'style'         => 'switcher',
                                 'single'        => true
@@ -256,6 +257,7 @@ $review_meta  = [
                         ]                                
                     ],
                     [
+                        'class'         => 'wfr-plans-meta',
                         'id'            => 'plans',
                         'title'         => __('Item Plans', 'wfr'),
                         'description'   => __('Adds pricing plans for this item. These plans can be used to display dynamic tables and link repeatable attributes and properties.', 'wfr'),
@@ -264,15 +266,13 @@ $review_meta  = [
                             [
                                 'columns'       => 'fourth',
                                 'id'            => 'name',
-                                'title'         => __('Name', 'wfr'),
-                                'description'   => __('The unique name for this plan.', 'wfr'), 
+                                'title'         => __('Unique Name', 'wfr'),
                                 'type'          => 'input'                    
                             ],                                                              
                             [
                                 'columns'       => 'fourth',
                                 'id'            => 'price',
                                 'title'         => __('Price', 'wfr'),
-                                'description'   => __('The price for this plan.', 'wfr'), 
                                 'min'           => 0,
                                 'step'          => 0.01,                   
                                 'subtype'       => 'number', 
@@ -282,7 +282,7 @@ $review_meta  = [
                                 'columns'       => 'half',
                                 'id'            => 'description',
                                 'title'         => __('Description', 'wfr'),
-                                'description'   => __('An optional description for the plan.', 'wfr'),
+                                'placeholder'   => __('An optional description for the plan.', 'wfr'),
                                 'type'          => 'textarea',
                                 'rows'          => 3                    
                             ]
@@ -384,6 +384,7 @@ if( $theme_options['rating_criteria'] ) {
          * This adds extra meta fields for our rating
          */
         $ratingFields[] = [
+            'class'         => 'wfr-rating-criteria',
             'columns'       => $theme_options['rating_visitors'] ? 'half' : 'full',
             'id'            => $key . '_rating',
             'title'         => sprintf( __('Rating for %s', 'wfr'), $criteria['name']),
@@ -430,11 +431,6 @@ if( $theme_options['rating_criteria'] ) {
 
                 if( in_array($attribute['type'], ['checkbox', 'select']) && $attribute['values'] ) {
                     $values = array_filter( explode(',', $attribute['values']) );
-
-                    // Placeholder
-                    if( $attribute['type'] == 'select' ) {
-                        $choices[''] = '';    
-                    }
                     
                     foreach( $values as $choice ) {
 
@@ -458,35 +454,32 @@ if( $theme_options['rating_criteria'] ) {
                         'type'      => 'repeatable',
                         'fields'    => [
                             'value' => [
-                                'title'         => __('Value', 'wfr'),
                                 'id'            => 'value',
                                 'columns'       => 'fourth',
                                 'type'          => $attribute['type'] == 'number' ? 'input' : $attribute['type'],
                                 'subtype'       => $attribute['type'] == 'number' ? 'number' : NULL,
+                                'placeholder'   => $attribute['type'] == 'select' ? __('Select', 'wfr') : __('Enter value', 'wfr'),
                                 'mode'          => 'plain',
                                 'options'       => $choices
                             ],                              
                             'plan' => [
                                 'class'         => 'wfr-meta-linked-plan',
-                                'title'         => __('Associated Plan', 'wfr'),
-                                'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
                                 'id'            => 'plan',
                                 'columns'       => 'fourth',
-                                'placeholder'   => __('Select a plan', 'wfr'),
+                                'placeholder'   => __('Select associated plan', 'wfr'),
                                 'mode'          => 'plain',
                                 'type'          => 'select',
                                 'options'       => $plan_options
                             ], 
                             'name' => [
-                                'title'         => __('Custom Name', 'wfr'),
-                                'description'   => __('A custom name for this item. Overwrites the name from the associated plan.', 'wfr'),
+                                'placeholder'   => __('Optional custom plan name', 'wfr'),
                                 'id'            => 'name',
                                 'columns'       => 'fourth',
                                 'type'          => 'input'
                             ],
                             'price' => [
-                                'title'         => __('Custom Price', 'wfr'),
-                                'description'   => __('A custom price for this item. Overwrites the price from the associated plan.', 'wfr'),
+                                'style'         => 'medium-text',
+                                'placeholder'   => __('Optional custom price', 'wfr'),
                                 'id'            => 'price',
                                 'columns'       => 'fourth',
                                 'type'          => 'input',
@@ -553,11 +546,7 @@ if( $theme_options['properties'] ) {
                       
             $values = array_filter( explode(',', $property['values']) );
 
-            // Placeholder
-            if( $attribute['type'] == 'select' ) {
-                $choices[''] = '';    
-            }            
-            
+                    
             foreach( $values as $key => $choice ) {
                 $key           = sanitize_key($choice);
                 $choices[$key] = $property['type'] == 'checkbox' ? ['label' => trim( sanitize_text_field($choice) )] : trim( sanitize_text_field($choice) );
@@ -571,36 +560,33 @@ if( $theme_options['properties'] ) {
                 'type'      => 'repeatable',
                 'fields'    => [
                     'value' => [
-                        'title'     => __('Value', 'wfr'),
                         'id'        => 'value',
                         'columns'   => 'fourth',
                         'type'      => $property['type'] == 'number' ? 'input' : $property['type'],
                         'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
                         'mode'      => 'plain',
                         'rows'      => 3,
+                        'placeholder'   => $attribute['type'] == 'select' ? __('Select', 'wfr') : __('Enter', 'wfr'),
                         'options'   => $choices
                     ],                    
                     'plan' => [
                         'class'         => 'wfr-meta-linked-plan',
-                        'title'         => __('Associated Plan', 'wfr'),
-                        'description'   => __('The plan that is associated with this value. Add plans under General, Plans', 'wfr'),
                         'id'            => 'plan',
                         'columns'       => 'fourth',
-                        'placeholder'   => __('Select a plan', 'wfr'),
+                        'placeholder'   => __('Select associated plan', 'wfr'),
                         'type'          => 'select',
                         'mode'          => 'plain',
                         'options'       => $plan_options
                     ],                             
                     'name' => [
-                        'title'         => __('Custom Name', 'wfr'),
-                        'description'   => __('A custom name for this item. Overwrites the name from the associated plan.', 'wfr'),
+                        'placeholder'   => __('Optional custom plan name', 'wfr'),
                         'id'            => 'name',
                         'columns'       => 'fourth',
                         'type'          => 'input'
                     ],
                     'price' => [
-                        'title'         => __('Custom Price', 'wfr'),
-                        'description'   => __('A custom price value for this item. Overwrites the price from the associated plan.', 'wfr'),
+                        'style'         => 'medium-text',
+                        'placeholder'   => __('Optional custom price', 'wfr'),                  
                         'id'            => 'price',
                         'columns'       => 'fourth',
                         'type'          => 'input',

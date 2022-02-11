@@ -31,8 +31,9 @@ $configurations = [
                 'singular'  => __( 'Review', 'wfr' ),
                 'args'      => [
                     'menu_icon'     => 'dashicons-star-filled', 
-                    'has_archive'   => true, 'show_in_rest' => true, 
-                    'supports'      => ['author', 'comments', 'editor', 'thumbnail', 'title'], 
+                    'has_archive'   => true, 
+                    'show_in_rest'  => true, 
+                    'supports'      => ['author', 'comments', 'editor', 'thumbnail', 'title', 'custom-fields'], 
                     'rewrite'       => ['slug' => _x('reviews', 'Reviews Slug', 'wfr'), 'with_front' => false]
                 ]
             ],

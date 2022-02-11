@@ -189,7 +189,7 @@ $options = [
                                 'class'         => 'regular-text wfr-key-target wfr-property-option',
                                 'columns'       => 'fifth',
                                 'id'            => 'key',
-                                'title'         => __('Property Key', 'wfr'),
+                                'title'         => __('Unique Property Key', 'wfr'),
                                 'description'   => __('The unique meta key for this property. Changing this key will remove the saved property values for existing reviews!', 'wfr'),
                                 'type'          => 'input'                                     
                             ],                                                    
@@ -292,7 +292,7 @@ if( isset($theme_options['rating_criteria']) && $theme_options['rating_criteria'
                     'class'         => 'regular-text wfr-key-target wfr-criteria-option wfr-criteria-' . $key,
                     'columns'       => 'fifth',
                     'id'            => 'key',
-                    'title'         => __('Attribute Key', 'wfr'),
+                    'title'         => __('Unique Attribute Key', 'wfr'),
                     'description'   => __('The unique meta key for this attribute. Changing this key will remove the saved attribute values for existing reviews!', 'wfr'),
                     'type'          => 'input'                                        
                 ],                                 

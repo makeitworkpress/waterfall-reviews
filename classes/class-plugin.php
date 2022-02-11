@@ -55,6 +55,21 @@ class Plugin {
         /**
          * Some additional hooks
          */     
+        $this->modify_rewrites();
+        $this->register_rest_meta();
+
+        /**
+         * Set-up the updater
+         */
+        $updater = Updater\Boot::instance();
+        $updater->add(['source' => 'https://github.com/makeitworkpress/waterfall-reviews', 'type' => 'plugin']);
+
+    }
+
+    /**
+     * Modifies to rewrite rules
+     */
+    private function modify_rewrites() {
 
         // Remove the attachment review rules, killing our category archives
         add_filter( 'rewrite_rules_array', function($rules) {
@@ -62,11 +77,25 @@ class Plugin {
             return $rules;
         } );
 
-        /**
-         * Set-up the updater
-         */
-        $updater = Updater\Boot::instance();
-        $updater->add(['source' => 'https://github.com/makeitworkpress/waterfall-reviews', 'type' => 'plugin']);
+    }
+
+    /**
+     * Registers the rating meta field to be accessible over the REST API
+     */
+    public function register_rest_meta() {
+
+        /** 
+         * @param WP_REST_Server $wp_rest_server The WP Rest Server object
+         */       
+        add_action('rest_api_init', function( $wp_rest_server ) {
+
+            register_post_meta('reviews', 'rating', [
+                'show_in_rest'  => true,
+                'single'        => true,
+                'type'          => 'number'            
+            ]);        
+
+        });
 
     }
 

@@ -57,35 +57,66 @@ jQuery(document).ready( function() {
         
     });
 
+    
+
     /**
      * Insert the calculated rating into the general rating
      */
     if( jQuery('.wfr-review-meta').length > 0 && jQuery('.wfr-review-meta').hasClass('wfr-rating-calculation-automatic') ) {
 
-        var wasSaving = false;
-        var wpEditor = wp.data.select('core/editor');
+        if( typeof wp.data !== 'undefined' ) {
 
-        // After saving, insert our updated rating
-        wp.data.subscribe( () => {
-            if( wpEditor.isSavingPost() ) {
-                wasSaving = true;
-                return;
-            }
+            var updatedMeta = {};
+            var wasSaving = false;
+            var wpEditor = wp.data.select('core/editor');
 
-            if( wasSaving ) {
-                // Recalculate our rating
+            // After saving, insert our updated rating
+            wp.data.subscribe( () => {
 
-                // Add our dynamic plans
-                console.log(wpEditor);
-            }
+                // Only applied to reviews post type
+                if( wpEditor.getCurrentPostType() !== 'reviews' ) {
+                    return;
+                }           
 
-            wasSaving = false;
-        });
+                if( wpEditor.isSavingPost() ) {
+                    wasSaving = true;
+                    return;
+                }
+
+                if( wasSaving ) {
+                    var postId    = wpEditor.getCurrentPostId();
+        
+                    // We have to fetch our data somewhat later, because the updated meta is not immediately available.
+                    setTimeout( function() {
+
+                        console.log(postId);
+        
+                        wp.apiFetch({ path: 'wp/v2/reviews/' + postId })
+                            .then( post => {
+        
+                                // Nothing to update
+                                if( Object.keys(post.meta).length === 0 || updatedMeta === post.meta ) {
+                                    return;
+                                }
+        
+                                updatedMeta = post.meta;
+
+                                if( updatedMeta.hasOwnProperty('rating') ) {
+                                    jQuery('#rating').val(updatedMeta.rating);
+                                    console.log(updatedMeta.rating);
+                                }
+
+                            })
+                            .catch( error => console.log(error) );
+                    }, 1000);
+
+                }
+
+                wasSaving = false;
+            });
+
+        }
         
     }
-
-    /**
-     * Insert
-     */
 
 } );
