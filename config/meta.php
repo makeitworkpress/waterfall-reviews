@@ -281,10 +281,10 @@ $review_meta  = [
                             [
                                 'columns'       => 'half',
                                 'id'            => 'description',
-                                'title'         => __('Description', 'wfr'),
+                                'title'         => __('Optional Description', 'wfr'),
                                 'placeholder'   => __('An optional description for the plan.', 'wfr'),
                                 'type'          => 'textarea',
-                                'rows'          => 3                    
+                                'rows'          => 1                    
                             ]
                         ]
                     ]                
@@ -449,6 +449,7 @@ if( $theme_options['rating_criteria'] ) {
 
                 if( isset($attribute['repeat']) && $attribute['repeat'] ) {
                     $ratingFields[] = [
+                        'class'     => 'wfr-meta-linked-plans',
                         'id'        => $id,
                         'title'     => $attribute['name'],
                         'type'      => 'repeatable',
@@ -463,7 +464,6 @@ if( $theme_options['rating_criteria'] ) {
                                 'options'       => $choices
                             ],                              
                             'plan' => [
-                                'class'         => 'wfr-meta-linked-plan',
                                 'id'            => 'plan',
                                 'columns'       => 'fourth',
                                 'placeholder'   => __('Select associated plan', 'wfr'),
@@ -555,6 +555,7 @@ if( $theme_options['properties'] ) {
 
         if( isset($property['repeat']) && $property['repeat'] ) {
             $propertyFields[] = [
+                'class'     => 'wfr-meta-linked-plans',
                 'id'        => $id,
                 'title'     => $property['name'],
                 'type'      => 'repeatable',
@@ -570,7 +571,6 @@ if( $theme_options['properties'] ) {
                         'options'   => $choices
                     ],                    
                     'plan' => [
-                        'class'         => 'wfr-meta-linked-plan',
                         'id'            => 'plan',
                         'columns'       => 'fourth',
                         'placeholder'   => __('Select associated plan', 'wfr'),

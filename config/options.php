@@ -155,9 +155,9 @@ $options = [
                             [
                                 'columns'       => 'half',
                                 'id'            => 'description',
-                                'title'         => __('Criteria Description', 'wfr'),
+                                'title'         => __('Optional Criteria Description', 'wfr'),
                                 'type'          => 'textarea',
-                                'rows'          => 3                                       
+                                'rows'          => 1                                      
                             ],
                                                                 
                         ]                                
