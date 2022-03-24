@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '3d73dee14814e973665bd828192fce7578e69fa3',
+    'reference' => '6fb92249676fbf8df348ccadb68a048c368dcdd4',
     'name' => 'makeitworkpress/waterfall-reviews',
   ),
   'versions' => 
@@ -44,7 +44,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '3d73dee14814e973665bd828192fce7578e69fa3',
+      'reference' => '6fb92249676fbf8df348ccadb68a048c368dcdd4',
     ),
   ),
 );

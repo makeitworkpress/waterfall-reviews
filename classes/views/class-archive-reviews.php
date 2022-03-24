@@ -18,6 +18,7 @@ class Archive_Reviews extends Base {
             'reviews_archive_content_charts'            => false,    
             'reviews_archive_content_compare'           => false,    
             'reviews_archive_content_compare_category'  => false,    
+            'reviews_archive_content_compare_weighted'  => false    
         ];
 
         $this->actions = [
