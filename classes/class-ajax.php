@@ -66,8 +66,8 @@ class Ajax extends Base {
             'properties'    => isset($_POST['properties']) ? array_filter( explode(',', sanitize_text_field($_POST['properties'])) ) : [],
             'reviews'       => array_filter( $_POST['reviews'], function($v) { return is_numeric($v); } ),
             'tags'          => isset($_POST['tags']) ? array_filter( explode(',', sanitize_text_field($_POST['tags'])), function($v) { return is_numeric($v); } ) : [],
-            'view'          => sanitize_text_field($_POST['view']),
-            'weight'        => sanitize_text_field($_POST['weight'])
+            'view'          => isset($_POST['view']) ? sanitize_text_field($_POST['view']) : 'tabs',
+            'weight'        => isset($_POST['weight']) ? sanitize_text_field($_POST['weight']) : false
         ];
 
         $tables      = new Views\Components\Tables( $args );
