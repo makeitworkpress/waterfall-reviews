@@ -258,7 +258,8 @@ class Single_Reviews extends Base {
         }             
 
         // Loads our custom properties
-        if( $this->layout['reviews_content_properties_before'] ) {
+        $hide_properties = get_post_meta($post->ID, 'wfr_hide_properties', true);
+        if( $this->layout['reviews_content_properties_before'] && ! $hide_properties ) {
 
             $properties = new Components\Tables( [
                 'groups'        => $this->property_groups(),
@@ -338,7 +339,8 @@ class Single_Reviews extends Base {
         }        
 
         // Loads our custom properties
-        if( $this->layout['reviews_content_properties_after'] ) {
+        $hide_properties = get_post_meta($post->ID, 'wfr_hide_properties', true);
+        if( $this->layout['reviews_content_properties_after'] && ! $hide_properties ) {
             $properties = new Components\Tables( [
                 'groups'        => $this->property_groups(),
                 'reviews'       => [$post->ID],

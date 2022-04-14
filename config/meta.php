@@ -156,16 +156,29 @@ $review_meta  = [
                         ]
                     ],
                     'manual_editing' => [
+                        'columns'       => 'half',
                         'id'            => 'manual_editing',
                         'title'         => __('Manual Templating', 'wfr'),
-                        'description'   => __('Removes the default layout element within the content, allowing you to build up the review content using content builders.', 'wfr'),
+                        'description'   => __('Removes all default review elements within the content, allowing you to build up the review content using content builders.', 'wfr'),
                         'type'          => 'checkbox',
                         'single'        => true,
-                        'style'         => 'switcher switcher-disable',
+                        'style'         => 'switcher switcher-enable',
                         'options'       => [
-                            'manual' => array( 'label' => __('Remove Default Review Content Element', 'wfr') )
+                            'manual' => array( 'label' => __('Remove Default Review Content Elements', 'wfr') )
                         ]  
-                    ]                          
+                    ],
+                    'hide_properties' => [
+                        'columns'       => 'half',
+                        'id'            => 'wfr_hide_properties',
+                        'title'         => __('Hide Properties and Attributes', 'wfr'),
+                        'description'   => __('Hides the table with all general and criteria related properties.', 'wfr'),
+                        'type'          => 'checkbox',
+                        'single'        => true,
+                        'style'         => 'switcher switcher-enable',
+                        'options'       => [
+                            'manual' => array( 'label' => __('Hide Properties and Attributes Table', 'wfr') )
+                        ]  
+                    ]                                               
                 ]
             ],
             [
