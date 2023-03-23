@@ -1,0 +1,24 @@
+{
+    "name": "makeitworkpress/waterfall-reviews",
+    "description": "The Waterfall Reviews plugin turns your Waterfall WordPress theme into a killer-review site.",
+    "repositories": [        
+        {
+            "type": "vcs",
+            "url": "https://github.com/makeitworkpress/wp-updater.git"
+        }        
+    ],
+    "require": {
+        "php": ">=7.4",
+        "makeitworkpress/wp-updater": "dev-master"
+    },
+    "license": "GPL",
+    "homepage": "https://github.com/makeitworkpress/waterfall-reviews/",
+    "authors": [ 
+        {
+            "name": "Michiel Tramper",
+            "email": "hello@makeitwork.press",
+            "homepage": "https://makeitwork.press"
+
+        } 
+    ]          
+}

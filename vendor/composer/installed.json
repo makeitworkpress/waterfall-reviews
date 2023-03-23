@@ -1,0 +1,51 @@
+{
+    "packages": [
+        {
+            "name": "makeitworkpress/wp-updater",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/makeitworkpress/wp-updater.git",
+                "reference": "eafa352d1e90ccd85035ab0476d2720354ca8a5c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/makeitworkpress/wp-updater/zipball/eafa352d1e90ccd85035ab0476d2720354ca8a5c",
+                "reference": "eafa352d1e90ccd85035ab0476d2720354ca8a5c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "time": "2022-02-03T16:32:21+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "MakeitWorkPress\\WP_Updater\\": "src"
+                }
+            },
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Michiel Tramper",
+                    "email": "michiel@makeitworkpress.com",
+                    "homepage": "https://www.makeitworkpress.com"
+                }
+            ],
+            "description": "Simple class to allow WordPress theme and plugin updates over Github or Gitlab",
+            "homepage": "https://github.com/makeitworkpress/wp-updater",
+            "support": {
+                "source": "https://github.com/makeitworkpress/wp-updater/tree/master",
+                "issues": "https://github.com/makeitworkpress/wp-updater/issues"
+            },
+            "install-path": "../makeitworkpress/wp-updater"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

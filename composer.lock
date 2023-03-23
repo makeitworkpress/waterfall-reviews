@@ -1,0 +1,65 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "76d535e88a058194c1e46a22dea2f8d4",
+    "packages": [
+        {
+            "name": "makeitworkpress/wp-updater",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/makeitworkpress/wp-updater.git",
+                "reference": "eafa352d1e90ccd85035ab0476d2720354ca8a5c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/makeitworkpress/wp-updater/zipball/eafa352d1e90ccd85035ab0476d2720354ca8a5c",
+                "reference": "eafa352d1e90ccd85035ab0476d2720354ca8a5c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MakeitWorkPress\\WP_Updater\\": "src"
+                }
+            },
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Michiel Tramper",
+                    "email": "michiel@makeitworkpress.com",
+                    "homepage": "https://www.makeitworkpress.com"
+                }
+            ],
+            "description": "Simple class to allow WordPress theme and plugin updates over Github or Gitlab",
+            "homepage": "https://github.com/makeitworkpress/wp-updater",
+            "support": {
+                "source": "https://github.com/makeitworkpress/wp-updater/tree/master",
+                "issues": "https://github.com/makeitworkpress/wp-updater/issues"
+            },
+            "time": "2022-02-03T16:32:21+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "makeitworkpress/wp-updater": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.4"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}
