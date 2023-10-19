@@ -4,7 +4,6 @@
  */
 namespace Waterfall_Reviews;
 use Waterfall as Waterfall;
-use MakeitWorkPress\WP_Updater as Updater;
 
 defined( 'ABSPATH' ) or die( 'Go eat veggies!' );
 
@@ -61,7 +60,7 @@ class Plugin {
         /**
          * Set-up the updater
          */
-        $updater = Updater\Boot::instance();
+        $updater = \MakeitWorkPress\WP_Updater\Boot::instance();
         $updater->add(['source' => 'https://github.com/makeitworkpress/waterfall-reviews', 'type' => 'plugin']);
 
     }

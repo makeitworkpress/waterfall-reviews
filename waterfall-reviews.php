@@ -3,7 +3,7 @@
 Plugin Name:  Waterfall Reviews
 Plugin URI:   https://www.makeitwork.press/wordpress-plugins/waterfall-reviews/
 Description:  The Waterfall Reviews plugin turns your Waterfall WordPress theme into a killer-review site. Works great with ElasticPress and Elementor too.
-Version:      0.2.5
+Version:      0.2.6
 Author:       Make it WorkPress
 Author URI:   https://makeitwork.press/
 License:      GPL3
@@ -28,26 +28,31 @@ if( $theme->template != 'waterfall' ) {
  */
 spl_autoload_register( function($class_name) {
     
-    $called_class   = str_replace( '\\', '/', str_replace('_', '-', strtolower($class_name)) );
+    $called_class       = str_replace( '\\', '/', str_replace( '_', '-', $class_name ) );
     
-    // Plugin Classes
-    $plugin_spaces  = explode( '/', str_replace( 'waterfall-reviews/', '', $called_class) );
-    $final_class    = array_pop($plugin_spaces);
-    $class_rel_path = $plugin_spaces ? implode('/', $plugin_spaces) . '/class-' . $final_class : 'class-' . $final_class;
-    $class_file     = dirname(__FILE__) .  '/classes/' . $class_rel_path . '.php';
-    
+    $class_names        = explode( '/', str_replace( 'Waterfall-Reviews/', '', $called_class) );
+    $final_class        = array_pop($class_names);
+    $class_rel_path     = $class_names ? implode('/', $class_names) . '/class-' . $final_class : 'class-' . $final_class;
+    $class_file         = dirname(__FILE__) .  '/classes/' . strtolower( $class_rel_path ) . '.php';
+
     if( file_exists($class_file) ) {
         require_once( $class_file );
         return;
     }
-
+        
     // Require Vendor (composer) classes
-    array_splice($plugin_spaces, 2, 0, 'src');
-    $vendor_class_file  = dirname(__FILE__) . '/vendor/' . implode(DIRECTORY_SEPARATOR, $plugin_spaces) . '/' . $final_class . '.php';
+    if( ! isset($class_names[0]) || $class_names[0] !== 'MakeitWorkPress' || ! isset($class_names[1]) ) {
+        return;
+    }
+
+    array_splice($class_names, 2, 0, 'src');
+    $class_names[0] = strtolower($class_names[0]);
+    $class_names[1] = strtolower($class_names[1]);
+    $vendor_class_file  = dirname(__FILE__) . '/vendor/' . implode('/', $class_names) . '/' . $final_class . '.php';
 
     if( file_exists($vendor_class_file) ) {
         require_once( $vendor_class_file );    
-    }    
+    }   
    
 } );
 

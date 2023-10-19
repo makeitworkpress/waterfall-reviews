@@ -44,12 +44,14 @@ if( $theme_options['rating_calculation'] === 'automatic' && $theme_options['rati
 } 
 
 // Flexible criteria properties
-foreach( $theme_options['rating_criteria'] as $key => $criteria ) {
-    $key                = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
-    $criteria_keys[]    = $key . '_attributes';
-}
+if( $theme_options['rating_criteria'] ) {
+    foreach( $theme_options['rating_criteria'] as $key => $criteria ) {
+        $key                = isset($criteria['key']) && $criteria['key'] ? sanitize_key($criteria['key']) : sanitize_key($criteria['name']);
+        $criteria_keys[]    = $key . '_attributes';
+    }
 
-$criteria_attributes = wf_get_data('options', $criteria_keys);
+    $criteria_attributes = wf_get_data('options', $criteria_keys);
+}
 
 /**
  * Our dynamic review meta
