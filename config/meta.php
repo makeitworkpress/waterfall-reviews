@@ -427,7 +427,6 @@ if( $theme_options['rating_criteria'] ) {
         }        
 
         // Now, add the different fields according to our settings
-        // @todo
         if( $criteria_attributes[$key . '_attributes'] ) {
 
             foreach( $criteria_attributes[$key . '_attributes'] as $attribute ) {
@@ -582,7 +581,7 @@ if( $theme_options['properties'] ) {
                         'subtype'   => $property['type'] == 'number' ? 'number' : NULL,
                         'mode'      => 'plain',
                         'rows'      => 3,
-                        'placeholder'   => $attribute['type'] == 'select' ? __('Select', 'wfr') : __('Enter', 'wfr'),
+                        'placeholder'   => $property['type'] == 'select' ? __('Select', 'wfr') : __('Enter', 'wfr'),
                         'options'   => $choices
                     ],                    
                     'plan' => [
