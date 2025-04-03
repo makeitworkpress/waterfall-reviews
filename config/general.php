@@ -30,10 +30,10 @@ $configurations = [
                 'plural'    => __( 'Reviews', 'wfr' ),
                 'singular'  => __( 'Review', 'wfr' ),
                 'args'      => [
-                    'menu_icon'     => 'dashicons-star-filled', 
-                    'has_archive'   => true, 
-                    'show_in_rest'  => true, 
-                    'supports'      => ['author', 'comments', 'editor', 'thumbnail', 'title', 'custom-fields'], 
+                    'menu_icon'     => 'dashicons-star-filled',
+                    'has_archive'   => true,
+                    'show_in_rest'  => true,
+                    'supports'      => ['author', 'comments', 'editor', 'thumbnail', 'title', 'custom-fields'],
                     'rewrite'       => ['slug' => _x('reviews', 'Reviews Slug', 'wfr'), 'with_front' => false]
                 ]
             ],
@@ -50,7 +50,7 @@ $configurations = [
                     'rewrite'           => ['hierarchical' => true, 'slug' => _x('reviews/category', 'Reviews Category Slug', 'wfr'), 'with_front' => false],
                     'show_admin_column' => true,
                     'show_in_rest'      => true
-                ]                
+                ]
             ],
             [
                 'name'      => 'reviews_tag',

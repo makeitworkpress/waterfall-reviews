@@ -133,13 +133,13 @@ $options = [
                         'description'   => __('Rating criteria will appear while editing a single review and allow you to give ratings on several criteria.', 'wfr'),
                         'type'          => 'repeatable',
                         'add'           => __('Add New Criteria', 'wfr'),
-                        'remove'        => __('Remove Criteria', 'wfr'),                               
+                        'remove'        => __('Remove Criteria', 'wfr'),
                         'fields'        => [
                             [
                                 'columns'       => 'fourth',
                                 'id'            => 'name',
                                 'title'         => __('Criteria Name', 'wfr'),
-                                'type'          => 'input'                                        
+                                'type'          => 'input'
                             ],
                             [
                                 'columns'       => 'fourth',
@@ -150,17 +150,16 @@ $options = [
                                 'subtype'       => 'number',
                                 'min'           => 1,
                                 'step'          => 1,
-                                'max'           => 10                                        
-                            ],                                     
+                                'max'           => 10
+                            ],
                             [
                                 'columns'       => 'half',
                                 'id'            => 'description',
                                 'title'         => __('Optional Criteria Description', 'wfr'),
                                 'type'          => 'textarea',
-                                'rows'          => 1                                      
+                                'rows'          => 1
                             ],
-                                                                
-                        ]                                
+                        ]
                     ]
                 ]
             ],                     
