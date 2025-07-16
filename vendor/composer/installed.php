@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '907ee99aa5af9e0c0c83dccd3519aeb2320e3039',
+        'reference' => '6fd27df09d3400b22c2031a4ca681b20820f74b5',
         'name' => 'makeitworkpress/waterfall-reviews',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '907ee99aa5af9e0c0c83dccd3519aeb2320e3039',
+            'reference' => '6fd27df09d3400b22c2031a4ca681b20820f74b5',
             'dev_requirement' => false,
         ),
         'makeitworkpress/wp-updater' => array(
@@ -27,7 +27,7 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
-            'reference' => '92267b5dae7538f8893b34d1551ccfa30da0bc73',
+            'reference' => 'adb685528dbc574af531ab4751f4f7d500aec379',
             'dev_requirement' => false,
         ),
     ),
