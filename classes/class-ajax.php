@@ -294,11 +294,13 @@ class Ajax extends Base
                 "taxonomy" => "reviews_category",
                 "terms" => [intval($_POST["term"])],
             ];
-        } elseif (isset($_POST["category"]) && $_POST["category"]) {
-            $args["tax_query"][] = [
-                "taxonomy" => "reviews_category",
-                "terms" => [intval($_POST["category"])],
-            ];
+        } else {
+            if (isset($_POST["category"]) && $_POST["category"]) {
+                $args["tax_query"][] = [
+                    "taxonomy" => "reviews_category",
+                    "terms" => [intval($_POST["category"])],
+                ];
+            }
         }
 
         // Do our query

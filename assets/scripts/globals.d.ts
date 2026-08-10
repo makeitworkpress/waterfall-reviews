@@ -30,6 +30,9 @@ declare global {
     const wpOptimizeLazyLoad: LazyLoader | undefined;
     const wpComponentsLazyLoad: LazyLoader | undefined;
 
+    /** ScrollReveal instance registered by the theme, when available. */
+    const sr: { sync: () => void } | undefined;
+
     interface Window {
         App?: unknown;
         [key: string]: unknown;

@@ -15,10 +15,10 @@ class Archive_Reviews extends Base {
     protected function register() {
 
         $this->defaults = [
-            'reviews_archive_content_charts'            => false,    
-            'reviews_archive_content_compare'           => false,    
-            'reviews_archive_content_compare_category'  => false,    
-            'reviews_archive_content_compare_weighted'  => false    
+            'reviews_archive_content_charts'            => false,
+            'reviews_archive_content_compare'           => false,
+            'reviews_archive_content_compare_category'  => false,
+            'reviews_archive_content_compare_weighted'  => false
         ];
 
         $this->actions = [
@@ -30,14 +30,14 @@ class Archive_Reviews extends Base {
             ['waterfall_blog_schema_post_types', 'blog_schema'],
             ['waterfall_archive_posts_args', 'reviews']
         ];
-        
+
     }
 
     /**
      * Enables BlogPosting schema for archives
      */
     public function blog_schema($types) {
-        
+
         if( wf_get_archive_post_type() != 'reviews' ) {
             return $types;
         }
@@ -46,14 +46,14 @@ class Archive_Reviews extends Base {
 
         // Schemas should not be disabled
         if( in_array('reviews', $no_schema) ) {
-            return $types;     
-        }  
-        
+            return $types;
+        }
+
         if( isset($this->options['review_scheme']) && $this->options['review_scheme'] == 'BlogPosting' ) {
             $types[] = 'reviews';
         }
 
-        return $types;        
+        return $types;
 
     }
 
@@ -84,7 +84,7 @@ class Archive_Reviews extends Base {
 
             echo '<ul class="atom-tabs-navigation">';
             echo '  <li><a class="atom-tab active" href="#" data-target="reviews"><i class="fa fa-list"></i> ' . __('List', 'wfr') . '</a></li>';
-            echo '  <li><a class="atom-tab" href="#" data-target="compare"><i class="fa fa-bar-chart"></i> ' . __('Compare', 'wfr') . '</a></li>';         
+            echo '  <li><a class="atom-tab" href="#" data-target="compare"><i class="fa fa-bar-chart"></i> ' . __('Compare', 'wfr') . '</a></li>';
             echo '</ul>';
 
             // Open up the tabs content
@@ -97,10 +97,10 @@ class Archive_Reviews extends Base {
 
     /**
      * Hook into our public posts with reviews arguments
-     * 
+     *
      * @param   array $args The original arguments passed by the filter
      * @return  array $args The modified arguments
-     * 
+     *
      * @todo    Add support for charts and compare
      */
     public function reviews( $args ) {
@@ -123,7 +123,7 @@ class Archive_Reviews extends Base {
 
     /**
      * Close the content container and add the graphs and compare tab
-     */ 
+     */
     public function after() {
 
         if( wf_get_archive_post_type() != 'reviews' ) {
@@ -137,7 +137,7 @@ class Archive_Reviews extends Base {
             echo '</div><!-- .content -->';
             return;
 
-        }        
+        }
 
         // Add our comparison tabs
         if( $this->layout['reviews_archive_content_compare'] ) {
@@ -155,12 +155,12 @@ class Archive_Reviews extends Base {
             // Filter for certain categories
             if( $this->check_term_query('reviews_category') ) {
                 $args['categories'] = [$this->check_term_query('reviews_category')];
-            }  
+            }
 
             // Filter for certain tags
             if( $this->check_term_query('reviews_tag') ) {
                 $args['tags']       = [$this->check_term_query('reviews_tag')];
-            }              
+            }
 
             // Show our charts
             $charts = new Components\Charts( $args );
@@ -180,9 +180,9 @@ class Archive_Reviews extends Base {
 
             // Close our tabs
             echo '  </div><!-- .atom-tabs-content -->';
-            echo '</div><!-- .atom-tabs -->';            
+            echo '</div><!-- .atom-tabs -->';
 
-        }     
+        }
 
         // Close our content wrapper
         echo '</div><!-- .content -->';
@@ -191,7 +191,7 @@ class Archive_Reviews extends Base {
 
     /**
      * Check if a reviews tag or category is queried, and returns the id if so
-     * 
+     *
      * @param   String  $taxonomy   The taxonomy that needs to be checked
      * @return  Int     @term       The queried term id
      */
