@@ -28,7 +28,7 @@ class Reviews extends Component {
     protected function initialize() {
 
         // Schema indicators
-        $noSchema = isset($this->options['scheme_post_types_disable']) && $this->options['scheme_post_types_disable'] ? $this->options['scheme_post_types_disable'] : [];
+        $no_schema = isset($this->options['scheme_post_types_disable']) && $this->options['scheme_post_types_disable'] ? $this->options['scheme_post_types_disable'] : [];
 
         // Our default parameters
         $this->params   = WP_Components\Build::multi_parse_args( $this->params, [
@@ -74,7 +74,7 @@ class Reviews extends Component {
             'price'         => isset($this->layout['reviews_archive_content_price']) && $this->layout['reviews_archive_content_price'] ? true : false,   // Displays the price
             'price_button'  => isset($this->layout['reviews_archive_content_price_button']) && $this->layout['reviews_archive_content_price_button'] ? $this->layout['reviews_archive_content_price_button'] : '',           // Displays the button to one supplier
             'rating'        => isset($this->layout['reviews_archive_content_rating']) && $this->layout['reviews_archive_content_rating'] ? true : false,                                                  // Displays the rating within a review
-            'schema'        => in_array( 'reviews', $noSchema ) ? false : true,
+            'schema'        => in_array( 'reviews', $no_schema ) ? false : true,
             'summary'       => isset($this->layout['reviews_archive_content_summary']) && $this->layout['reviews_archive_content_summary'] ? true : false,                                                 // Adds the summary of our review
             'query'         => '',
             'query_args'     => [
@@ -84,6 +84,40 @@ class Reviews extends Component {
             ],
             'view'          => isset($this->layout['reviews_archive_content_style']) && $this->layout['reviews_archive_content_style'] ? $this->layout['reviews_archive_content_style'] : 'grid',        // Accepts our review style, either list, magazine or grid
         ] );
+
+        // These settings my spill over from the general settings in Waterfall and need to be redeclared here because of the filter order
+        if (isset($this->layout['reviews_archive_content_meta_author']) && $this->layout['reviews_archive_content_meta_author'] && ! isset($this->params['post_properties']['header_atoms']['author']) ) {
+            $this->params['post_properties']['header_atoms']['author'] = [
+                'atom'          => 'author',
+                'properties'    => [
+                    'attributes'    => ['class' => 'entry-author'],
+                    'description'   => false,
+                    'imageFloat'    => 'left',
+                    'schema'        => in_array('reviews', $no_schema) ? false : true,
+                ]
+            ];
+
+            if (! isset($this->layout['reviews_archive_content_meta_avatar']) || !$this->layout['reviews_archive_content_meta_avatar'] && ! isset($this->params['post_properties']['header_atoms']['author']['properties']['avatar'])) {
+                $this->params['post_properties']['header_atoms']['author']['properties']['avatar'] = false;
+            }
+        }
+
+        if (isset($this->layout['reviews_archive_content_meta_date']) && $this->layout['reviews_archive_content_meta_date'] && ! isset($this->params['post_properties']['header_atoms']['date'])) {
+            $this->params['post_properties']['header_atoms']['date'] = [
+                'atom'              => 'date',
+                'properties'        => [
+                    'attributes'    => ['class' => 'entry-time'],
+                    'schema'        => in_array('reviews', $no_schema) ? false : true
+                ]
+            ];
+        }
+
+        if (isset($this->layout['reviews_archive_content_type']) && $this->layout['reviews_archive_content_type'] && ! isset($this->params['post_properties']['header_atoms']['type'])) {
+            $this->params['post_properties']['header_atoms']['type'] = [
+                'atom'          => 'type',
+                'properties'    => ['attributes' => ['class' => 'entry-meta']]
+            ];
+        }
 
         // We are using WP_Components to display our posts
         $this->template = false;
