@@ -3,7 +3,7 @@
 Plugin Name:  Waterfall Reviews
 Plugin URI:   https://www.makeitwork.press/wordpress-plugins/waterfall-reviews/
 Description:  The Waterfall Reviews plugin turns your Waterfall WordPress theme into a killer-review site. Works great with ElasticPress and Elementor too.
-Version:      0.2.8
+Version:      0.3.0
 Author:       Make it WorkPress
 Author URI:   https://makeitwork.press/
 License:      GPL3
@@ -18,8 +18,8 @@ $theme = wp_get_theme();
 
 if( $theme->template != 'waterfall' ) {
     add_action( 'admin_notices', function() {
-        echo '<div class="error"><p>' . __('The Waterfall theme is not present or activated. The Waterfall Reviews plugin requires the Waterfall theme to function.', 'wfr') . '</p></div>';      
-    });     
+        echo '<div class="error"><p>' . __('The Waterfall theme is not present or activated. The Waterfall Reviews plugin requires the Waterfall theme to function.', 'wfr') . '</p></div>';
+    });
     return;
 }
 
@@ -27,9 +27,9 @@ if( $theme->template != 'waterfall' ) {
  * Registers the autoloading for plugin classes
  */
 spl_autoload_register( function($class_name) {
-    
+
     $called_class       = str_replace( '\\', '/', str_replace( '_', '-', $class_name ) );
-    
+
     $class_names        = explode( '/', str_replace( 'Waterfall-Reviews/', '', $called_class) );
     $final_class        = array_pop($class_names);
     $class_rel_path     = $class_names ? implode('/', $class_names) . '/class-' . $final_class : 'class-' . $final_class;
@@ -39,7 +39,7 @@ spl_autoload_register( function($class_name) {
         require_once( $class_file );
         return;
     }
-        
+
     // Require Vendor (composer) classes
     if( ! isset($class_names[0]) || $class_names[0] !== 'MakeitWorkPress' || ! isset($class_names[1]) ) {
         return;
@@ -51,9 +51,9 @@ spl_autoload_register( function($class_name) {
     $vendor_class_file  = dirname(__FILE__) . '/vendor/' . implode('/', $class_names) . '/' . $final_class . '.php';
 
     if( file_exists($vendor_class_file) ) {
-        require_once( $vendor_class_file );    
-    }   
-   
+        require_once( $vendor_class_file );
+    }
+
 } );
 
 /**
