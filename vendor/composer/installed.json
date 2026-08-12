@@ -7,18 +7,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/makeitworkpress/wp-updater.git",
-                "reference": "adb685528dbc574af531ab4751f4f7d500aec379"
+                "reference": "b2af161e71aa2f37dba39ddf1c165e710002d7b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/makeitworkpress/wp-updater/zipball/adb685528dbc574af531ab4751f4f7d500aec379",
-                "reference": "adb685528dbc574af531ab4751f4f7d500aec379",
+                "url": "https://api.github.com/repos/makeitworkpress/wp-updater/zipball/b2af161e71aa2f37dba39ddf1c165e710002d7b5",
+                "reference": "b2af161e71aa2f37dba39ddf1c165e710002d7b5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3"
+                "php": ">=7.1"
             },
-            "time": "2025-04-08T06:47:05+00:00",
+            "time": "2026-08-12T06:41:10+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
@@ -33,8 +33,8 @@
             "authors": [
                 {
                     "name": "Make it WorkPress",
-                    "email": "michiel@makeitworkpress.com",
-                    "homepage": "https://www.makeitworkpress.com"
+                    "email": "hello@makeitwork.press",
+                    "homepage": "https://makeitwork.press"
                 }
             ],
             "description": "Simple class to allow WordPress theme and plugin updates over Github or Gitlab",

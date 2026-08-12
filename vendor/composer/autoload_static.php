@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInit90c796d231dd4a3bdee843a92eb84e7f
 {
     public static $prefixLengthsPsr4 = array (
-        'M' => 
+        'M' =>
         array (
             'MakeitWorkPress\\WP_Updater\\' => 27,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'MakeitWorkPress\\WP_Updater\\' => 
+        'MakeitWorkPress\\WP_Updater\\' =>
         array (
             0 => __DIR__ . '/..' . '/makeitworkpress/wp-updater/src',
         ),
